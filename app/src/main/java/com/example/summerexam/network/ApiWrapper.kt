@@ -1,5 +1,6 @@
-package com.example.summerexam.network
+package com.ndhzs.lib.common.network
 
+import com.example.summerexam.network.ApiException
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 import kotlin.jvm.Throws
@@ -16,18 +17,19 @@ open class ApiWrapper<T> (
 ) : Serializable, ApiStatus()
 
 open class ApiStatus(
-  @SerializedName("errorCode")
-  val errorCode: Int = 0,
-  @SerializedName("errorMsg")
-  val errorMsg: String = ""
+  @SerializedName("code")
+  val code: Int = 0,
+  @SerializedName("msg")
+  val msg: String = ""
 ) : Serializable {
-  
+
   fun isSuccess(): Boolean {
-    return errorCode == 0
+    return code == 0
   }
-  
+
   @Throws(ApiException::class)
   fun throwApiExceptionIfFail() {
-    if (!isSuccess()) throw ApiException(errorCode, errorMsg)
-  }
+  if (!isSuccess()) throw ApiException(code, msg)
 }
+}
+

@@ -1,6 +1,7 @@
 package com.ndhzs.lib.common.extensions
 
-import com.ndhzs.lib.common.BaseApp
+import com.example.summerexam.BaseApp
+
 
 /**
  * ...

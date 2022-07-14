@@ -2,7 +2,8 @@ package com.ndhzs.lib.common.extensions
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.ndhzs.lib.common.BaseApp
+import com.example.summerexam.BaseApp
+
 
 /**
  * ...

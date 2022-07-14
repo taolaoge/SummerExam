@@ -13,10 +13,9 @@ import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import com.example.summerexam.utils.BindView
 import com.ndhzs.lib.common.extensions.RxjavaLifecycle
-import com.ndhzs.lib.common.utils.BindView
 import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -118,15 +117,6 @@ abstract class BaseActivity(
   
   protected fun <T> LiveData<T>.observe(observer: (T) -> Unit) {
     observe(this@BaseActivity, observer)
-  }
-  
-  /**
-   * 结合生命周期收集 Flow 方法
-   */
-  protected fun <T> Flow<T>.collectLaunch(action: suspend (value: T) -> Unit) {
-    lifecycleScope.launch {
-      flowWithLifecycle(lifecycle).collect { action.invoke(it) }
-    }
   }
   
   private val mDisposableList = mutableListOf<Disposable>()

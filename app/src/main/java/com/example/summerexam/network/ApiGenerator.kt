@@ -3,6 +3,7 @@ package com.example.summerexam.network
 import com.ndhzs.lib.common.extensions.mapOrThrowApiException
 import com.ndhzs.lib.common.extensions.mapOrCatchApiException
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import kotlin.reflect.KClass
 
@@ -78,6 +79,7 @@ object ApiGenerator {
       .Builder()
       .baseUrl(URL)
       .addConverterFactory(GsonConverterFactory.create())
+      .addCallAdapterFactory(RxJava3CallAdapterFactory.createSynchronous())
       .build()
   }
 
