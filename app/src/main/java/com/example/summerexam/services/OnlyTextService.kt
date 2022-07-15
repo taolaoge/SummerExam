@@ -1,31 +1,27 @@
 package com.example.summerexam.services
 
-import com.example.summerexam.beans.UserInfo
-import com.example.summerexam.beans.UserInfoResponse
+import com.example.summerexam.beans.OnlyTextResponse
 import com.example.summerexam.network.ApiGenerator
 import com.ndhzs.lib.common.network.ApiWrapper
 import io.reactivex.rxjava3.core.Single
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.Headers
 import retrofit2.http.POST
 
 /**
  * description ： TODO:类的作用
  * author :Li Jian
  * email : 1678921845@qq.com
- * date : 2022/7/14
+ * date : 2022/7/15
  */
-interface MineService {
+interface OnlyTextService {
     companion object {
         val INSTANCE by lazy {
-            ApiGenerator.getApiService(MineService::class)
+            ApiGenerator.getApiService(OnlyTextService::class)
         }
     }
 
     /**
-     * 获取个人信息
+     * 获取主页的纯文列表数据
      */
-    @POST("user/info")
-    fun getUserInfo():Single<ApiWrapper<UserInfoResponse>>
-
+    @POST("home/text")
+    fun getOnlyText():Single<ApiWrapper<OnlyTextResponse>>
 }

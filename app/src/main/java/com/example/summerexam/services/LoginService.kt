@@ -20,10 +20,17 @@ interface LoginService {
         }
     }
 
+    /**
+     * 验证码登陆
+     */
     @FormUrlEncoded
     @POST("user/login/code")
     fun login(@Field("code") code:String, @Field("phone") phone:String):Single<ApiWrapper<LoginResponse>>
 
+
+    /**
+     * 获取手机登陆的验证码
+     */
     @FormUrlEncoded
     @POST("user/login/get_code")
     fun getCode(@Field("phone") phone:String):Single<ApiWrapper<Any>>
