@@ -1,6 +1,7 @@
 package com.example.summerexam.fragments.first
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.summerexam.R
 import com.example.summerexam.adapters.OnlyTextRvAdapter
+import com.example.summerexam.network.TAG
 import com.example.summerexam.view.MyItemDecoration
 import com.example.summerexam.viewmodel.OnlyTextViewModel
 import com.ndhzs.lib.common.ui.BaseFragment
@@ -27,7 +29,8 @@ class OnlyTextFragment : BaseFragment() {
             overScrollMode = View.OVER_SCROLL_NEVER
             this.run {
                 layoutManager = LinearLayoutManager(context)
-                adapter = OnlyTextRvAdapter(viewModel.newTextData)
+                adapter =
+                    OnlyTextRvAdapter(viewModel.newTextData, ::clickLikeOrDislike)
                 addItemDecoration(
                     MyItemDecoration(20)
                 )
@@ -59,10 +62,10 @@ class OnlyTextFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.isLoading.observe(this){
+        viewModel.isLoading.observe(this) {
             if (!it) freshRecycleViewData()
         }
-        viewModel.isSwipeLayoutRefreshing.observe(this){
+        viewModel.isSwipeLayoutRefreshing.observe(this) {
             if (!it) mSwipeLayout.isRefreshing = false
         }
     }
@@ -84,7 +87,7 @@ class OnlyTextFragment : BaseFragment() {
                     //获取最后一个完全显示的ItemPosition
                     val lastVisibleItem = manager.findLastCompletelyVisibleItemPosition()
                     val totalItem = manager.itemCount
-                    if (lastVisibleItem == (totalItem - 1) && viewModel.isLoading.value == false){
+                    if (lastVisibleItem == (totalItem - 1) && viewModel.isLoading.value == false) {
                         viewModel.getOnlyText()
                     }
                 }
@@ -100,4 +103,32 @@ class OnlyTextFragment : BaseFragment() {
         )
         diffResult.dispatchUpdatesTo(mRvText.adapter!!)
     }
+
+    private fun clickLikeOrDislike(id: Int, status: Boolean, position: Int, what: Boolean) {
+        viewModel.newTextData[position].info.run {
+            Log.d(TAG, "clickLikeOrDislike:${viewModel.newTextData[position].joke.jokesId} ")
+            if (!what) {
+                viewModel.dislikeJoke(id, status)
+                if (status) {
+                    disLikeNum += 1
+                    isUnlike = true
+                } else {
+                    disLikeNum -= 1
+                    isUnlike = false
+                }
+            } else {
+                viewModel.likeJoke(id, status)
+                if (status){
+                    likeNum += 1
+                    isLike = true
+                }
+                else{
+                    likeNum -= 1
+                    isLike = false
+                }
+            }
+            freshRecycleViewData()
+        }
+    }
+
 }

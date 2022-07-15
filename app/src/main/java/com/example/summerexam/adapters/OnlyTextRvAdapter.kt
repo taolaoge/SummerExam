@@ -9,10 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.summerexam.R
-import com.example.summerexam.beans.OnlyTextResponse
 import com.example.summerexam.beans.OnlyTextResponseItem
-import okhttp3.internal.wait
-import org.w3c.dom.Text
 
 /**
  * description ： TODO:类的作用
@@ -20,24 +17,44 @@ import org.w3c.dom.Text
  * email : 1678921845@qq.com
  * date : 2022/7/15
  */
-class OnlyTextRvAdapter(private val data: ArrayList<OnlyTextResponseItem>) :
+class OnlyTextRvAdapter(private val data: ArrayList<OnlyTextResponseItem>
+,private val clickLikeOrDislike:(id:Int, status:Boolean, position:Int, what:Boolean)->Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val TYPE_TEXT = 0
     private val TYPE_BOTTOM = 1
 
-
     inner class OnlyTextViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        init {
+            view.findViewById<ImageView>(R.id.img_like).setOnClickListener {
+                data[adapterPosition].run {
+                    clickLikeOrDislike(joke.jokesId,!info.isLike,adapterPosition,true)
+                }
+            }
+            view.findViewById<ImageView>(R.id.img_dislike).setOnClickListener {
+                data[adapterPosition].run {
+                    clickLikeOrDislike(joke.jokesId,!info.isUnlike,adapterPosition,false)
+                }
+            }
+            view.findViewById<ImageView>(R.id.img_comment).setOnClickListener {
+
+            }
+        }
+
         val mImgAvatar: ImageView = view.findViewById(R.id.img_avatar)
         val mTvNickname: TextView = view.findViewById(R.id.tv_nickname)
         val mTvSignature: TextView = view.findViewById(R.id.tv_signature)
         val mTvContent: TextView = view.findViewById(R.id.tv_content)
         val mTvLike: TextView = view.findViewById(R.id.tv_like_detail)
         val mTvDislike: TextView = view.findViewById(R.id.tv_dislike_detail)
-        val mTvComment: TextView = view.findViewById(R.id.tv_dislike_detail)
+        val mTvComment: TextView = view.findViewById(R.id.tv_comment_detail)
         val mTvShare: TextView = view.findViewById(R.id.tv_share_detail)
+        val mImgLike: ImageView = view.findViewById(R.id.img_like)
+        val mImgDislike: ImageView = view.findViewById(R.id.img_dislike)
+        val mImgComment: ImageView = view.findViewById(R.id.img_comment)
     }
 
     inner class BottomHolder(view: View) : RecyclerView.ViewHolder(view) {}
+
 
     /**
      *得到当前position的item的种类
@@ -60,10 +77,10 @@ class OnlyTextRvAdapter(private val data: ArrayList<OnlyTextResponseItem>) :
         }
     }
 
+
     override fun getItemViewType(position: Int): Int {
         return if (position == data.size) TYPE_BOTTOM else TYPE_TEXT
     }
-
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is OnlyTextViewHolder) {
@@ -86,8 +103,12 @@ class OnlyTextRvAdapter(private val data: ArrayList<OnlyTextResponseItem>) :
     /**
      * 差分刷新固定写法
      */
-    class DiffCallBack(private val mOldData:List<OnlyTextResponseItem>, private val mNewData:List<OnlyTextResponseItem>):
-        DiffUtil.Callback(){
+    class DiffCallBack(
+        private val mOldData: List<OnlyTextResponseItem>,
+        private val mNewData: List<OnlyTextResponseItem>
+    ) :
+        DiffUtil.Callback() {
+
         override fun getOldListSize(): Int {
             return mOldData.size
         }

@@ -2,10 +2,10 @@ package com.example.summerexam.beans
 
 data class InfoX(
     val commentNum: Int,
-    val disLikeNum: Int,
+    var disLikeNum: Int,
     val isAttention: Boolean,
-    val isLike: Boolean,
-    val isUnlike: Boolean,
-    val likeNum: Int,
-    val shareNum: Int
+    var isLike: Boolean,
+    var isUnlike: Boolean,
+    var likeNum: Int,
+    var shareNum: Int
 )

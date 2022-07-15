@@ -7,6 +7,8 @@ import com.example.summerexam.beans.OnlyTextResponseItem
 import com.example.summerexam.network.TAG
 import com.example.summerexam.services.OnlyTextService
 import com.ndhzs.lib.common.extensions.mapOrThrowApiException
+import com.ndhzs.lib.common.extensions.throwApiExceptionIfFail
+import com.ndhzs.lib.common.extensions.toast
 import com.ndhzs.lib.common.extensions.unSafeSubscribeBy
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -48,6 +50,33 @@ class OnlyTextViewModel : ViewModel() {
                 isLoading.value = false
                 //请求成功后参数变为false，因为观察了这个数据，达到一个回调的目的
                 isSwipeLayoutRefreshing.value = false
+            }
+    }
+
+    fun likeJoke(id:Int, status:Boolean){
+        OnlyTextService.INSTANCE.likeJoke(id, status)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .throwApiExceptionIfFail()
+            .unSafeSubscribeBy {
+                if (it.code != 200){
+                    toast(it.msg)
+                }
+            }
+    }
+
+    fun dislikeJoke(id:Int,status: Boolean){
+        OnlyTextService.INSTANCE.dislikeJoke(id, status)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .throwApiExceptionIfFail()
+            .doOnError {
+                toast(it.toString())
+            }
+            .unSafeSubscribeBy {
+                if (it.code != 200){
+                    toast(it.msg)
+                }
             }
     }
 
