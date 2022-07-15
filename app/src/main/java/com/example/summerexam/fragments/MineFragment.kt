@@ -5,12 +5,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.example.summerexam.R
 import com.example.summerexam.activities.LoginActivity
 import com.example.summerexam.viewmodel.MineViewModel
+import com.ndhzs.lib.common.extensions.appContext
+import com.ndhzs.lib.common.extensions.edit
+import com.ndhzs.lib.common.extensions.getSp
 import com.ndhzs.lib.common.ui.BaseFragment
 
 /**
@@ -22,10 +28,12 @@ import com.ndhzs.lib.common.ui.BaseFragment
 class MineFragment : BaseFragment() {
     private val mRelativeLayout by R.id.mine_rl_login.view<RelativeLayout>()
     private val viewModel by lazy { ViewModelProvider(this)[MineViewModel::class.java] }
-    private val mTvFollow by R.id.mine_tv_follow_detail.view<TextView>()
-    private val mTvFollowers by R.id.mine_tv_followers_detail.view<TextView>()
-    private val mTvCoin by R.id.mine_tv_coins_detail.view<TextView>()
-    private val mTvUserName by R.id.mine_tv_username.view<TextView>()
+    private val mTvFollow by R.id.tv_mine_follow_detail.view<TextView>()
+    private val mTvFollowers by R.id.tv_mine_followers_detail.view<TextView>()
+    private val mTvCoin by R.id.tv_mine_coins_detail.view<TextView>()
+    private val mTvUserName by R.id.tv_mine_username.view<TextView>()
+    private val mBtnOut by R.id.btn_mine_out.view<Button>()
+    private val mImgUser by R.id.img_mine_head.view<ImageView>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,23 +58,44 @@ class MineFragment : BaseFragment() {
             mTvFollow.text = viewModel.follow.toString()
             mTvFollowers.text = viewModel.followers.toString()
             mTvUserName.text = viewModel.username
+            Glide.with(this).load(viewModel.avatar).into(mImgUser)
             //当请求成功并且token未过期的时候，变为false
-            viewModel.isNeedRefresh = false
+            viewModel.isNeedToken = false
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mRelativeLayout.setOnClickListener {
-            val intent = Intent(context, LoginActivity::class.java)
-            startActivity(intent)
+            if (viewModel.token.value == "123") {
+                val intent = Intent(context, LoginActivity::class.java)
+                startActivity(intent)
+            }
         }
+        mBtnOut.setOnClickListener {
+            appContext.getSp("token").edit {
+                clear()
+            }
+            viewModel.refreshToken()
+            //token被clear了，所以对token的状态为需要token
+            viewModel.isNeedToken = true
+            initUi()
+        }
+    }
+
+    private fun initUi(){
+        mTvUserName.text = "登陆/注册"
+        Glide.with(this).load("https://jokes-avatar.oss-cn-beijing.aliyuncs.com/aliyun/jokes/avatar/default_avatar.png")
+            .into(mImgUser)
+        mTvCoin.text = "0"
+        mTvFollow.text = "0"
+        mTvFollowers.text = "0"
     }
 
     override fun onResume() {
         super.onResume()
         //切换回前台后，刷新token，主要目的为登陆成功后，刷新用户信息
-        if (viewModel.isNeedRefresh) viewModel.refreshToken()
+        if (viewModel.isNeedToken) viewModel.refreshToken()
     }
 
 }

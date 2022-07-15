@@ -59,9 +59,7 @@ class OnlyTextViewModel : ViewModel() {
             .observeOn(AndroidSchedulers.mainThread())
             .throwApiExceptionIfFail()
             .unSafeSubscribeBy {
-                if (it.code != 200){
-                    toast(it.msg)
-                }
+                if (it.code != 200) toast(it.msg)
             }
     }
 
@@ -74,9 +72,7 @@ class OnlyTextViewModel : ViewModel() {
                 toast(it.toString())
             }
             .unSafeSubscribeBy {
-                if (it.code != 200){
-                    toast(it.msg)
-                }
+                if (it.code != 200) toast(it.msg)
             }
     }
 

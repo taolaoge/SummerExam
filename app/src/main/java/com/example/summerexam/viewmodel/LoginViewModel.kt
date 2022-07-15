@@ -17,11 +17,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers
  * date : 2022/7/14
  */
 class LoginViewModel : ViewModel() {
-    private val _token = MutableLiveData("123")
-    val token:MutableLiveData<String>
-        get() = _token
 
-    fun login(code: String, phone: String,block:()->Unit) {
+    fun login(code: String, phone: String, block: () -> Unit) {
         LoginService.INSTANCE.login(code, phone)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -38,7 +35,10 @@ class LoginViewModel : ViewModel() {
         LoginService.INSTANCE.getCode(phone)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .mapOrThrowApiException()
-            .unSafeSubscribeBy { }
+            .throwApiExceptionIfFail()
+            .unSafeSubscribeBy {
+                if (it.code != 200) toast(it.msg)
+                else toast("请求成功")
+            }
     }
 }

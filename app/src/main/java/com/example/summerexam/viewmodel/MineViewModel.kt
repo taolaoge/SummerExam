@@ -18,12 +18,13 @@ class MineViewModel : ViewModel() {
     val token: MutableLiveData<String>
         get() = _token
     //是否需要刷新ui，是否需要重新获取token，这个变量来控制获取到最新token后再次拿到token
-    var isNeedRefresh = true
+    var isNeedToken = true
 
     var follow = 0
     var followers = 0
     var coin = 0
     var username = ""
+    var avatar = ""
 
     fun refreshToken(){
         _token.value = appContext.getSp("token").getString("token","123")
@@ -42,6 +43,7 @@ class MineViewModel : ViewModel() {
                 followers = it.info.fansNum
                 coin = it.info.experienceNum
                 username = it.user.nickname
+                avatar = it.user.avatar
                 block()
             }
     }
