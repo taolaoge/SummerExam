@@ -57,7 +57,7 @@ fun <T : ApiStatus> Flowable<T>.throwApiExceptionIfFail(): Flowable<T> {
 
 fun <E : Any, T : ApiWrapper<E>> Single<T>.mapOrThrowApiException(): Single<E> {
     return throwApiExceptionIfFail()
-        .map { it.data }
+        .map { it.data}
 }
 
 fun <E : Any, T : ApiWrapper<E>> Maybe<T>.mapOrThrowApiException(): Maybe<E> {

@@ -2,6 +2,10 @@ package com.ndhzs.lib.common.network
 
 import com.example.summerexam.network.ApiException
 import com.google.gson.annotations.SerializedName
+import com.ndhzs.lib.common.extensions.appContext
+import com.ndhzs.lib.common.extensions.edit
+import com.ndhzs.lib.common.extensions.getSp
+import com.ndhzs.lib.common.extensions.toast
 import java.io.Serializable
 import kotlin.jvm.Throws
 
@@ -11,25 +15,33 @@ import kotlin.jvm.Throws
  * @email 2767465918@qq.com
  * @date 2022/5/29 23:06
  */
-open class ApiWrapper<T> (
-  @SerializedName("data")
-  val data: T,
+open class ApiWrapper<T>(
+    @SerializedName("data")
+    val data: T,
 ) : Serializable, ApiStatus()
 
 open class ApiStatus(
-  @SerializedName("code")
-  val code: Int = 0,
-  @SerializedName("msg")
-  val msg: String = ""
+    @SerializedName("code")
+    val code: Int = 200,
+    @SerializedName("msg")
+    val msg: String = ""
 ) : Serializable {
 
-  fun isSuccess(): Boolean {
-    return code == 0
-  }
+    fun isSuccess(): Boolean {
+        if (code == 0 || code == 201) toast(msg)
+        if (code == 202) {
+            toast("用户登陆状态过期，请重新登陆")
+            //清除储存的token
+            appContext.getSp("token").edit {
+                clear()
+            }
+        }
+        return code == 200 || code == 0 || code == 201
+    }
 
-  @Throws(ApiException::class)
-  fun throwApiExceptionIfFail() {
-  if (!isSuccess()) throw ApiException(code, msg)
-}
+    @Throws(ApiException::class)
+    fun throwApiExceptionIfFail() {
+        if (!isSuccess()) throw ApiException(code, msg)
+    }
 }
 

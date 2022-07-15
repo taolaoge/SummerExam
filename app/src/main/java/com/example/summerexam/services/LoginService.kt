@@ -2,13 +2,9 @@ package com.example.summerexam.services
 
 import com.example.summerexam.beans.LoginResponse
 import com.example.summerexam.network.ApiGenerator
-import com.example.summerexam.network.PROJECT_TOKEN
 import com.ndhzs.lib.common.network.ApiWrapper
 import io.reactivex.rxjava3.core.Single
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Headers
-import retrofit2.http.Query
+import retrofit2.http.*
 
 /**
  * description ： TODO:类的作用
@@ -24,8 +20,12 @@ interface LoginService {
         }
     }
 
-    @Headers("project_token:$PROJECT_TOKEN")
-    @GET("/user/login/code")
-    fun login(@Query("code") code:String,@Query("phone") phone:String):Single<ApiWrapper<LoginResponse>>
+    @FormUrlEncoded
+    @POST("user/login/code")
+    fun login(@Field("code") code:String, @Field("phone") phone:String):Single<ApiWrapper<LoginResponse>>
+
+    @FormUrlEncoded
+    @POST("user/login/get_code")
+    fun getCode(@Field("phone") phone:String):Single<ApiWrapper<Any>>
 
 }

@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.FirstFragment">
+    tools:context=".fragments.first.FirstFragment">
+
+    <com.google.android.material.tabs.TabLayout
+        app:tabMode="scrollable"
+        android:id="@+id/first_tab_layout"
+        android:layout_width="300dp"
+        android:layout_height="50dp"/>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/first_vp2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="184dp"
-        android:text="This is first"
-        android:textSize="30dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

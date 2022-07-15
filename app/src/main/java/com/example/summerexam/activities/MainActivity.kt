@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.example.summerexam.R
-import com.example.summerexam.adapters.FragmentAdapter
-import com.example.summerexam.fragments.FirstFragment
+import com.example.summerexam.adapters.MainFragmentAdapter
+import com.example.summerexam.fragments.first.FirstFragment
 import com.example.summerexam.fragments.FindingFragment
 import com.example.summerexam.fragments.MineFragment
 import com.example.summerexam.fragments.MessageFragment
@@ -55,6 +55,6 @@ class MainActivity : BaseActivity() {
             add(MessageFragment())
             add(MineFragment())
         }
-        mViewPager.adapter = FragmentAdapter(this@MainActivity, fragments)
+        mViewPager.adapter = MainFragmentAdapter(this@MainActivity, fragments)
     }
 }

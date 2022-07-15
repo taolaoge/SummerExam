@@ -117,6 +117,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:background="@color/white"
             android:layout_gravity="center"
             android:layout_width="340dp"
             android:layout_height="80dp">

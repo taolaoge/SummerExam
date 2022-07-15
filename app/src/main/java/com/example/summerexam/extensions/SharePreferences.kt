@@ -16,7 +16,7 @@ import com.example.summerexam.BaseApp
  * 快捷得到方式
  */
 fun Context.getSp(name: String): SharedPreferences {
-  return getSharedPreferences(name, Context.MODE_PRIVATE)
+    return getSharedPreferences(name, Context.MODE_PRIVATE)
 }
 
 /**
@@ -27,6 +27,13 @@ fun Context.getSp(name: String): SharedPreferences {
  * 注意：这个是给整个应用全局使用的！
  */
 val defaultSp: SharedPreferences
-  get() = BaseApp.appContext.getSharedPreferences("defaultSp", Context.MODE_PRIVATE)
+    get() = BaseApp.appContext.getSharedPreferences("defaultSp", Context.MODE_PRIVATE)
 
 const val SP_TEST_DEMO = "这只是一个用于演示的例子"
+
+
+fun SharedPreferences.edit(block: SharedPreferences.Editor.() -> Unit) {
+    val editor = edit()
+    editor.block()
+    editor.apply()
+}

@@ -2,9 +2,11 @@ package com.example.summerexam.network
 
 import com.ndhzs.lib.common.extensions.mapOrThrowApiException
 import com.ndhzs.lib.common.extensions.mapOrCatchApiException
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import kotlin.reflect.KClass
 
 /**
@@ -58,11 +60,11 @@ import kotlin.reflect.KClass
 object ApiGenerator {
 
   private val retrofit = getNewRetrofit(true) {}
-  
+
   fun <T : Any> getApiService(clazz: KClass<T>): T {
     return retrofit.create(clazz.java)
   }
-  
+
   fun <T : Any> getApiService(
     clazz: KClass<T>,
     isNeedCookie: Boolean,
@@ -70,17 +72,25 @@ object ApiGenerator {
   ): T {
     return getNewRetrofit(isNeedCookie, config).create(clazz.java)
   }
-  
-  private fun getNewRetrofit(
+
+  fun getNewRetrofit(
     isNeedCookie: Boolean,
     config: Retrofit.Builder.() -> Unit
   ): Retrofit {
     return Retrofit
       .Builder()
       .baseUrl(URL)
+      .client(OkHttpClient().newBuilder().defaultOkhttpConfig())
       .addConverterFactory(GsonConverterFactory.create())
       .addCallAdapterFactory(RxJava3CallAdapterFactory.createSynchronous())
+      .apply { config.invoke(this) }
       .build()
+  }
+
+  private fun OkHttpClient.Builder.defaultOkhttpConfig(): OkHttpClient {
+    connectTimeout(10, TimeUnit.SECONDS)
+    readTimeout(10, TimeUnit.SECONDS)
+    return addInterceptor(MyInterceptor()).build()
   }
 
 }
