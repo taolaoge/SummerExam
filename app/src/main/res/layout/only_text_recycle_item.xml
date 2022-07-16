@@ -7,7 +7,7 @@
     android:layout_height="wrap_content">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/img_avatar"
+        android:id="@+id/img_text_avatar"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginTop="4dp"
@@ -19,7 +19,7 @@
         app:shapeAppearanceOverlay="@style/circleImageStyle" />
 
     <TextView
-        android:id="@+id/tv_nickname"
+        android:id="@+id/tv_text_nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -27,24 +27,24 @@
         android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.055"
-        app:layout_constraintStart_toEndOf="@+id/img_avatar"
+        app:layout_constraintStart_toEndOf="@+id/img_text_avatar"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_signature"
+        android:id="@+id/tv_text_signature"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:text="signature"
         android:textSize="12dp"
         android:lines="1"
         android:ellipsize="end"
-        app:layout_constraintEnd_toEndOf="@+id/tv_nickname"
+        app:layout_constraintEnd_toEndOf="@+id/tv_text_nickname"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/tv_nickname"
-        app:layout_constraintTop_toBottomOf="@+id/tv_nickname" />
+        app:layout_constraintStart_toStartOf="@+id/tv_text_nickname"
+        app:layout_constraintTop_toBottomOf="@+id/tv_text_nickname" />
 
     <TextView
-        android:id="@+id/tv_following"
+        android:id="@+id/tv_text_following"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -53,11 +53,11 @@
         android:textColor="@color/purple_200"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.744"
-        app:layout_constraintStart_toEndOf="@+id/tv_signature"
+        app:layout_constraintStart_toEndOf="@+id/tv_text_signature"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_content"
+        android:id="@+id/tv_text_content"
         android:layout_width="340dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="52dp"
@@ -75,79 +75,79 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.50"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_content">
+        app:layout_constraintTop_toBottomOf="@+id/tv_text_content">
 
         <ImageView
-            android:id="@+id/img_like"
+            android:id="@+id/img_text_like"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_like" />
 
         <TextView
-            android:id="@+id/tv_like_detail"
+            android:id="@+id/tv_text_like_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="8dp"
-            android:layout_toEndOf="@id/img_like"
+            android:layout_toEndOf="@id/img_text_like"
             android:text="0"
             android:textSize="15dp" />
 
         <ImageView
-            android:id="@+id/img_dislike"
+            android:id="@+id/img_text_dislike"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_centerVertical="true"
             android:layout_marginStart="40dp"
-            android:layout_toEndOf="@id/tv_like_detail"
+            android:layout_toEndOf="@id/tv_text_like_detail"
             android:src="@drawable/ic_dislike" />
 
         <TextView
-            android:id="@+id/tv_dislike_detail"
+            android:id="@+id/tv_text_dislike_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="8dp"
-            android:layout_toEndOf="@id/img_dislike"
+            android:layout_toEndOf="@id/img_text_dislike"
             android:text="0"
             android:textSize="15dp" />
 
         <ImageView
-            android:id="@+id/img_comment"
+            android:id="@+id/img_text_comment"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_centerVertical="true"
             android:layout_marginStart="40dp"
-            android:layout_toEndOf="@id/tv_dislike_detail"
+            android:layout_toEndOf="@id/tv_text_dislike_detail"
             android:src="@drawable/ic_comment" />
 
         <TextView
-            android:id="@+id/tv_comment_detail"
+            android:id="@+id/tv_text_comment_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="8dp"
-            android:layout_toEndOf="@id/img_comment"
+            android:layout_toEndOf="@id/img_text_comment"
             android:text="0"
             android:textSize="15dp" />
 
         <ImageView
-            android:id="@+id/img_share"
+            android:id="@+id/img_text_share"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_centerVertical="true"
             android:layout_marginStart="40dp"
-            android:layout_toEndOf="@id/tv_comment_detail"
+            android:layout_toEndOf="@id/tv_text_comment_detail"
             android:src="@drawable/ic_share" />
 
         <TextView
-            android:id="@+id/tv_share_detail"
+            android:id="@+id/tv_text_share_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="8dp"
-            android:layout_toEndOf="@id/img_share"
+            android:layout_toEndOf="@id/img_text_share"
             android:text="0"
             android:textSize="15dp" />
 

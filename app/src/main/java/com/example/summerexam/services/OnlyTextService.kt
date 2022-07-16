@@ -40,4 +40,11 @@ interface OnlyTextService {
     @POST("jokes/unlike")
     @FormUrlEncoded
     fun dislikeJoke(@Field("id") id: Int, @Field("status") status: Boolean):Single<ApiWrapper<Any>>
+
+    /**
+     * 关注发段子的人
+     */
+    @POST("user/attention")
+    @FormUrlEncoded
+    fun followUser(@Field("status") status:String,@Field("userId") userId:String):Single<ApiWrapper<Any>>
 }

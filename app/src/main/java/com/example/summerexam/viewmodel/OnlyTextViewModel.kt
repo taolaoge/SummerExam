@@ -77,6 +77,16 @@ class OnlyTextViewModel : ViewModel() {
             }
     }
 
+    fun followUser(status:String,userId:String,block:(Boolean) -> Unit){
+        OnlyTextService.INSTANCE.followUser(status, userId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .throwApiExceptionIfFail()
+            .unSafeSubscribeBy {
+                if (it.code == 200) block(true)
+            }
+    }
+
     fun clearList(){
         newTextData.clear()
         oldTextData.clear()

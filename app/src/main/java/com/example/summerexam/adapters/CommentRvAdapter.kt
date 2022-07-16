@@ -21,9 +21,6 @@ class CommentRvAdapter(private val data: ArrayList<Comment>
 ,private val clickLike:(String, Boolean,Int) -> Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val TYPE_NOCOMMENT = 0
-    private val TYPE_COMMENT = 1
-
     inner class CommentViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         init {
             view.findViewById<TextView>(R.id.tv_comment_reply).setOnClickListener {

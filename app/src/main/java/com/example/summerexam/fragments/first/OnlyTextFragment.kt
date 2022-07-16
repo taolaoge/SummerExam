@@ -22,6 +22,7 @@ import com.example.summerexam.network.TAG
 import com.example.summerexam.view.MyItemDecoration
 import com.example.summerexam.viewmodel.OnlyTextViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.ndhzs.lib.common.extensions.toast
 import com.ndhzs.lib.common.ui.BaseFragment
 
 /**
@@ -37,13 +38,7 @@ class OnlyTextFragment : BaseFragment() {
             this.run {
                 layoutManager = LinearLayoutManager(context)
                 adapter =
-                    OnlyTextRvAdapter(viewModel.newTextData, ::clickLikeOrDislike) {
-                        val commentBottomFragment = CommentBottomFragment()
-                        val bundle = Bundle()
-                        bundle.putInt("jokeId",it)
-                        commentBottomFragment.arguments = bundle
-                        commentBottomFragment.show(this@OnlyTextFragment.childFragmentManager,"CommentBottomFragment")
-                    }
+                    OnlyTextRvAdapter(viewModel.newTextData, ::clickLikeOrDislike,::clickComment,::clickFollowing)
                 addItemDecoration(
                     MyItemDecoration(20)
                 )
@@ -115,6 +110,27 @@ class OnlyTextFragment : BaseFragment() {
             ), true
         )
         diffResult.dispatchUpdatesTo(mRvText.adapter!!)
+    }
+
+    private fun clickComment(id:Int) {
+        val commentBottomFragment = CommentBottomFragment()
+        val bundle = Bundle()
+        bundle.putInt("jokeId", id)
+        commentBottomFragment.arguments = bundle
+        commentBottomFragment.show(
+            this@OnlyTextFragment.childFragmentManager,
+            "CommentBottomFragment"
+        )
+    }
+
+    private fun clickFollowing(status: Boolean,userId:String,position:Int){
+        if (status) viewModel.followUser("1",userId){
+            if (it) {
+                toast("关注成功")
+                viewModel.newTextData[position].info.isAttention = true
+                freshRecycleViewData()
+            }
+        }
     }
 
     /**

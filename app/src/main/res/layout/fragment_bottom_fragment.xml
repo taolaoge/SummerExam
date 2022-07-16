@@ -47,7 +47,7 @@
             android:hint="   留下你的精彩评论..." />
 
         <ImageView
-            android:id="@+id/img_comment"
+            android:id="@+id/img_text_comment"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_centerVertical="true"
