@@ -28,4 +28,11 @@ interface CommentService {
     @POST("jokes/comment/list")
     @FormUrlEncoded
     fun getCommentList(@Field("jokeId")id:Int):Single<ApiWrapper<CommentResponse>>
+
+    /**
+     * 给指定的评论点赞，需要传入评论的id，status，点赞或者取消点赞
+     */
+    @POST("jokes/comment/like")
+    @FormUrlEncoded
+    fun likeComment(@Field("commentId") commentId:String,@Field("status")status:Boolean):Single<ApiWrapper<Any>>
 }

@@ -10,8 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.summerexam.R
 import com.example.summerexam.beans.Comment
-import com.example.summerexam.beans.OnlyTextResponseItem
-import org.w3c.dom.Text
 
 /**
  * description ： TODO:类的作用
@@ -19,7 +17,8 @@ import org.w3c.dom.Text
  * email : 1678921845@qq.com
  * date : 2022/7/16
  */
-class CommentRvAdapter(private val data: ArrayList<Comment>) :
+class CommentRvAdapter(private val data: ArrayList<Comment>
+,private val clickLike:(String, Boolean,Int) -> Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val TYPE_NOCOMMENT = 0
@@ -29,6 +28,11 @@ class CommentRvAdapter(private val data: ArrayList<Comment>) :
         init {
             view.findViewById<TextView>(R.id.tv_comment_reply).setOnClickListener {
 
+            }
+            view.findViewById<ImageView>(R.id.img_comment_love).setOnClickListener {
+                data[adapterPosition].run {
+                    clickLike(commentId.toString(),!isLike,adapterPosition)
+                }
             }
         }
         val mTvNickname: TextView = view.findViewById(R.id.rv_comment_nickname)

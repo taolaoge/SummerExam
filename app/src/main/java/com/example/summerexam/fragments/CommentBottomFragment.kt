@@ -8,17 +8,16 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.summerexam.R
 import com.example.summerexam.adapters.CommentRvAdapter
-import com.example.summerexam.services.CommentService
+import com.example.summerexam.adapters.OnlyTextRvAdapter
 import com.example.summerexam.viewmodel.CommentViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.ndhzs.lib.common.ui.BaseFragment
-import org.w3c.dom.Text
 
 /**
  * description ： TODO:类的作用
@@ -73,8 +72,33 @@ class CommentBottomFragment :BottomSheetDialogFragment() {
             mTvCommentCount.text = "评论数量 ${viewModel.count}"
             mRvComment.run {
                 layoutManager = LinearLayoutManager(context)
-                adapter = CommentRvAdapter(viewModel.data)
+                adapter = CommentRvAdapter(viewModel.newData,::clickLike)
                 overScrollMode = View.OVER_SCROLL_NEVER
+            }
+        }
+    }
+
+    private fun freshRecycleViewData() {
+        val diffResult = DiffUtil.calculateDiff(
+            CommentRvAdapter.DiffCallBack(
+                viewModel.oldData, viewModel.newData
+            ), true
+        )
+        diffResult.dispatchUpdatesTo(mRvComment.adapter!!)
+    }
+
+    private fun clickLike(id:String, status:Boolean, position:Int){
+        viewModel.likeComment(id,status){
+            if (it) viewModel.newData[position].run {
+                if (status) {
+                    isLike = status
+                    likeNum += 1
+                    freshRecycleViewData()
+                }else{
+                    isLike = status
+                    likeNum -= 1
+                    freshRecycleViewData()
+                }
             }
         }
     }

@@ -1,12 +1,10 @@
 package com.example.summerexam.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.summerexam.beans.Comment
-import com.example.summerexam.network.TAG
 import com.example.summerexam.services.CommentService
 import com.ndhzs.lib.common.extensions.mapOrThrowApiException
-import com.ndhzs.lib.common.extensions.toast
+import com.ndhzs.lib.common.extensions.throwApiExceptionIfFail
 import com.ndhzs.lib.common.extensions.unSafeSubscribeBy
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -19,7 +17,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers
  */
 class CommentViewModel : ViewModel() {
 
-    val data = ArrayList<Comment>()
+    val newData = ArrayList<Comment>()
+    var oldData = ArrayList<Comment>()
     var id = 0
     var count = 0
 
@@ -28,15 +27,23 @@ class CommentViewModel : ViewModel() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .mapOrThrowApiException()
-            .doOnError {
-                toast(it.toString())
-            }
             .unSafeSubscribeBy {
+                oldData = newData
                 for (i in it.comments) {
-                    data.add(i)
+                    newData.add(i)
                 }
                 count = it.count
                 block()
+            }
+    }
+
+    fun likeComment(id:String,status:Boolean,block: (Boolean) -> Unit){
+        CommentService.INSTANCE.likeComment(id,status)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .throwApiExceptionIfFail()
+            .unSafeSubscribeBy {
+                if (it.code == 200) block(true)
             }
     }
 }

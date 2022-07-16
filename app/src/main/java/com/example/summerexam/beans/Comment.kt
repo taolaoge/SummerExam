@@ -4,11 +4,11 @@ data class Comment(
     val commentId: Int,
     val commentUser: CommentUser,
     val content: String,
-    val isLike: Boolean,
+    var isLike: Boolean,
     val itemCommentList: List<ItemComment>,
     val itemCommentNum: Int,
     val jokeId: Int,
     val jokeOwnerUserId: Int,
-    val likeNum: Int,
+    var likeNum: Int,
     val timeStr: String
 )
