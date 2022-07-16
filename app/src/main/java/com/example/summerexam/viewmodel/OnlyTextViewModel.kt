@@ -1,5 +1,6 @@
 package com.example.summerexam.viewmodel
 
+import android.text.BoringLayout
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -53,17 +54,17 @@ class OnlyTextViewModel : ViewModel() {
             }
     }
 
-    fun likeJoke(id:Int, status:Boolean){
+    fun likeJoke(id:Int, status:Boolean,block:(Boolean) -> Unit){
         OnlyTextService.INSTANCE.likeJoke(id, status)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .throwApiExceptionIfFail()
             .unSafeSubscribeBy {
-                if (it.code != 200) toast(it.msg)
+                if (it.code == 200) block(true)
             }
     }
 
-    fun dislikeJoke(id:Int,status: Boolean){
+    fun dislikeJoke(id:Int,status: Boolean,block:(Boolean) -> Unit){
         OnlyTextService.INSTANCE.dislikeJoke(id, status)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -72,7 +73,7 @@ class OnlyTextViewModel : ViewModel() {
                 toast(it.toString())
             }
             .unSafeSubscribeBy {
-                if (it.code != 200) toast(it.msg)
+                if (it.code == 200) block(true)
             }
     }
 

@@ -36,7 +36,7 @@ open class ApiStatus(
                 clear()
             }
         }
-        return code == 200 || code == 0 || code == 201
+        return code == 200 || code == 0 || code == 201 || code == 202
     }
 
     @Throws(ApiException::class)

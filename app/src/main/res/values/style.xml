@@ -6,4 +6,9 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="BottomDialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@style/Animation.Design.BottomSheetDialog</item>
+    </style>
+
 </resources>

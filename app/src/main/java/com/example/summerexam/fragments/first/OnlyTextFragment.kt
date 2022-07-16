@@ -1,10 +1,15 @@
 package com.example.summerexam.fragments.first
 
+import android.app.AlertDialog
+import android.app.ProgressDialog
+import android.app.ProgressDialog.show
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,9 +17,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.summerexam.R
 import com.example.summerexam.adapters.OnlyTextRvAdapter
+import com.example.summerexam.fragments.CommentBottomFragment
 import com.example.summerexam.network.TAG
 import com.example.summerexam.view.MyItemDecoration
 import com.example.summerexam.viewmodel.OnlyTextViewModel
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.ndhzs.lib.common.ui.BaseFragment
 
 /**
@@ -30,7 +37,13 @@ class OnlyTextFragment : BaseFragment() {
             this.run {
                 layoutManager = LinearLayoutManager(context)
                 adapter =
-                    OnlyTextRvAdapter(viewModel.newTextData, ::clickLikeOrDislike)
+                    OnlyTextRvAdapter(viewModel.newTextData, ::clickLikeOrDislike) {
+                        val commentBottomFragment = CommentBottomFragment()
+                        val bundle = Bundle()
+                        bundle.putInt("jokeId",it)
+                        commentBottomFragment.arguments = bundle
+                        commentBottomFragment.show(this@OnlyTextFragment.childFragmentManager,"CommentBottomFragment")
+                    }
                 addItemDecoration(
                     MyItemDecoration(20)
                 )
@@ -104,31 +117,40 @@ class OnlyTextFragment : BaseFragment() {
         diffResult.dispatchUpdatesTo(mRvText.adapter!!)
     }
 
+    /**
+     * 第一个参数为段子的id，第二个参数为你想对段子进行什么操作，点赞，取消点赞等
+     * 第三个参数为此段子在rv中的位置，方便对他进行数值的修改
+     * 第四个参数为用户点赞或者点踩，点赞what就为true，点踩what就为false
+     */
     private fun clickLikeOrDislike(id: Int, status: Boolean, position: Int, what: Boolean) {
         viewModel.newTextData[position].info.run {
-            Log.d(TAG, "clickLikeOrDislike:${viewModel.newTextData[position].joke.jokesId} ")
             if (!what) {
-                viewModel.dislikeJoke(id, status)
-                if (status) {
-                    disLikeNum += 1
-                    isUnlike = true
-                } else {
-                    disLikeNum -= 1
-                    isUnlike = false
+                viewModel.dislikeJoke(id, status) {
+                    if (it) {
+                        if (status) {
+                            disLikeNum += 1
+                            isUnlike = true
+                        } else {
+                            disLikeNum -= 1
+                            isUnlike = false
+                        }
+                    }
+                    freshRecycleViewData()
                 }
             } else {
-                viewModel.likeJoke(id, status)
-                if (status){
-                    likeNum += 1
-                    isLike = true
-                }
-                else{
-                    likeNum -= 1
-                    isLike = false
+                viewModel.likeJoke(id, status) {
+                    if (it) {
+                        if (status) {
+                            likeNum += 1
+                            isLike = true
+                        } else {
+                            likeNum -= 1
+                            isLike = false
+                        }
+                    }
+                    freshRecycleViewData()
                 }
             }
-            freshRecycleViewData()
         }
     }
-
 }

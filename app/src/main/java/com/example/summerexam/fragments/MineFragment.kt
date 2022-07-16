@@ -46,6 +46,7 @@ class MineFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.token.observe(this) {
+            //观察token，token只要不为123，即token不为空就会刷新ui
             if (it != "123") {
                 refreshUi()
             }
@@ -54,6 +55,7 @@ class MineFragment : BaseFragment() {
 
     private fun refreshUi() {
         viewModel.refreshUi(){
+            //传入的lambda回调，请求成功后回调此函数更新ui
             mTvCoin.text = viewModel.coin.toString()
             mTvFollow.text = viewModel.follow.toString()
             mTvFollowers.text = viewModel.followers.toString()
@@ -76,9 +78,11 @@ class MineFragment : BaseFragment() {
             appContext.getSp("token").edit {
                 clear()
             }
+            //退出登陆就是把token清除
             viewModel.refreshToken()
             //token被clear了，所以对token的状态为需要token
             viewModel.isNeedToken = true
+            //初始化ui，将ui变为初始的样子
             initUi()
         }
     }

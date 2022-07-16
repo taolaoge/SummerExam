@@ -18,7 +18,8 @@ import com.example.summerexam.beans.OnlyTextResponseItem
  * date : 2022/7/15
  */
 class OnlyTextRvAdapter(private val data: ArrayList<OnlyTextResponseItem>
-,private val clickLikeOrDislike:(id:Int, status:Boolean, position:Int, what:Boolean)->Unit) :
+,private val clickLikeOrDislike:(id:Int, status:Boolean, position:Int, what:Boolean)->Unit
+,private val clickComment:((id:Int) -> Unit)) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val TYPE_TEXT = 0
     private val TYPE_BOTTOM = 1
@@ -36,7 +37,9 @@ class OnlyTextRvAdapter(private val data: ArrayList<OnlyTextResponseItem>
                 }
             }
             view.findViewById<ImageView>(R.id.img_comment).setOnClickListener {
-
+                data[adapterPosition].run {
+                    clickComment(joke.jokesId)
+                }
             }
         }
 
@@ -61,8 +64,6 @@ class OnlyTextRvAdapter(private val data: ArrayList<OnlyTextResponseItem>
      *有了类型的判断就可以在onCreateViewHolder中首先判断viewType的种类，对应的item的类型填充不同的视图
      *这一步是必须要判断的，如果不判断的种类的话，在onCreateViewHolder中会造成item的类型错乱，显示错乱等等
      */
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == 0) {
             OnlyTextViewHolder(
@@ -78,6 +79,9 @@ class OnlyTextRvAdapter(private val data: ArrayList<OnlyTextResponseItem>
     }
 
 
+    /**
+     * 获取item的类型
+     */
     override fun getItemViewType(position: Int): Int {
         return if (position == data.size) TYPE_BOTTOM else TYPE_TEXT
     }
