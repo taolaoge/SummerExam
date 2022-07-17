@@ -9,13 +9,13 @@
 
     <com.google.android.material.tabs.TabLayout
         app:tabMode="scrollable"
-        android:id="@+id/first_tab_layout"
+        android:id="@+id/tab_layout_first"
         android:layout_width="300dp"
         android:layout_height="50dp"/>
 
     <androidx.viewpager2.widget.ViewPager2
         android:background="@color/grey"
-        android:id="@+id/first_vp2"
+        android:id="@+id/vp2_first"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

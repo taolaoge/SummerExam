@@ -17,6 +17,7 @@
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable/shape_btn.xml" value="0.2325" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable/shape_dialog.xml" value="0.148" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable/shape_ed.xml" value="0.2635" />
+        <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable/shape_img.xml" value="0.2355" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/activity_login.xml" value="0.40217391304347827" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/activity_login2.xml" value="0.3890625" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/activity_main.xml" value="0.40217391304347827" />
@@ -30,14 +31,15 @@
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/fragment_bottom_fragment.xml" value="0.264" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/fragment_comprehensive.xml" value="0.40217391304347827" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/fragment_finding.xml" value="0.40217391304347827" />
-        <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/fragment_first.xml" value="0.40217391304347827" />
+        <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/fragment_first.xml" value="0.2" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/fragment_message.xml" value="0.40217391304347827" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/fragment_mine.xml" value="0.264" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/fragment_move.xml" value="0.40217391304347827" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/fragment_only_text.xml" value="0.40217391304347827" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/fragment_picture.xml" value="0.40217391304347827" />
-        <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/only_text_recycle_item.xml" value="0.536" />
+        <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/only_text_recycle_item.xml" value="0.1" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/only_text_recycle_item_bottom.xml" value="0.40217391304347827" />
+        <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/view_pager_item.xml" value="0.264" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/menu/menu_navigation.xml" value="0.40260416666666665" />
       </map>
     </option>

@@ -4,8 +4,10 @@ import android.text.BoringLayout
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.summerexam.beans.OnlyTextResponse
 import com.example.summerexam.beans.OnlyTextResponseItem
 import com.example.summerexam.network.TAG
+import com.example.summerexam.repository.FirstRepository
 import com.example.summerexam.services.OnlyTextService
 import com.ndhzs.lib.common.extensions.mapOrThrowApiException
 import com.ndhzs.lib.common.extensions.throwApiExceptionIfFail
@@ -24,6 +26,8 @@ class OnlyTextViewModel : ViewModel() {
     val newTextData = ArrayList<OnlyTextResponseItem>()
     var oldTextData = ArrayList<OnlyTextResponseItem>()
 
+    val page = MutableLiveData<Int>()
+
     /**
      * 判断是否正在请求数据
      * 因为我是用的监听最后一个item来继续请求更多数据，如果没有这个参数，很有可能重复请求两次数据
@@ -39,22 +43,27 @@ class OnlyTextViewModel : ViewModel() {
 
     fun getOnlyText() {
         isLoading.value = true
-        OnlyTextService.INSTANCE.getOnlyText()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .mapOrThrowApiException()
-            .unSafeSubscribeBy {
-                oldTextData = newTextData
-                for (data in it) {
-                    newTextData.add(data)
-                }
-                isLoading.value = false
-                //请求成功后参数变为false，因为观察了这个数据，达到一个回调的目的
-                isSwipeLayoutRefreshing.value = false
+        when (page.value) {
+            3 -> {
+                FirstRepository.getOnlyText().unSafeSubscribeBy { dealData(it) }
             }
+            4 -> {
+                FirstRepository.getPicture().unSafeSubscribeBy { dealData(it) }
+            }
+        }
     }
 
-    fun likeJoke(id:Int, status:Boolean,block:(Boolean) -> Unit){
+    private fun dealData(it: OnlyTextResponse) {
+        oldTextData = newTextData
+        for (data in it) {
+            newTextData.add(data)
+        }
+        isLoading.value = false
+        //请求成功后参数变为false，因为观察了这个数据，达到一个回调的目的
+        isSwipeLayoutRefreshing.value = false
+    }
+
+    fun likeJoke(id: Int, status: Boolean, block: (Boolean) -> Unit) {
         OnlyTextService.INSTANCE.likeJoke(id, status)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -64,7 +73,7 @@ class OnlyTextViewModel : ViewModel() {
             }
     }
 
-    fun dislikeJoke(id:Int,status: Boolean,block:(Boolean) -> Unit){
+    fun dislikeJoke(id: Int, status: Boolean, block: (Boolean) -> Unit) {
         OnlyTextService.INSTANCE.dislikeJoke(id, status)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -77,7 +86,7 @@ class OnlyTextViewModel : ViewModel() {
             }
     }
 
-    fun followUser(status:String,userId:String,block:(Boolean) -> Unit){
+    fun followUser(status: String, userId: String, block: (Boolean) -> Unit) {
         OnlyTextService.INSTANCE.followUser(status, userId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -87,7 +96,7 @@ class OnlyTextViewModel : ViewModel() {
             }
     }
 
-    fun clearList(){
+    fun clearList() {
         newTextData.clear()
         oldTextData.clear()
         //下拉刷新数据时，先将此参数变为true，意味着正在请求

@@ -47,4 +47,22 @@ interface OnlyTextService {
     @POST("user/attention")
     @FormUrlEncoded
     fun followUser(@Field("status") status:String,@Field("userId") userId:String):Single<ApiWrapper<Any>>
+
+    /**
+     * 获取首页趣图数据
+     */
+    @POST("home/pic")
+    fun getPicture():Single<ApiWrapper<OnlyTextResponse>>
+
+    /**
+     * 获取首页最新列表数据
+     */
+    @POST("home/latest")
+    fun getLatest():Single<ApiWrapper<OnlyTextResponse>>
+
+    /**
+     * 获取推荐列表的数据
+     */
+    @POST("home/recommend")
+    fun getRecommend():Single<ApiWrapper<OnlyTextResponse>>
 }

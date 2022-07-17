@@ -58,8 +58,9 @@ class OnlyTextFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getOnlyText()
         initSwipeLayout()
+        val bundle = arguments
+        viewModel.page.value = bundle?.getInt("page")
     }
 
     private fun initSwipeLayout() {
@@ -75,6 +76,9 @@ class OnlyTextFragment : BaseFragment() {
         }
         viewModel.isSwipeLayoutRefreshing.observe(this) {
             if (!it) mSwipeLayout.isRefreshing = false
+        }
+        viewModel.page.observe(this){
+            viewModel.getOnlyText()
         }
     }
 

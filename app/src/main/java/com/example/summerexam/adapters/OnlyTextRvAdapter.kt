@@ -6,11 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.VideoView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.example.summerexam.R
 import com.example.summerexam.beans.OnlyTextResponseItem
+import com.example.summerexam.extensions.decrypt
+import com.example.summerexam.extensions.decrypt1
+import com.ndhzs.lib.common.extensions.gone
 import com.ndhzs.lib.common.extensions.invisible
 import com.ndhzs.lib.common.extensions.visible
 import org.w3c.dom.Text
@@ -21,38 +27,18 @@ import org.w3c.dom.Text
  * email : 1678921845@qq.com
  * date : 2022/7/15
  */
-class OnlyTextRvAdapter(private val data: ArrayList<OnlyTextResponseItem>
-,private val clickLikeOrDislike:(id:Int, status:Boolean, position:Int, what:Boolean)->Unit
-,private val clickComment:((Int) -> Unit),private val clickFollowing:(Boolean,String,Int) -> Unit) :
+class OnlyTextRvAdapter(
+    private val data: ArrayList<OnlyTextResponseItem>,
+    private val clickLikeOrDislike: (id: Int, status: Boolean, position: Int, what: Boolean) -> Unit,
+    private val clickComment: ((Int) -> Unit),
+    private val clickFollowing: (Boolean, String, Int) -> Unit
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val TYPE_TEXT = 0
     private val TYPE_BOTTOM = 1
 
     inner class OnlyTextViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        init {
-            view.findViewById<ImageView>(R.id.img_text_like).setOnClickListener {
-                data[adapterPosition].run {
-                    clickLikeOrDislike(joke.jokesId,!info.isLike,adapterPosition,true)
-                }
-            }
-            view.findViewById<ImageView>(R.id.img_text_dislike).setOnClickListener {
-                data[adapterPosition].run {
-                    clickLikeOrDislike(joke.jokesId,!info.isUnlike,adapterPosition,false)
-                }
-            }
-            view.findViewById<ImageView>(R.id.img_text_comment).setOnClickListener {
-                data[adapterPosition].run {
-                    clickComment(joke.jokesId)
-                }
-            }
-            view.findViewById<TextView>(R.id.tv_text_following).setOnClickListener {
-                data[adapterPosition].run {
-                    clickFollowing(!info.isAttention,user.userId.toString(),adapterPosition)
-                }
-            }
-        }
-
-        val mTvFollowing:TextView = view.findViewById(R.id.tv_text_following)
+        val mTvFollowing: TextView = view.findViewById(R.id.tv_text_following)
         val mImgAvatar: ImageView = view.findViewById(R.id.img_text_avatar)
         val mTvNickname: TextView = view.findViewById(R.id.tv_text_nickname)
         val mTvSignature: TextView = view.findViewById(R.id.tv_text_signature)
@@ -64,6 +50,31 @@ class OnlyTextRvAdapter(private val data: ArrayList<OnlyTextResponseItem>
         val mImgLike: ImageView = view.findViewById(R.id.img_text_like)
         val mImgDislike: ImageView = view.findViewById(R.id.img_text_dislike)
         val mImgComment: ImageView = view.findViewById(R.id.img_text_comment)
+        val mImgPicture: ImageView = view.findViewById(R.id.img_picture)
+        //val mVideoVideo = view.findViewById(R.id.video_view_video)
+
+        init {
+            mImgLike.setOnClickListener {
+                data[adapterPosition].run {
+                    clickLikeOrDislike(joke.jokesId, !info.isLike, adapterPosition, true)
+                }
+            }
+            mImgDislike.setOnClickListener {
+                data[adapterPosition].run {
+                    clickLikeOrDislike(joke.jokesId, !info.isUnlike, adapterPosition, false)
+                }
+            }
+            mImgComment.setOnClickListener {
+                data[adapterPosition].run {
+                    clickComment(joke.jokesId)
+                }
+            }
+            mTvFollowing.setOnClickListener {
+                data[adapterPosition].run {
+                    clickFollowing(!info.isAttention, user.userId.toString(), adapterPosition)
+                }
+            }
+        }
     }
 
     inner class BottomHolder(view: View) : RecyclerView.ViewHolder(view) {}
@@ -108,6 +119,13 @@ class OnlyTextRvAdapter(private val data: ArrayList<OnlyTextResponseItem>
                 this.mTvComment.text = data.info.commentNum.toString()
                 this.mTvShare.text = data.info.shareNum.toString()
                 if (data.info.isAttention) mTvFollowing.invisible() else mTvFollowing.visible()
+                if (data.joke.imageUrl.decrypt() != "")
+                    Glide.with(itemView.context).load(data.joke.imageUrl.decrypt())
+                        .apply(RequestOptions.bitmapTransform(RoundedCorners(15)))
+                        .into(this.mImgPicture)
+                else holder.mImgPicture.gone()
+                /*if (data.joke.videoUrl.decrypt()?.isNotEmpty() == true  ){}
+                else holder.mVideoVideo.gone()*/
             }
         }
     }

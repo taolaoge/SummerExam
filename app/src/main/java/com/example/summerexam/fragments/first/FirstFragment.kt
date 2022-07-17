@@ -18,14 +18,14 @@ import com.ndhzs.lib.common.ui.BaseFragment
 
 class FirstFragment : BaseFragment() {
     private val viewModel by lazy { ViewModelProvider(this)[FirstViewModel::class.java] }
-    private val mViewPager by R.id.first_vp2.view<ViewPager2>()
+    private val mViewPager by R.id.vp2_first.view<ViewPager2>()
         .addInitialize {
             val child: View = getChildAt(0)
             if (child is RecyclerView) {
                 child.setOverScrollMode(View.OVER_SCROLL_NEVER)
             }
         }
-    private val mTabLayout by R.id.first_tab_layout.view<TabLayout>()
+    private val mTabLayout by R.id.tab_layout_first.view<TabLayout>()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -40,12 +40,28 @@ class FirstFragment : BaseFragment() {
     }
 
     private fun initViewPager() {
+        val bundleList = ArrayList<Bundle>()
+        for (i in 0..4){
+            val bundle = Bundle()
+            bundle.putInt("page",i)
+            bundleList.add(bundle)
+        }
+        val followFragment = FollowFragment()
+        val recommendFragment = RecommendFragment()
+        val freshFragment = FreshFragment()
+        val onlyTextFragment = OnlyTextFragment()
+        val pictureFragment = OnlyTextFragment()
+        followFragment.arguments = bundleList[0]
+        recommendFragment.arguments = bundleList[1]
+        freshFragment.arguments = bundleList[2]
+        onlyTextFragment.arguments = bundleList[3]
+        pictureFragment.arguments = bundleList[4]
         val fragments = arrayListOf<Fragment>(
-            FollowFragment(),
-            RecommendFragment(),
-            FreshFragment(),
-            OnlyTextFragment(),
-            PictureFragment()
+            followFragment,
+            recommendFragment,
+            freshFragment,
+            onlyTextFragment,
+            pictureFragment
         )
         val data = arrayOf("关注","推荐","新鲜","纯文","趣图")
         mViewPager.adapter = FirstFragmentAdapter(this,fragments)
