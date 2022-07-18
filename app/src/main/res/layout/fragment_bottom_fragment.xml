@@ -37,14 +37,14 @@
         android:layout_width="match_parent"
         android:layout_height="60dp">
 
-        <EditText
-            android:id="@+id/ed_comment"
+        <TextView
+            android:id="@+id/tv_comment"
             android:layout_width="280dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:layout_marginStart="20dp"
             android:background="@drawable/shape_ed"
-            android:hint="   留下你的精彩评论..." />
+            android:hint=" 留下你的精彩评论..." />
 
         <ImageView
             android:id="@+id/img_text_comment"

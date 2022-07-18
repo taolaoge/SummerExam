@@ -177,5 +177,7 @@ class OnlyTextRvAdapter(
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             return false
         }
+
+        override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any = ""
     }
 }

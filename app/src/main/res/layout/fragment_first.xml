@@ -10,7 +10,9 @@
     <com.google.android.material.tabs.TabLayout
         app:tabMode="scrollable"
         android:id="@+id/tab_layout_first"
-        android:layout_width="300dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="50dp"
+        android:layout_width="match_parent"
         android:layout_height="50dp"/>
 
     <androidx.viewpager2.widget.ViewPager2
