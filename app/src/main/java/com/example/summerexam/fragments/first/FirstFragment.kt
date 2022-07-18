@@ -47,8 +47,8 @@ class FirstFragment : BaseFragment() {
             bundleList.add(bundle)
         }
         val followFragment = FollowFragment()
-        val recommendFragment = RecommendFragment()
-        val freshFragment = FreshFragment()
+        val recommendFragment = OnlyTextFragment()
+        val freshFragment = OnlyTextFragment()
         val onlyTextFragment = OnlyTextFragment()
         val pictureFragment = OnlyTextFragment()
         followFragment.arguments = bundleList[0]

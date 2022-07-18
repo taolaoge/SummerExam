@@ -2,6 +2,7 @@ package com.example.summerexam.extensions
 
 import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.example.summerexam.network.DECRYPT_KEY
 import com.example.summerexam.network.TAG
 import com.ndhzs.lib.common.extensions.appContext
@@ -32,8 +33,8 @@ fun String.decrypt1():String{
     return s
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 fun String.decrypt():String {
-    Log.d(TAG, "decrypt1: $this")
     if (this == "") return ""
     val new = this.split(",")
     val newString = new[0].replace("ftp://","")

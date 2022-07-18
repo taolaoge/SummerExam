@@ -5,6 +5,8 @@
       <map>
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2325" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable/bottom_navigation_selector.xml" value="0.2325" />
+        <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable/dkplayer_progress_loading.xml" value="0.2355" />
+        <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable/dkplayer_selector_play_button.xml" value="0.2355" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable/ic_add.xml" value="0.2325" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable/ic_comment.xml" value="0.2635" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable/ic_dislike.xml" value="0.2325" />
@@ -23,6 +25,12 @@
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/activity_main.xml" value="0.40217391304347827" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/comment_recycle_item.xml" value="0.4" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/comment_recycle_item_no.xml" value="0.4036458333333333" />
+        <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/dkplayer_layout_complete_view.xml" value="0.4036458333333333" />
+        <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/dkplayer_layout_error_view.xml" value="0.4036458333333333" />
+        <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/dkplayer_layout_prepare_view.xml" value="0.4036458333333333" />
+        <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/dkplayer_layout_standard_controller.xml" value="0.4036458333333333" />
+        <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/dkplayer_layout_title_view.xml" value="0.4036458333333333" />
+        <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/dkplayer_shape_standard_controller_top_bg.xml" value="0.4036458333333333" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/first_fragment_follow.xml" value="0.40217391304347827" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/first_fragment_fresh.xml" value="0.40217391304347827" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/first_fragment_only_text.xml" value="0.40217391304347827" />

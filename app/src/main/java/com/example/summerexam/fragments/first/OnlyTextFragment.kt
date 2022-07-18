@@ -1,29 +1,35 @@
 package com.example.summerexam.fragments.first
 
-import android.app.AlertDialog
-import android.app.ProgressDialog
-import android.app.ProgressDialog.show
+import android.content.pm.ActivityInfo
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import androidx.fragment.app.FragmentManager
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.summerexam.R
+import com.example.summerexam.activities.MainActivity
 import com.example.summerexam.adapters.OnlyTextRvAdapter
+import com.example.summerexam.extensions.decrypt
 import com.example.summerexam.fragments.CommentBottomFragment
 import com.example.summerexam.network.TAG
+import com.example.summerexam.utils.DkVideoPlayerUtils
 import com.example.summerexam.view.MyItemDecoration
 import com.example.summerexam.viewmodel.OnlyTextViewModel
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.ndhzs.lib.common.extensions.toast
 import com.ndhzs.lib.common.ui.BaseFragment
+import xyz.doikki.videocontroller.StandardVideoController
+import xyz.doikki.videocontroller.component.*
+import xyz.doikki.videoplayer.controller.GestureVideoController
+import xyz.doikki.videoplayer.player.AndroidMediaPlayer
+import xyz.doikki.videoplayer.player.VideoView
+import xyz.doikki.videoplayer.player.VideoViewManager
 
 /**
  * description ： TODO:类的作用
@@ -31,14 +37,18 @@ import com.ndhzs.lib.common.ui.BaseFragment
  * email : 1678921845@qq.com
  * date : 2022/7/15
  */
-class OnlyTextFragment : BaseFragment() {
+open class OnlyTextFragment : BaseFragment() {
+    private lateinit var mLayoutManager:LinearLayoutManager
     private val mRvText by R.id.rv_only_text.view<RecyclerView>()
         .addInitialize {
+            mLayoutManager = LinearLayoutManager(context)
             overScrollMode = View.OVER_SCROLL_NEVER
             this.run {
-                layoutManager = LinearLayoutManager(context)
+                layoutManager = mLayoutManager
                 adapter =
-                    OnlyTextRvAdapter(viewModel.newTextData, ::clickLikeOrDislike,::clickComment,::clickFollowing)
+                    OnlyTextRvAdapter(viewModel.newTextData, ::clickLikeOrDislike,::clickComment,::clickFollowing){
+                        startPlay(it)
+                    }
                 addItemDecoration(
                     MyItemDecoration(20)
                 )
@@ -47,18 +57,140 @@ class OnlyTextFragment : BaseFragment() {
         }
     private val viewModel by lazy { ViewModelProvider(this)[OnlyTextViewModel::class.java] }
     private val mSwipeLayout by R.id.swipe_layout_only_text.view<SwipeRefreshLayout>()
+    private lateinit var mVideoView:VideoView<AndroidMediaPlayer>
+    lateinit var mController: GestureVideoController
+    private lateinit var mErrorView: ErrorView
+    private lateinit var mCompleteView: CompleteView
+    private lateinit var mTitleView: TitleView
+
+
+    /**
+     * 当前播放的位置
+     */
+    private var mCurPos = -1
+
+    /**
+     * 上次播放的位置，用于页面切回来之后恢复播放
+     */
+    private var mLastPos = mCurPos
+
+    /*init {
+        val bundle = arguments
+        viewModel.page.value = bundle?.getInt("page")
+    }*/
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        initView()
         return inflater.inflate(R.layout.fragment_only_text, container, false)
+    }
+
+    private fun initView() {
+        mVideoView = VideoView(requireContext())
+        mVideoView.setOnStateChangeListener(object : VideoView.SimpleOnStateChangeListener(){
+            override fun onPlayStateChanged(playState: Int) {
+                super.onPlayStateChanged(playState)
+                //监听VideoViewManager释放，重置状态
+
+                if (playState == VideoView.STATE_IDLE) {
+                    DkVideoPlayerUtils.removeViewFormParent(mVideoView)
+                    mLastPos = mCurPos
+                    mCurPos = -1
+                }
+            }
+        })
+        mController = StandardVideoController(requireContext())
+        mErrorView = ErrorView(requireContext())
+        mController.addControlComponent(mErrorView)
+        mCompleteView = CompleteView(requireContext())
+        mController.addControlComponent(mCompleteView)
+        mTitleView = TitleView(requireContext())
+        mController.addControlComponent(mTitleView)
+        mController.addControlComponent(VodControlView(requireContext()))
+        mController.addControlComponent(GestureView(requireContext()))
+        mController.setEnableOrientation(true)
+        mVideoView.setVideoController(mController)
+    }
+
+    private fun releaseVideoView() {
+        mVideoView.release()
+        if (mVideoView.isFullScreen) {
+            mVideoView.stopFullScreen()
+        }
+        if (requireActivity().requestedOrientation !== ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+            requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        }
+        mCurPos = -1
+    }
+
+    override fun onPause() {
+        super.onPause()
+        pause()
+    }
+
+    /**
+     * 由于onPause必须调用super。故增加此方法，
+     * 子类将会重写此方法，改变onPause的逻辑
+     */
+    private fun pause() {
+        releaseVideoView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        resume()
+    }
+
+    /**
+     * 由于onResume必须调用super。故增加此方法，
+     * 子类将会重写此方法，改变onResume的逻辑
+     */
+    private fun resume() {
+        if (mLastPos == -1) return
+        startPlay(mLastPos)
+    }
+
+    /**
+     * 开始播放
+     * @param position 列表位置
+     */
+    private fun startPlay(position: Int) {
+        if (mCurPos == position) return
+        if (mCurPos != -1) {
+            releaseVideoView()
+        }
+
+
+        mVideoView.setUrl(viewModel.newTextData[position].joke.videoUrl.decrypt())
+        mVideoView.setVideoController(mController)
+        val itemView: View = mLayoutManager.findViewByPosition(position) ?: return
+        val viewHolder: OnlyTextRvAdapter.OnlyTextViewHolder =
+            itemView.tag as OnlyTextRvAdapter.OnlyTextViewHolder
+        //把列表中预置的PrepareView添加到控制器中，注意isDissociate此处只能为true, 请点进去看isDissociate的解释
+        mController.addControlComponent(viewHolder.mPrepareView, true)
+        DkVideoPlayerUtils.removeViewFormParent(mVideoView)
+        viewHolder.mPlayerContainer.addView(mVideoView, 0)
+        //播放之前将VideoView添加到VideoViewManager以便在别的页面也能操作它
+        VideoViewManager.instance().add(mVideoView, "list")
+        mVideoView.start()
+        mCurPos = position
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initSwipeLayout()
+        viewModel.isLoading.observe(viewLifecycleOwner) {
+            if (!it) freshRecycleViewData()
+        }
+        viewModel.isSwipeLayoutRefreshing.observe(viewLifecycleOwner) {
+            if (!it) mSwipeLayout.isRefreshing = false
+        }
+        viewModel.page.observe(viewLifecycleOwner){
+            viewModel.getOnlyText()
+        }
         val bundle = arguments
         viewModel.page.value = bundle?.getInt("page")
     }
@@ -66,19 +198,6 @@ class OnlyTextFragment : BaseFragment() {
     private fun initSwipeLayout() {
         mSwipeLayout.setOnRefreshListener {
             viewModel.clearList()
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.isLoading.observe(this) {
-            if (!it) freshRecycleViewData()
-        }
-        viewModel.isSwipeLayoutRefreshing.observe(this) {
-            if (!it) mSwipeLayout.isRefreshing = false
-        }
-        viewModel.page.observe(this){
-            viewModel.getOnlyText()
         }
     }
 

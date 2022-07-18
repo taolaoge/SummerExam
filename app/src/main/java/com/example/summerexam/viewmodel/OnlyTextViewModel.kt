@@ -44,6 +44,8 @@ class OnlyTextViewModel : ViewModel() {
     fun getOnlyText() {
         isLoading.value = true
         when (page.value) {
+            1->{FirstRepository.getRecommend().unSafeSubscribeBy { dealData(it) }}
+            2->{FirstRepository.getLatest().unSafeSubscribeBy { dealData(it) }}
             3 -> {
                 FirstRepository.getOnlyText().unSafeSubscribeBy { dealData(it) }
             }

@@ -62,7 +62,6 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <TextView
         android:id="@+id/tv_text_content"
         android:layout_width="340dp"
@@ -77,12 +76,21 @@
         android:adjustViewBounds="true"
         android:scaleType="fitStart"
         android:layout_width="wrap_content"
-        android:layout_height="200dp"/>
+        android:layout_height="wrap_content"/>
 
-    <!--<xyz.doikki.videoplayer.player.VideoView
-        android:id="@+id/video_view_video"
+    <FrameLayout
+        android:id="@+id/fl_player_container"
         android:layout_width="match_parent"
-        android:layout_height="300dp"/>-->
+        android:layout_height="300dp"
+        android:background="@color/black"
+        app:layout_constraintDimensionRatio="16:9"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.example.summerexam.view.PrepareView
+            android:id="@+id/prepare_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </FrameLayout>
 
     <RelativeLayout
         android:id="@+id/rl_info"
