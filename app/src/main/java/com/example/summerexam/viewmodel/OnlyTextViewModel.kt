@@ -23,6 +23,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
  * date : 2022/7/15
  */
 class OnlyTextViewModel : ViewModel() {
+    //新的数据集合，差分刷新使用
     val newTextData = ArrayList<OnlyTextResponseItem>()
     var oldTextData = ArrayList<OnlyTextResponseItem>()
 

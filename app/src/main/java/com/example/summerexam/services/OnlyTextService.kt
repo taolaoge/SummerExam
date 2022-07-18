@@ -1,5 +1,6 @@
 package com.example.summerexam.services
 
+import com.example.summerexam.beans.CommentResponse
 import com.example.summerexam.beans.OnlyTextResponse
 import com.example.summerexam.network.ApiGenerator
 import com.ndhzs.lib.common.network.ApiWrapper
@@ -7,6 +8,7 @@ import io.reactivex.rxjava3.core.Single
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 /**
  * description ： TODO:类的作用
@@ -65,4 +67,6 @@ interface OnlyTextService {
      */
     @POST("home/recommend")
     fun getRecommend():Single<ApiWrapper<OnlyTextResponse>>
+
+
 }

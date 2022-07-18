@@ -1,5 +1,6 @@
 package com.example.summerexam.services
 
+import com.example.summerexam.beans.CommentListResponse
 import com.example.summerexam.beans.CommentResponse
 import com.example.summerexam.network.ApiGenerator
 import com.ndhzs.lib.common.network.ApiWrapper
@@ -7,7 +8,6 @@ import io.reactivex.rxjava3.core.Single
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
-import retrofit2.http.Query
 
 /**
  * description ： TODO:类的作用
@@ -27,7 +27,7 @@ interface CommentService {
      */
     @POST("jokes/comment/list")
     @FormUrlEncoded
-    fun getCommentList(@Field("jokeId")id:Int):Single<ApiWrapper<CommentResponse>>
+    fun getCommentList(@Field("jokeId")id:Int):Single<ApiWrapper<CommentListResponse>>
 
     /**
      * 给指定的评论点赞，需要传入评论的id，status，点赞或者取消点赞
@@ -35,4 +35,12 @@ interface CommentService {
     @POST("jokes/comment/like")
     @FormUrlEncoded
     fun likeComment(@Field("commentId") commentId:String,@Field("status")status:Boolean):Single<ApiWrapper<Any>>
+
+    /**
+     * 评论段子
+     */
+    @POST("jokes/comment")
+    @FormUrlEncoded
+    fun commentJoke(@Field("content") content:String,@Field("jokeId") jokeId:String):Single<ApiWrapper<CommentResponse>>
+
 }

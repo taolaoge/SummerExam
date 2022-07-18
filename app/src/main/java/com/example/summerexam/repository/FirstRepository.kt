@@ -1,5 +1,6 @@
 package com.example.summerexam.repository
 
+import com.example.summerexam.beans.CommentResponse
 import com.example.summerexam.beans.OnlyTextResponse
 import com.example.summerexam.beans.OnlyTextResponseItem
 import com.example.summerexam.services.OnlyTextService
@@ -67,4 +68,5 @@ object FirstRepository {
             .observeOn(AndroidSchedulers.mainThread())
             .mapOrThrowApiException()
     }
+
 }
