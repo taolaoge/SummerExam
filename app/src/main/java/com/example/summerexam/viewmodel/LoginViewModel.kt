@@ -1,12 +1,8 @@
 package com.example.summerexam.viewmodel
 
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.summerexam.BaseApp
-import com.example.summerexam.network.*
+import com.example.summerexam.extensions.*
 import com.example.summerexam.services.LoginService
-import com.ndhzs.lib.common.extensions.*
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 

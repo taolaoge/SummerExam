@@ -1,16 +1,14 @@
 package com.example.summerexam.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.summerexam.beans.AttentionRecommendResponse
 import com.example.summerexam.beans.AttentionRecommendResponseItem
-import com.example.summerexam.beans.OnlyTextResponse
-import com.example.summerexam.beans.OnlyTextResponseItem
-import com.example.summerexam.network.TAG
+import com.example.summerexam.beans.FirstTextResponse
+import com.example.summerexam.beans.FirstTextResponseItem
+import com.example.summerexam.extensions.*
 import com.example.summerexam.repository.FirstRepository
-import com.example.summerexam.services.OnlyTextService
-import com.ndhzs.lib.common.extensions.*
+import com.example.summerexam.services.FirstTextService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 
@@ -20,20 +18,21 @@ import io.reactivex.rxjava3.schedulers.Schedulers
  * email : 1678921845@qq.com
  * date : 2022/7/15
  */
-class OnlyTextViewModel : ViewModel() {
+class FirstTextViewModel : ViewModel() {
     val token = MutableLiveData(appContext.getSp("token").getString("token","123"))
-    val attentionPage = MutableLiveData(0)
+    private val attentionPage = MutableLiveData(0)
+
+    val keyword = MutableLiveData<String>()
 
     val noTokenIsLoading = MutableLiveData(false)
-    var haveClearList = false
 
     //关注fragment中推荐关注的用户列表
     val newRecommendUserData = ArrayList<AttentionRecommendResponseItem>()
     var oldRecommendUserData = ArrayList<AttentionRecommendResponseItem>()
 
     //新的数据集合，差分刷新使用
-    val newTextData = ArrayList<OnlyTextResponseItem>()
-    var oldTextData = ArrayList<OnlyTextResponseItem>()
+    val newTextData = ArrayList<FirstTextResponseItem>()
+    var oldTextData = ArrayList<FirstTextResponseItem>()
 
     val page = MutableLiveData<Int>()
 
@@ -73,6 +72,9 @@ class OnlyTextViewModel : ViewModel() {
             4 -> {
                 FirstRepository.getPicture().unSafeSubscribeBy { dealData(it) }
             }
+            5->{
+                FirstRepository.searchJoke(keyword.value?:"",attentionPage.value?:0).unSafeSubscribeBy { dealData(it) }
+            }
         }
     }
 
@@ -88,7 +90,7 @@ class OnlyTextViewModel : ViewModel() {
         isSwipeLayoutRefreshing.value = false
     }
 
-    private fun dealData(it: OnlyTextResponse) {
+    private fun dealData(it: FirstTextResponse) {
         oldTextData = newTextData
         for (data in it) {
             newTextData.add(data)
@@ -100,7 +102,7 @@ class OnlyTextViewModel : ViewModel() {
     }
 
     fun likeJoke(id: Int, status: Boolean, block: (Boolean) -> Unit) {
-        OnlyTextService.INSTANCE.likeJoke(id, status)
+        FirstTextService.INSTANCE.likeJoke(id, status)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .throwApiExceptionIfFail()
@@ -110,7 +112,7 @@ class OnlyTextViewModel : ViewModel() {
     }
 
     fun dislikeJoke(id: Int, status: Boolean, block: (Boolean) -> Unit) {
-        OnlyTextService.INSTANCE.dislikeJoke(id, status)
+        FirstTextService.INSTANCE.dislikeJoke(id, status)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .throwApiExceptionIfFail()
@@ -123,7 +125,7 @@ class OnlyTextViewModel : ViewModel() {
     }
 
     fun followUser(status: String, userId: String, block: (Boolean) -> Unit) {
-        OnlyTextService.INSTANCE.followUser(status, userId)
+        FirstTextService.INSTANCE.followUser(status, userId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .throwApiExceptionIfFail()

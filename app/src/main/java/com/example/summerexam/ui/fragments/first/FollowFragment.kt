@@ -1,6 +1,6 @@
-package com.example.summerexam.fragments.first
+package com.example.summerexam.ui.fragments.first
 
-import com.ndhzs.lib.common.ui.BaseFragment
+import com.example.summerexam.baseui.BaseFragment
 
 /**
  * description ： TODO:类的作用

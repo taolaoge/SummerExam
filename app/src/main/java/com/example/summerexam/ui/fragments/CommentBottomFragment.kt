@@ -1,8 +1,7 @@
-package com.example.summerexam.fragments
+package com.example.summerexam.ui.fragments
 
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,14 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.summerexam.R
 import com.example.summerexam.adapters.CommentRvAdapter
-import com.example.summerexam.adapters.OnlyTextRvAdapter
-import com.example.summerexam.network.TAG
 import com.example.summerexam.viewmodel.CommentViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import org.w3c.dom.Comment
-import org.w3c.dom.Text
 
 /**
  * description ： TODO:类的作用

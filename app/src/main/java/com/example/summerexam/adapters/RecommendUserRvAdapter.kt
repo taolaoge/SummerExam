@@ -1,7 +1,5 @@
 package com.example.summerexam.adapters
 
-import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,10 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.summerexam.R
-import com.example.summerexam.beans.AttentionRecommendResponse
 import com.example.summerexam.beans.AttentionRecommendResponseItem
-import com.example.summerexam.beans.OnlyTextResponseItem
-import com.example.summerexam.network.TAG
 
 /**
  * description ： TODO:类的作用

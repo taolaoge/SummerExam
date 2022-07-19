@@ -1,4 +1,4 @@
-package com.example.summerexam.fragments
+package com.example.summerexam.ui.fragments
 
 import android.app.Dialog
 import android.os.Bundle
@@ -14,7 +14,6 @@ import com.example.summerexam.viewmodel.CommentDiaLogViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.coroutines.flow.combineTransform
 
 /**
  * description ： TODO:类的作用

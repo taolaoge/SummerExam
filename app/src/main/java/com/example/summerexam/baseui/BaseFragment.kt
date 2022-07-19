@@ -1,4 +1,4 @@
-package com.ndhzs.lib.common.ui
+package com.example.summerexam.baseui
 
 import android.view.View
 import androidx.annotation.CallSuper
@@ -8,10 +8,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import androidx.lifecycle.LiveData
 import com.example.summerexam.utils.BindView
-import com.ndhzs.lib.common.extensions.RxjavaLifecycle
+import com.example.summerexam.extensions.RxjavaLifecycle
 import io.reactivex.rxjava3.disposables.Disposable
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 
 @Suppress("UNCHECKED_CAST")
 abstract class BaseFragment : Fragment(), RxjavaLifecycle {

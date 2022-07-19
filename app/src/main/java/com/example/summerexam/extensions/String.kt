@@ -1,11 +1,8 @@
 package com.example.summerexam.extensions
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.summerexam.network.DECRYPT_KEY
-import com.example.summerexam.network.TAG
-import com.ndhzs.lib.common.extensions.appContext
 import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec

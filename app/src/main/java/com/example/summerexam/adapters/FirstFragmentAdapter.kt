@@ -12,7 +12,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
  */
 class FirstFragmentAdapter(
     private val fragmentActivity: Fragment,
-    private val fragments: ArrayList<Fragment>
+    private val fragments: List<Fragment>
     ) : FragmentStateAdapter(
     fragmentActivity
     ) {

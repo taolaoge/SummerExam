@@ -1,7 +1,7 @@
 package com.example.summerexam.network
 
-import com.ndhzs.lib.common.extensions.mapOrThrowApiException
-import com.ndhzs.lib.common.extensions.mapOrCatchApiException
+import com.example.summerexam.extensions.mapOrThrowApiException
+import com.example.summerexam.extensions.mapOrCatchApiException
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory

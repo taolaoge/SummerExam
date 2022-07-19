@@ -1,11 +1,11 @@
-package com.example.summerexam.fragments
+package com.example.summerexam.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.summerexam.R
-import com.ndhzs.lib.common.ui.BaseFragment
+import com.example.summerexam.baseui.BaseFragment
 
 /**
  * description ： TODO:类的作用
@@ -13,13 +13,12 @@ import com.ndhzs.lib.common.ui.BaseFragment
  * email : 1678921845@qq.com
  * date : 2022/7/14
  */
-class MessageFragment :BaseFragment() {
+class FindingFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_message,container,false)
-        return view
+        return inflater.inflate(R.layout.fragment_finding, container, false)
     }
 }

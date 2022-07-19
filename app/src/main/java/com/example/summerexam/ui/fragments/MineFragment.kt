@@ -1,4 +1,4 @@
-package com.example.summerexam.fragments
+package com.example.summerexam.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,12 +12,12 @@ import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.summerexam.R
-import com.example.summerexam.activities.LoginActivity
+import com.example.summerexam.ui.activities.LoginActivity
 import com.example.summerexam.viewmodel.MineViewModel
-import com.ndhzs.lib.common.extensions.appContext
-import com.ndhzs.lib.common.extensions.edit
-import com.ndhzs.lib.common.extensions.getSp
-import com.ndhzs.lib.common.ui.BaseFragment
+import com.example.summerexam.extensions.appContext
+import com.example.summerexam.extensions.edit
+import com.example.summerexam.extensions.getSp
+import com.example.summerexam.baseui.BaseFragment
 
 /**
  * description ： TODO:类的作用

@@ -1,7 +1,7 @@
 package com.example.summerexam.network
 
-import com.ndhzs.lib.common.extensions.appContext
-import com.ndhzs.lib.common.extensions.getSp
+import com.example.summerexam.extensions.appContext
+import com.example.summerexam.extensions.getSp
 import okhttp3.Interceptor
 import okhttp3.Response
 

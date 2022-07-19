@@ -1,4 +1,4 @@
-package com.example.summerexam.activities
+package com.example.summerexam.ui.activities
 
 import android.os.Bundle
 import android.view.View
@@ -8,9 +8,9 @@ import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import com.example.summerexam.R
 import com.example.summerexam.viewmodel.LoginViewModel
-import com.ndhzs.lib.common.extensions.appContext
-import com.ndhzs.lib.common.extensions.getSp
-import com.ndhzs.lib.common.ui.BaseActivity
+import com.example.summerexam.extensions.appContext
+import com.example.summerexam.extensions.getSp
+import com.example.summerexam.baseui.BaseActivity
 
 class LoginActivity : BaseActivity(), View.OnClickListener {
     private val mEdPhone by R.id.ed_login_phone.view<EditText>()

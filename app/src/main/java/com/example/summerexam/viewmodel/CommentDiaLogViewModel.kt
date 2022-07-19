@@ -2,9 +2,9 @@ package com.example.summerexam.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.example.summerexam.services.CommentService
-import com.ndhzs.lib.common.extensions.mapOrThrowApiException
-import com.ndhzs.lib.common.extensions.toast
-import com.ndhzs.lib.common.extensions.unSafeSubscribeBy
+import com.example.summerexam.extensions.mapOrThrowApiException
+import com.example.summerexam.extensions.toast
+import com.example.summerexam.extensions.unSafeSubscribeBy
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 

@@ -2,10 +2,10 @@ package com.ndhzs.lib.common.network
 
 import com.example.summerexam.network.ApiException
 import com.google.gson.annotations.SerializedName
-import com.ndhzs.lib.common.extensions.appContext
-import com.ndhzs.lib.common.extensions.edit
-import com.ndhzs.lib.common.extensions.getSp
-import com.ndhzs.lib.common.extensions.toast
+import com.example.summerexam.extensions.appContext
+import com.example.summerexam.extensions.edit
+import com.example.summerexam.extensions.getSp
+import com.example.summerexam.extensions.toast
 import java.io.Serializable
 import kotlin.jvm.Throws
 

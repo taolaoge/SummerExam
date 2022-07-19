@@ -1,4 +1,4 @@
-package com.ndhzs.lib.common.ui
+package com.example.summerexam.baseui
 
 import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
@@ -13,12 +13,9 @@ import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.lifecycleScope
 import com.example.summerexam.utils.BindView
-import com.ndhzs.lib.common.extensions.RxjavaLifecycle
+import com.example.summerexam.extensions.RxjavaLifecycle
 import io.reactivex.rxjava3.disposables.Disposable
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 
 /**
  *@author 985892345

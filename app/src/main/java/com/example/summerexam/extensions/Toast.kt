@@ -1,4 +1,4 @@
-package com.ndhzs.lib.common.extensions
+package com.example.summerexam.extensions
 
 import android.widget.Toast
 import com.example.summerexam.BaseApp

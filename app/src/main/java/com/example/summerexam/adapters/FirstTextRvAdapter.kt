@@ -14,12 +14,12 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.summerexam.R
 import com.example.summerexam.beans.AttentionRecommendResponseItem
-import com.example.summerexam.beans.OnlyTextResponseItem
+import com.example.summerexam.beans.FirstTextResponseItem
 import com.example.summerexam.extensions.decrypt
 import com.example.summerexam.view.MyHorizontalItemDecoration
 import com.example.summerexam.view.PrepareView
-import com.ndhzs.lib.common.extensions.gone
-import com.ndhzs.lib.common.extensions.visible
+import com.example.summerexam.extensions.gone
+import com.example.summerexam.extensions.visible
 
 /**
  * description ： TODO:类的作用
@@ -27,8 +27,8 @@ import com.ndhzs.lib.common.extensions.visible
  * email : 1678921845@qq.com
  * date : 2022/7/15
  */
-class OnlyTextRvAdapter(
-    private val data: ArrayList<OnlyTextResponseItem>,
+class FirstTextRvAdapter(
+    private val data: ArrayList<FirstTextResponseItem>,
     private val newRecommendUserData:ArrayList<AttentionRecommendResponseItem>,
     private val oldRecommendUserData:ArrayList<AttentionRecommendResponseItem>,
     private val clickLikeOrDislike: (id: Int, status: Boolean, position: Int, what: Boolean) -> Unit,
@@ -160,7 +160,7 @@ class OnlyTextRvAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is OnlyTextViewHolder) {
-            val text: OnlyTextResponseItem
+            val text: FirstTextResponseItem
             if (newRecommendUserData.size == 0){
                 text = data[position]
                 holder.mPosition = position
@@ -218,8 +218,8 @@ class OnlyTextRvAdapter(
      * 差分刷新固定写法
      */
     class DiffCallBack(
-        private val mOldData: List<OnlyTextResponseItem>,
-        private val mNewData: List<OnlyTextResponseItem>
+        private val mOldData: List<FirstTextResponseItem>,
+        private val mNewData: List<FirstTextResponseItem>
     ) :
         DiffUtil.Callback() {
 

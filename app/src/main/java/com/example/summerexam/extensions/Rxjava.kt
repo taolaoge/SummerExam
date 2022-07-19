@@ -1,4 +1,4 @@
-package com.ndhzs.lib.common.extensions
+package com.example.summerexam.extensions
 
 import com.example.summerexam.network.ApiException
 import com.ndhzs.lib.common.network.ApiStatus

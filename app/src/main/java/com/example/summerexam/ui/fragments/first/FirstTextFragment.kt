@@ -1,8 +1,7 @@
-package com.example.summerexam.fragments.first
+package com.example.summerexam.ui.fragments.first
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,17 +11,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.summerexam.R
-import com.example.summerexam.adapters.OnlyTextRvAdapter
+import com.example.summerexam.adapters.FirstTextRvAdapter
 import com.example.summerexam.extensions.decrypt
-import com.example.summerexam.fragments.CommentBottomFragment
-import com.example.summerexam.network.TAG
+import com.example.summerexam.ui.fragments.CommentBottomFragment
 import com.example.summerexam.utils.DkVideoPlayerUtils
 import com.example.summerexam.view.MyVerticalItemDecoration
-import com.example.summerexam.viewmodel.OnlyTextViewModel
-import com.ndhzs.lib.common.extensions.appContext
-import com.ndhzs.lib.common.extensions.getSp
-import com.ndhzs.lib.common.extensions.toast
-import com.ndhzs.lib.common.ui.BaseFragment
+import com.example.summerexam.viewmodel.FirstTextViewModel
+import com.example.summerexam.extensions.appContext
+import com.example.summerexam.extensions.getSp
+import com.example.summerexam.extensions.toast
+import com.example.summerexam.baseui.BaseFragment
 import xyz.doikki.videocontroller.StandardVideoController
 import xyz.doikki.videocontroller.component.*
 import xyz.doikki.videoplayer.controller.GestureVideoController
@@ -36,7 +34,7 @@ import xyz.doikki.videoplayer.player.VideoViewManager
  * email : 1678921845@qq.com
  * date : 2022/7/15
  */
-open class OnlyTextFragment : BaseFragment() {
+open class FirstTextFragment : BaseFragment() {
     private lateinit var mLayoutManager: LinearLayoutManager
     private val mRvText by R.id.rv_only_text.view<RecyclerView>()
         .addInitialize {
@@ -45,7 +43,7 @@ open class OnlyTextFragment : BaseFragment() {
             this.run {
                 layoutManager = mLayoutManager
                 adapter =
-                    OnlyTextRvAdapter(
+                    FirstTextRvAdapter(
                         viewModel.newTextData,
                         viewModel.newRecommendUserData,
                         viewModel.oldRecommendUserData,
@@ -61,7 +59,7 @@ open class OnlyTextFragment : BaseFragment() {
                 )
             }
         }
-    private val viewModel by lazy { ViewModelProvider(this)[OnlyTextViewModel::class.java] }
+    private val viewModel by lazy { ViewModelProvider(this)[FirstTextViewModel::class.java] }
     private val mSwipeLayout by R.id.swipe_layout_only_text.view<SwipeRefreshLayout>()
     private lateinit var mVideoView: VideoView<AndroidMediaPlayer>
     lateinit var mController: GestureVideoController
@@ -174,8 +172,8 @@ open class OnlyTextFragment : BaseFragment() {
         }
         mVideoView.setUrl(viewModel.newTextData[newPosition].joke.videoUrl.decrypt())
         mVideoView.setVideoController(mController)
-        val viewHolder: OnlyTextRvAdapter.OnlyTextViewHolder =
-            itemView.tag as OnlyTextRvAdapter.OnlyTextViewHolder
+        val viewHolder: FirstTextRvAdapter.OnlyTextViewHolder =
+            itemView.tag as FirstTextRvAdapter.OnlyTextViewHolder
         //把列表中预置的PrepareView添加到控制器中，注意isDissociate此处只能为true, 请点进去看isDissociate的解释
         mController.addControlComponent(viewHolder.mPrepareView, true)
         DkVideoPlayerUtils.removeViewFormParent(mVideoView)
@@ -263,7 +261,7 @@ open class OnlyTextFragment : BaseFragment() {
 
     private fun freshRecycleViewData() {
         val diffResult = DiffUtil.calculateDiff(
-            OnlyTextRvAdapter.DiffCallBack(
+            FirstTextRvAdapter.DiffCallBack(
                 viewModel.oldTextData, viewModel.newTextData
             ), true
         )
@@ -276,7 +274,7 @@ open class OnlyTextFragment : BaseFragment() {
         bundle.putInt("jokeId", id)
         commentBottomFragment.arguments = bundle
         commentBottomFragment.show(
-            this@OnlyTextFragment.childFragmentManager,
+            this@FirstTextFragment.childFragmentManager,
             "CommentBottomFragment"
         )
     }
