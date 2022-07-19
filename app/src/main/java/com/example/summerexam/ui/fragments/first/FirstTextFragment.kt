@@ -187,7 +187,7 @@ open class FirstTextFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         val bundle = arguments
         viewModel.page.value = bundle?.getInt("page")
-        initSwipeLayout()
+        viewModel.keyword.value = bundle?.getString("keyword")?:""
         viewModel.isLoading.observe(viewLifecycleOwner) {
             if (!it) freshRecycleViewData()
         }
@@ -214,12 +214,14 @@ open class FirstTextFragment : BaseFragment() {
                 }
             }
         }
+        initSwipeLayout()
         freshRecycleView(mRvText)
     }
 
     private fun initSwipeLayout() {
         mSwipeLayout.setOnRefreshListener {
-            viewModel.clearList()
+            if(viewModel.page.value != 5) viewModel.clearList()
+            else mSwipeLayout.isRefreshing = false
         }
     }
 

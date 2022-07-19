@@ -27,10 +27,10 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/tv_search_back"
+        android:id="@+id/tv_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="取消"
+        android:text="搜索"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/ll_search"

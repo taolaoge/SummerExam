@@ -93,7 +93,7 @@ interface FirstTextService {
      * @param page
      * @return
      */
-    @POST("home/latest")
+    @POST("home/jokes/search")
     @FormUrlEncoded
     fun searchJoke(@Field("keyword") keyword:String,@Field("page") page:Int): Single<ApiWrapper<FirstTextResponse>>
 }
