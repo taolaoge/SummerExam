@@ -25,7 +25,6 @@ class FirstTextViewModel : ViewModel() {
     val keyword = MutableLiveData<String>()
 
     val noTokenIsLoading = MutableLiveData(false)
-
     //关注fragment中推荐关注的用户列表
     val newRecommendUserData = ArrayList<AttentionRecommendResponseItem>()
     var oldRecommendUserData = ArrayList<AttentionRecommendResponseItem>()
@@ -134,10 +133,11 @@ class FirstTextViewModel : ViewModel() {
             }
     }
 
-    fun clearList() {
+    fun clearList(block: () -> Unit) {
         newRecommendUserData.clear()
-        oldRecommendUserData.clear()
         newTextData.clear()
+        block()
+        oldRecommendUserData.clear()
         oldTextData.clear()
         //下拉刷新数据时，先将此参数变为true，意味着正在请求
         isSwipeLayoutRefreshing.value = true

@@ -21,6 +21,7 @@ import com.example.summerexam.extensions.appContext
 import com.example.summerexam.extensions.getSp
 import com.example.summerexam.extensions.toast
 import com.example.summerexam.baseui.BaseFragment
+import com.example.summerexam.view.MyLinearLayoutManager
 import xyz.doikki.videocontroller.StandardVideoController
 import xyz.doikki.videocontroller.component.*
 import xyz.doikki.videoplayer.controller.GestureVideoController
@@ -208,7 +209,7 @@ open class FirstTextFragment : BaseFragment() {
             //当token改变时，如果在关注页面
             if (viewModel.page.value == 0) {
                 if (it == "123") {
-                    if (viewModel.newTextData.size != 0) viewModel.clearList()
+                    if (viewModel.newTextData.size != 0) viewModel.clearList(){mRvText.adapter?.notifyItemRangeRemoved(0,viewModel.oldTextData.size)}
                 } else {
                     freshRecycleView(mRvText)
                 }
@@ -220,7 +221,7 @@ open class FirstTextFragment : BaseFragment() {
 
     private fun initSwipeLayout() {
         mSwipeLayout.setOnRefreshListener {
-            if(viewModel.page.value != 5) viewModel.clearList()
+            if(viewModel.page.value != 5) viewModel.clearList(){mRvText.adapter?.notifyItemRangeRemoved(0,viewModel.oldTextData.size)}
             else mSwipeLayout.isRefreshing = false
         }
     }
