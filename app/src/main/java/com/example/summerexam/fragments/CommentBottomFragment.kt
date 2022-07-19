@@ -21,6 +21,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.w3c.dom.Comment
+import org.w3c.dom.Text
 
 /**
  * description ： TODO:类的作用
@@ -33,6 +34,7 @@ class CommentBottomFragment : BottomSheetDialogFragment() {
     private lateinit var mRvComment: RecyclerView
     private lateinit var mTvCommentCount: TextView
     private lateinit var mTvToComment: TextView
+    private lateinit var mTvBack:TextView
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         setStyle(STYLE_NO_TITLE, R.style.BottomDialog)
@@ -74,6 +76,7 @@ class CommentBottomFragment : BottomSheetDialogFragment() {
         mRvComment = view.findViewById(R.id.rv_comment)
         mTvCommentCount = view.findViewById(R.id.tv_comment_count)
         mTvToComment = view.findViewById(R.id.tv_comment)
+        mTvBack = view.findViewById(R.id.tv_comment_back)
         val bundle = arguments
         viewModel.id = bundle?.getInt("jokeId") ?: 0
         if (viewModel.id != 0) viewModel.getCommentList() {
@@ -86,6 +89,9 @@ class CommentBottomFragment : BottomSheetDialogFragment() {
         }
         mTvToComment.setOnClickListener {
             toComment()
+        }
+        mTvBack.setOnClickListener {
+            dismiss()
         }
     }
 

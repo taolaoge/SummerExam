@@ -39,7 +39,7 @@ abstract class BaseActivity(
    * 可以给根布局加上 android:fitsSystemWindows=true
    * 不同布局该属性效果不同，请给合适的布局添加
    */
-  private val isCancelStatusBar: Boolean = true
+  private val isCancelStatusBar: Boolean = false
 ) : AppCompatActivity(), RxjavaLifecycle {
   
   @CallSuper
