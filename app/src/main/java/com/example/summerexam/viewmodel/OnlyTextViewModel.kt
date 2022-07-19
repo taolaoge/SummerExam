@@ -48,7 +48,7 @@ class OnlyTextViewModel : ViewModel() {
      * 监听此参数的就会被回调，取消SwipeLayout的动画
      * 其实接口回调和高阶函数更好，但是这里没有page参数，不好判断是否回调
      */
-    val isSwipeLayoutRefreshing = MutableLiveData(false)
+    val isSwipeLayoutRefreshing = MutableLiveData<Boolean>()
 
     fun getOnlyText() {
         isLoading.value = true
@@ -78,7 +78,6 @@ class OnlyTextViewModel : ViewModel() {
 
 
     private fun dealRecommendUserData(it: AttentionRecommendResponse) {
-        Log.d(TAG, "dealRecommendUserData:$it")
         for (data in it) {
             newRecommendUserData.add(data)
             oldRecommendUserData.add(data)
@@ -136,10 +135,8 @@ class OnlyTextViewModel : ViewModel() {
     fun clearList() {
         newRecommendUserData.clear()
         oldRecommendUserData.clear()
-        Log.d(TAG, "clearList: $newRecommendUserData")
         newTextData.clear()
         oldTextData.clear()
-        Log.d(TAG, "clearList: $oldTextData")
         //下拉刷新数据时，先将此参数变为true，意味着正在请求
         isSwipeLayoutRefreshing.value = true
         getOnlyText()

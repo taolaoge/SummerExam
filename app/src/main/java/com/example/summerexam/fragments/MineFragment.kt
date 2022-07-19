@@ -85,6 +85,8 @@ class MineFragment : BaseFragment() {
             //初始化ui，将ui变为初始的样子
             initUi()
         }
+        Glide.with(this).load("https://jokes-avatar.oss-cn-beijing.aliyuncs.com/aliyun/jokes/avatar/default_avatar.png")
+            .into(mImgUser)
     }
 
     private fun initUi(){

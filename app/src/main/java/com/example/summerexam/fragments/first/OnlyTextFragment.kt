@@ -200,32 +200,33 @@ open class OnlyTextFragment : BaseFragment() {
             viewModel.getOnlyText()
         }
         viewModel.noTokenIsLoading.observe(viewLifecycleOwner) {
-            if(viewModel.page.value == 0) {
-                if (appContext.getSp("token").getString("token", "123") == "123") {
+            if (viewModel.page.value == 0) {
+                if (viewModel.token.value == "123") {
                     mRvText.adapter?.notifyDataSetChanged()
                 }
             }
         }
         viewModel.token.observe(viewLifecycleOwner) {
-            if(viewModel.page.value == 0) {
-                if (appContext.getSp("token").getString("token", "123") == "123" && !viewModel.haveClearList) {
-                    viewModel.clearList()
-                    viewModel.haveClearList = true
+            //当token改变时，如果在关注页面
+            if (viewModel.page.value == 0) {
+                if (it == "123") {
+                    if (viewModel.newTextData.size != 0) viewModel.clearList()
+                } else {
+                    freshRecycleView(mRvText)
                 }
             }
         }
-        freshRecycleView()
+        freshRecycleView(mRvText)
     }
 
     private fun initSwipeLayout() {
         mSwipeLayout.setOnRefreshListener {
-            Log.d(TAG, "initSwipeLayout:true ")
             viewModel.clearList()
         }
     }
 
-    private fun freshRecycleView() {
-        mRvText.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+    private fun freshRecycleView(rv:RecyclerView) {
+        rv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 //dx为横向滚动 dy为竖向滚动
@@ -238,11 +239,13 @@ open class OnlyTextFragment : BaseFragment() {
                 val manager: LinearLayoutManager = recyclerView.layoutManager as LinearLayoutManager
                 //newState是RecycleView的状态 如果它的状态为没有滚动时
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    if (viewModel.page.value == 0 && appContext.getSp("token").getString("token","123") != "123") {
+                    if (viewModel.page.value == 0) {
                         //获取最后一个完全显示的ItemPosition
                         val lastVisibleItem = manager.findLastCompletelyVisibleItemPosition()
                         val totalItem = manager.itemCount
-                        if (lastVisibleItem == (totalItem - 1) && viewModel.isLoading.value == false) {
+                        if (lastVisibleItem == (totalItem - 1) && viewModel.isLoading.value == false
+                            && viewModel.token.value != "123"
+                        ){
                             viewModel.getOnlyText()
                         }
                     } else {
