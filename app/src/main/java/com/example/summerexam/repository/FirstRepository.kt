@@ -66,8 +66,8 @@ object FirstRepository {
             .mapOrThrowApiException()
     }
 
-    fun getAttentionList():Single<OnlyTextResponse>{
-        return OnlyTextService.INSTANCE.getAttentionList()
+    fun getAttentionList(page:Int):Single<OnlyTextResponse>{
+        return OnlyTextService.INSTANCE.getAttentionList(page)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .mapOrThrowApiException()

@@ -1,16 +1,16 @@
 package com.example.summerexam.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.summerexam.beans.AttentionRecommendResponse
 import com.example.summerexam.beans.AttentionRecommendResponseItem
 import com.example.summerexam.beans.OnlyTextResponse
 import com.example.summerexam.beans.OnlyTextResponseItem
+import com.example.summerexam.network.TAG
 import com.example.summerexam.repository.FirstRepository
 import com.example.summerexam.services.OnlyTextService
-import com.ndhzs.lib.common.extensions.throwApiExceptionIfFail
-import com.ndhzs.lib.common.extensions.toast
-import com.ndhzs.lib.common.extensions.unSafeSubscribeBy
+import com.ndhzs.lib.common.extensions.*
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 
@@ -21,6 +21,12 @@ import io.reactivex.rxjava3.schedulers.Schedulers
  * date : 2022/7/15
  */
 class OnlyTextViewModel : ViewModel() {
+    val token = MutableLiveData(appContext.getSp("token").getString("token","123"))
+    val attentionPage = MutableLiveData(0)
+
+    val noTokenIsLoading = MutableLiveData(false)
+    var haveClearList = false
+
     //关注fragment中推荐关注的用户列表
     val newRecommendUserData = ArrayList<AttentionRecommendResponseItem>()
     var oldRecommendUserData = ArrayList<AttentionRecommendResponseItem>()
@@ -46,13 +52,21 @@ class OnlyTextViewModel : ViewModel() {
 
     fun getOnlyText() {
         isLoading.value = true
+        noTokenIsLoading.value = true
         when (page.value) {
-            0 ->{
-                FirstRepository.getAttentionList().unSafeSubscribeBy { dealData(it) }
-                FirstRepository.getAttentionRecommend().unSafeSubscribeBy { dealRecommendUserData(it) }
+            0 -> {
+                if (token.value != "123") {
+                    FirstRepository.getAttentionList(attentionPage.value?:0).unSafeSubscribeBy { dealData(it) }
+                }
+                FirstRepository.getAttentionRecommend()
+                    .unSafeSubscribeBy { dealRecommendUserData(it) }
             }
-            1->{FirstRepository.getRecommend().unSafeSubscribeBy { dealData(it) }}
-            2->{FirstRepository.getLatest().unSafeSubscribeBy { dealData(it) }}
+            1 -> {
+                FirstRepository.getRecommend().unSafeSubscribeBy { dealData(it) }
+            }
+            2 -> {
+                FirstRepository.getLatest().unSafeSubscribeBy { dealData(it) }
+            }
             3 -> {
                 FirstRepository.getOnlyText().unSafeSubscribeBy { dealData(it) }
             }
@@ -62,11 +76,14 @@ class OnlyTextViewModel : ViewModel() {
         }
     }
 
+
     private fun dealRecommendUserData(it: AttentionRecommendResponse) {
+        Log.d(TAG, "dealRecommendUserData:$it")
         for (data in it) {
             newRecommendUserData.add(data)
             oldRecommendUserData.add(data)
         }
+        noTokenIsLoading.value = true
         isLoading.value = false
         //请求成功后参数变为false，因为观察了这个数据，达到一个回调的目的
         isSwipeLayoutRefreshing.value = false
@@ -80,6 +97,7 @@ class OnlyTextViewModel : ViewModel() {
         isLoading.value = false
         //请求成功后参数变为false，因为观察了这个数据，达到一个回调的目的
         isSwipeLayoutRefreshing.value = false
+        attentionPage.value = attentionPage.value?.plus(1)
     }
 
     fun likeJoke(id: Int, status: Boolean, block: (Boolean) -> Unit) {
@@ -117,8 +135,11 @@ class OnlyTextViewModel : ViewModel() {
 
     fun clearList() {
         newRecommendUserData.clear()
+        oldRecommendUserData.clear()
+        Log.d(TAG, "clearList: $newRecommendUserData")
         newTextData.clear()
         oldTextData.clear()
+        Log.d(TAG, "clearList: $oldTextData")
         //下拉刷新数据时，先将此参数变为true，意味着正在请求
         isSwipeLayoutRefreshing.value = true
         getOnlyText()

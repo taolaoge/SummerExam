@@ -73,7 +73,8 @@ interface OnlyTextService {
      *获取关注的用户发布的段子列表
      */
     @POST("home/attention/list")
-    fun getAttentionList():Single<ApiWrapper<OnlyTextResponse>>
+    @FormUrlEncoded
+    fun getAttentionList(@Field("page") page:Int):Single<ApiWrapper<OnlyTextResponse>>
 
     /**
      * 获取主页的推荐关注数据

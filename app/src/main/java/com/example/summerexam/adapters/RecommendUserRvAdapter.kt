@@ -80,7 +80,6 @@ class RecommendUserRvAdapter(
         DiffUtil.Callback() {
 
         override fun getOldListSize(): Int {
-            Log.d(TAG, "getOldListSize:${mOldData.size}    ")
             return mOldData.size
         }
 

@@ -2,6 +2,7 @@ package com.example.summerexam.fragments.first
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,9 +15,12 @@ import com.example.summerexam.R
 import com.example.summerexam.adapters.OnlyTextRvAdapter
 import com.example.summerexam.extensions.decrypt
 import com.example.summerexam.fragments.CommentBottomFragment
+import com.example.summerexam.network.TAG
 import com.example.summerexam.utils.DkVideoPlayerUtils
 import com.example.summerexam.view.MyVerticalItemDecoration
 import com.example.summerexam.viewmodel.OnlyTextViewModel
+import com.ndhzs.lib.common.extensions.appContext
+import com.ndhzs.lib.common.extensions.getSp
 import com.ndhzs.lib.common.extensions.toast
 import com.ndhzs.lib.common.ui.BaseFragment
 import xyz.doikki.videocontroller.StandardVideoController
@@ -33,7 +37,7 @@ import xyz.doikki.videoplayer.player.VideoViewManager
  * date : 2022/7/15
  */
 open class OnlyTextFragment : BaseFragment() {
-    private lateinit var mLayoutManager:LinearLayoutManager
+    private lateinit var mLayoutManager: LinearLayoutManager
     private val mRvText by R.id.rv_only_text.view<RecyclerView>()
         .addInitialize {
             mLayoutManager = LinearLayoutManager(context)
@@ -41,8 +45,15 @@ open class OnlyTextFragment : BaseFragment() {
             this.run {
                 layoutManager = mLayoutManager
                 adapter =
-                    OnlyTextRvAdapter(viewModel.newTextData,viewModel.newRecommendUserData,viewModel.oldRecommendUserData,
-                        ::clickLikeOrDislike,::clickComment,::clickFollowing,::clickRecommendFollowing){
+                    OnlyTextRvAdapter(
+                        viewModel.newTextData,
+                        viewModel.newRecommendUserData,
+                        viewModel.oldRecommendUserData,
+                        ::clickLikeOrDislike,
+                        ::clickComment,
+                        ::clickFollowing,
+                        ::clickRecommendFollowing
+                    ) {
                         startPlay(it)
                     }
                 addItemDecoration(
@@ -52,7 +63,7 @@ open class OnlyTextFragment : BaseFragment() {
         }
     private val viewModel by lazy { ViewModelProvider(this)[OnlyTextViewModel::class.java] }
     private val mSwipeLayout by R.id.swipe_layout_only_text.view<SwipeRefreshLayout>()
-    private lateinit var mVideoView:VideoView<AndroidMediaPlayer>
+    private lateinit var mVideoView: VideoView<AndroidMediaPlayer>
     lateinit var mController: GestureVideoController
     private lateinit var mErrorView: ErrorView
     private lateinit var mCompleteView: CompleteView
@@ -69,11 +80,6 @@ open class OnlyTextFragment : BaseFragment() {
      */
     private var mLastPos = mCurPos
 
-    /*init {
-        val bundle = arguments
-        viewModel.page.value = bundle?.getInt("page")
-    }*/
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -85,7 +91,7 @@ open class OnlyTextFragment : BaseFragment() {
 
     private fun initView() {
         mVideoView = VideoView(requireContext())
-        mVideoView.setOnStateChangeListener(object : VideoView.SimpleOnStateChangeListener(){
+        mVideoView.setOnStateChangeListener(object : VideoView.SimpleOnStateChangeListener() {
             override fun onPlayStateChanged(playState: Int) {
                 super.onPlayStateChanged(playState)
                 //监听VideoViewManager释放，重置状态
@@ -136,6 +142,7 @@ open class OnlyTextFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
+        viewModel.token.value = appContext.getSp("token").getString("token", "123")
         resume()
     }
 
@@ -158,16 +165,17 @@ open class OnlyTextFragment : BaseFragment() {
             releaseVideoView()
         }
         val itemView: View
-        if (viewModel.newRecommendUserData.size != 0){
-            itemView= mLayoutManager.findViewByPosition(newPosition+1) ?: return
-            mCurPos = newPosition+1
-        }else{
+        if (viewModel.newRecommendUserData.size != 0) {
+            itemView = mLayoutManager.findViewByPosition(newPosition + 1) ?: return
+            mCurPos = newPosition + 1
+        } else {
             itemView = mLayoutManager.findViewByPosition(newPosition) ?: return
             mCurPos = newPosition
         }
         mVideoView.setUrl(viewModel.newTextData[newPosition].joke.videoUrl.decrypt())
         mVideoView.setVideoController(mController)
-        val viewHolder: OnlyTextRvAdapter.OnlyTextViewHolder = itemView.tag as OnlyTextRvAdapter.OnlyTextViewHolder
+        val viewHolder: OnlyTextRvAdapter.OnlyTextViewHolder =
+            itemView.tag as OnlyTextRvAdapter.OnlyTextViewHolder
         //把列表中预置的PrepareView添加到控制器中，注意isDissociate此处只能为true, 请点进去看isDissociate的解释
         mController.addControlComponent(viewHolder.mPrepareView, true)
         DkVideoPlayerUtils.removeViewFormParent(mVideoView)
@@ -188,14 +196,30 @@ open class OnlyTextFragment : BaseFragment() {
         viewModel.isSwipeLayoutRefreshing.observe(viewLifecycleOwner) {
             if (!it) mSwipeLayout.isRefreshing = false
         }
-        viewModel.page.observe(viewLifecycleOwner){
+        viewModel.page.observe(viewLifecycleOwner) {
             viewModel.getOnlyText()
+        }
+        viewModel.noTokenIsLoading.observe(viewLifecycleOwner) {
+            if(viewModel.page.value == 0) {
+                if (appContext.getSp("token").getString("token", "123") == "123") {
+                    mRvText.adapter?.notifyDataSetChanged()
+                }
+            }
+        }
+        viewModel.token.observe(viewLifecycleOwner) {
+            if(viewModel.page.value == 0) {
+                if (appContext.getSp("token").getString("token", "123") == "123" && !viewModel.haveClearList) {
+                    viewModel.clearList()
+                    viewModel.haveClearList = true
+                }
+            }
         }
         freshRecycleView()
     }
 
     private fun initSwipeLayout() {
         mSwipeLayout.setOnRefreshListener {
+            Log.d(TAG, "initSwipeLayout:true ")
             viewModel.clearList()
         }
     }
@@ -214,18 +238,18 @@ open class OnlyTextFragment : BaseFragment() {
                 val manager: LinearLayoutManager = recyclerView.layoutManager as LinearLayoutManager
                 //newState是RecycleView的状态 如果它的状态为没有滚动时
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    if (viewModel.page.value == 0){
+                    if (viewModel.page.value == 0 && appContext.getSp("token").getString("token","123") != "123") {
                         //获取最后一个完全显示的ItemPosition
                         val lastVisibleItem = manager.findLastCompletelyVisibleItemPosition()
                         val totalItem = manager.itemCount
                         if (lastVisibleItem == (totalItem - 1) && viewModel.isLoading.value == false) {
                             viewModel.getOnlyText()
                         }
-                    }else{
+                    } else {
                         //获取最后一个完全显示的ItemPosition
                         val lastVisibleItem = manager.findLastCompletelyVisibleItemPosition()
                         val totalItem = manager.itemCount
-                        if (lastVisibleItem == (totalItem-1) && viewModel.isLoading.value == false) {
+                        if (lastVisibleItem == (totalItem - 1) && viewModel.isLoading.value == false) {
                             viewModel.getOnlyText()
                         }
                     }
@@ -243,7 +267,7 @@ open class OnlyTextFragment : BaseFragment() {
         diffResult.dispatchUpdatesTo(mRvText.adapter!!)
     }
 
-    private fun clickComment(id:Int) {
+    private fun clickComment(id: Int) {
         val commentBottomFragment = CommentBottomFragment()
         val bundle = Bundle()
         bundle.putInt("jokeId", id)
@@ -254,8 +278,8 @@ open class OnlyTextFragment : BaseFragment() {
         )
     }
 
-    private fun clickFollowing(status: Boolean,userId:String,position:Int){
-        if (status) viewModel.followUser("1",userId){
+    private fun clickFollowing(status: Boolean, userId: String, position: Int) {
+        if (status) viewModel.followUser("1", userId) {
             if (it) {
                 toast("关注成功")
                 viewModel.newTextData[position].info.isAttention = true
@@ -264,17 +288,22 @@ open class OnlyTextFragment : BaseFragment() {
         }
     }
 
-    private fun clickRecommendFollowing(status: Boolean,userId:String,position:Int,block:()->Unit){
-        if (status) viewModel.followUser("1",userId){
-            if (it){
+    private fun clickRecommendFollowing(
+        status: Boolean,
+        userId: String,
+        position: Int,
+        block: () -> Unit
+    ) {
+        if (status) viewModel.followUser("1", userId) {
+            if (it) {
                 toast("关注成功")
                 viewModel.newRecommendUserData[position].isAttention = status
                 block()
                 viewModel.oldRecommendUserData[position].isAttention = status
             }
-        }else{
-            viewModel.followUser("0",userId){
-                if (it){
+        } else {
+            viewModel.followUser("0", userId) {
+                if (it) {
                     toast("取关成功")
                     viewModel.newRecommendUserData[position].isAttention = status
                     block()
