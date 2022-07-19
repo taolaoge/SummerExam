@@ -1,5 +1,6 @@
 package com.example.summerexam.services
 
+import com.example.summerexam.beans.AttentionRecommendResponse
 import com.example.summerexam.beans.CommentResponse
 import com.example.summerexam.beans.OnlyTextResponse
 import com.example.summerexam.network.ApiGenerator
@@ -68,5 +69,15 @@ interface OnlyTextService {
     @POST("home/recommend")
     fun getRecommend():Single<ApiWrapper<OnlyTextResponse>>
 
+    /**
+     *获取关注的用户发布的段子列表
+     */
+    @POST("home/attention/list")
+    fun getAttentionList():Single<ApiWrapper<OnlyTextResponse>>
 
+    /**
+     * 获取主页的推荐关注数据
+     */
+    @POST("home/attention/recommend")
+    fun getAttentionRecommend():Single<ApiWrapper<AttentionRecommendResponse>>
 }

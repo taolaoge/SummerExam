@@ -51,12 +51,12 @@ class CommentRvAdapter(private val data: ArrayList<Comment>
         return if (viewType == 1) {
             CommentViewHolder(
                 LayoutInflater.from(parent.context)
-                    .inflate(R.layout.comment_recycle_item, parent, false)
+                    .inflate(R.layout.recycle_item_comment, parent, false)
             )
         }else{
             NoCommentViewHolder(
                 LayoutInflater.from(parent.context)
-                    .inflate(R.layout.comment_recycle_item_no,parent,false)
+                    .inflate(R.layout.recycle_item_no_comment,parent,false)
             )
         }
     }

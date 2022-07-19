@@ -70,16 +70,21 @@
         android:layout_marginTop="8dp"
         tools:text="ssssssssssssssssssssssssssssssss" />
 
-    <ImageView
+    <androidx.cardview.widget.CardView
+        app:cardCornerRadius="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:id="@+id/img_picture"
-        android:adjustViewBounds="true"
-        android:scaleType="fitStart"
-        />
+        android:layout_marginEnd="16dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/img_picture"
+            android:adjustViewBounds="true"
+            android:scaleType="fitStart" />
+    </androidx.cardview.widget.CardView>
+
 
     <androidx.cardview.widget.CardView
         android:id="@+id/fl_player_container"

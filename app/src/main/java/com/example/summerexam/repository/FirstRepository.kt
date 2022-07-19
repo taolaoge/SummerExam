@@ -1,13 +1,10 @@
 package com.example.summerexam.repository
 
-import com.example.summerexam.beans.CommentResponse
+import com.example.summerexam.beans.AttentionRecommendResponse
 import com.example.summerexam.beans.OnlyTextResponse
-import com.example.summerexam.beans.OnlyTextResponseItem
 import com.example.summerexam.services.OnlyTextService
 import com.ndhzs.lib.common.extensions.mapOrThrowApiException
 import com.ndhzs.lib.common.extensions.throwApiExceptionIfFail
-import com.ndhzs.lib.common.extensions.toast
-import com.ndhzs.lib.common.extensions.unSafeSubscribeBy
 import com.ndhzs.lib.common.network.ApiWrapper
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
@@ -69,4 +66,17 @@ object FirstRepository {
             .mapOrThrowApiException()
     }
 
+    fun getAttentionList():Single<OnlyTextResponse>{
+        return OnlyTextService.INSTANCE.getAttentionList()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .mapOrThrowApiException()
+    }
+
+    fun getAttentionRecommend():Single<AttentionRecommendResponse>{
+        return OnlyTextService.INSTANCE.getAttentionRecommend()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .mapOrThrowApiException()
+    }
 }
