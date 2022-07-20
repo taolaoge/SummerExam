@@ -2,6 +2,7 @@ package com.example.summerexam.ui.fragments.first
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,7 @@ import com.example.summerexam.extensions.appContext
 import com.example.summerexam.extensions.getSp
 import com.example.summerexam.extensions.toast
 import com.example.summerexam.baseui.BaseFragment
+import com.example.summerexam.network.TAG
 import xyz.doikki.videocontroller.StandardVideoController
 import xyz.doikki.videocontroller.component.*
 import xyz.doikki.videoplayer.controller.GestureVideoController
@@ -302,6 +304,8 @@ open class FirstTextFragment : BaseFragment() {
             if (it) {
                 toast("关注成功")
                 viewModel.newRecommendUserData[position].isAttention = status
+                viewModel.newRecommendUserData[position].fansNum += 1
+                Log.d(TAG, "clickRecommendFollowing: ${viewModel.newRecommendUserData[position].fansNum}")
                 block()
                 viewModel.oldRecommendUserData[position].isAttention = status
             }
@@ -310,6 +314,7 @@ open class FirstTextFragment : BaseFragment() {
                 if (it) {
                     toast("取关成功")
                     viewModel.newRecommendUserData[position].isAttention = status
+                    viewModel.newRecommendUserData[position].fansNum =(viewModel.newRecommendUserData[position].fansNum.toInt()-1)
                     block()
                     viewModel.oldRecommendUserData[position].isAttention = status
                 }

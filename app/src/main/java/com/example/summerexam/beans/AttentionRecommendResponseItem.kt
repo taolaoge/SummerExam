@@ -2,7 +2,7 @@ package com.example.summerexam.beans
 
 data class AttentionRecommendResponseItem(
     val avatar: String,
-    val fansNum: String,
+    var fansNum: Int,
     var isAttention: Boolean,
     val jokesNum: String,
     val nickname: String,

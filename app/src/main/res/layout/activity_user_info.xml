@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:contentInsetStartWithNavigation="100dp"
-                app:navigationIcon="@drawable/ic_back"
+                app:navigationIcon="@drawable/ic_return"
                 app:title="nickname" />
 
         </com.google.android.material.appbar.AppBarLayout>

@@ -3,6 +3,7 @@ package com.example.summerexam.extensions
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.summerexam.network.DECRYPT_KEY
+import okio.ByteString.Companion.decodeBase64
 import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
@@ -30,7 +31,6 @@ fun String.decrypt1():String{
     return s
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun String.decrypt():String {
     if (this == "") return ""
     val new = this.split(",")
@@ -39,7 +39,11 @@ fun String.decrypt():String {
     val secretKeySpec = SecretKeySpec(raw, "AES")
     val cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
     cipher.init(Cipher.DECRYPT_MODE, secretKeySpec)
-    val encrypted = Base64.getDecoder().decode(newString)
+    val encrypted = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        Base64.getDecoder().decode(newString)
+    } else {
+        return ""
+    }
     val original = cipher.doFinal(encrypted)
     return String(original)
 }

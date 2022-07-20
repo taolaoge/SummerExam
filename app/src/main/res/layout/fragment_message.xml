@@ -26,22 +26,87 @@
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"/>
 
-    <!--<ImageView
+    <ImageView
         android:src="@drawable/ic_inform"
         android:id="@+id/img_message_fabulous"
-        android:layout_width="50dp"
-        android:layout_height="50dp"/>
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/img_message_comment"
+        android:layout_marginTop="80dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="赞  踩"
+        app:layout_constraintStart_toStartOf="@id/img_message_fabulous"
+        app:layout_constraintEnd_toEndOf="@id/img_message_fabulous"
+        app:layout_constraintTop_toBottomOf="@id/img_message_fabulous"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:layout_marginTop="8dp"/>
 
     <ImageView
         android:src="@drawable/ic_comment"
         android:id="@+id/img_message_comment"
-        android:layout_width="50dp"
-        android:layout_height="50dp"/>
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintStart_toEndOf="@id/img_message_fabulous"
+        app:layout_constraintTop_toTopOf="@id/img_message_fabulous"
+        app:layout_constraintEnd_toStartOf="@id/img_message_follow"
+        app:layout_constraintBottom_toBottomOf="@id/img_message_fabulous"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="评论"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/img_message_comment"
+        app:layout_constraintStart_toStartOf="@id/img_message_comment"
+        app:layout_constraintEnd_toEndOf="@id/img_message_comment"
+        android:layout_marginTop="8dp"/>
 
     <ImageView
-        android:id=""
-        android:layout_width="50dp"
-        android:layout_height="50dp"-->
+        android:id="@+id/img_message_follow"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_star"
+        app:layout_constraintStart_toEndOf="@id/img_message_comment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/img_message_fabulous"
+        app:layout_constraintBottom_toBottomOf="@id/img_message_fabulous"/>
+
+    <TextView
+        android:id="@+id/tv_message_follow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="关注"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@id/img_message_follow"
+        app:layout_constraintEnd_toEndOf="@id/img_message_follow"
+        app:layout_constraintTop_toBottomOf="@id/img_message_follow"
+        android:layout_marginTop="8dp"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/ll_message"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_message_follow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/grey"
+        android:layout_marginTop="16dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_message"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_message"
+        android:layout_marginTop="186dp"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
