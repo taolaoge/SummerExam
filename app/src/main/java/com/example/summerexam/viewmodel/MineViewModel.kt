@@ -25,6 +25,7 @@ class MineViewModel : ViewModel() {
     var coin = 0
     var username = ""
     var avatar = ""
+    var userId = ""
 
     fun refreshToken(){
         _token.value = appContext.getSp("token").getString("token","123")
@@ -44,6 +45,7 @@ class MineViewModel : ViewModel() {
                 coin = it.info.experienceNum
                 username = it.user.nickname
                 avatar = it.user.avatar
+                userId = it.user.userId.toString()
                 block()
             }
     }

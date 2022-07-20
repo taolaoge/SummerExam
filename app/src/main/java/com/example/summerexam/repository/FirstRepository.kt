@@ -5,6 +5,8 @@ import com.example.summerexam.beans.FirstTextResponse
 import com.example.summerexam.services.FirstTextService
 import com.example.summerexam.extensions.mapOrThrowApiException
 import com.example.summerexam.extensions.throwApiExceptionIfFail
+import com.example.summerexam.extensions.unSafeSubscribeBy
+import com.example.summerexam.services.UserinfoService
 import com.ndhzs.lib.common.network.ApiWrapper
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
@@ -82,6 +84,20 @@ object FirstRepository {
 
     fun searchJoke(keyword:String,page:Int):Single<FirstTextResponse>{
         return FirstTextService.INSTANCE.searchJoke(keyword,page)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .mapOrThrowApiException()
+    }
+
+    fun getUserJoke(userId: String,page:Int): Single<FirstTextResponse> {
+        return UserinfoService.INSTANCE.getUserJoke(userId, page)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .mapOrThrowApiException()
+    }
+
+    fun getUserLikeJoke(userId: String,page:Int): Single<FirstTextResponse> {
+        return UserinfoService.INSTANCE.getUserLikeJoke(userId, page)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .mapOrThrowApiException()

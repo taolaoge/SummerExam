@@ -6,12 +6,42 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:textSize="30dp"
-        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="This is message"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="消息"
+        android:textColor="@color/black"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"/>
+
+    <ImageView
+        android:id="@+id/img_message_search"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_search"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"/>
+
+    <!--<ImageView
+        android:src="@drawable/ic_inform"
+        android:id="@+id/img_message_fabulous"
+        android:layout_width="50dp"
+        android:layout_height="50dp"/>
+
+    <ImageView
+        android:src="@drawable/ic_comment"
+        android:id="@+id/img_message_comment"
+        android:layout_width="50dp"
+        android:layout_height="50dp"/>
+
+    <ImageView
+        android:id=""
+        android:layout_width="50dp"
+        android:layout_height="50dp"-->
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

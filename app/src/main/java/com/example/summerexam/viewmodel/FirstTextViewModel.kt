@@ -1,5 +1,6 @@
 package com.example.summerexam.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.summerexam.beans.AttentionRecommendResponse
@@ -7,6 +8,7 @@ import com.example.summerexam.beans.AttentionRecommendResponseItem
 import com.example.summerexam.beans.FirstTextResponse
 import com.example.summerexam.beans.FirstTextResponseItem
 import com.example.summerexam.extensions.*
+import com.example.summerexam.network.TAG
 import com.example.summerexam.repository.FirstRepository
 import com.example.summerexam.services.FirstTextService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -23,6 +25,7 @@ class FirstTextViewModel : ViewModel() {
     private val attentionPage = MutableLiveData(0)
 
     val keyword = MutableLiveData<String>()
+    var userId = ""
 
     val noTokenIsLoading = MutableLiveData(false)
     //关注fragment中推荐关注的用户列表
@@ -74,6 +77,13 @@ class FirstTextViewModel : ViewModel() {
             5->{
                 FirstRepository.searchJoke(keyword.value?:"",attentionPage.value?:0).unSafeSubscribeBy { dealData(it) }
             }
+            6->{
+                Log.d(TAG, "getOnlyText:$userId ")
+                FirstRepository.getUserJoke(userId,attentionPage.value?:1).unSafeSubscribeBy { dealData(it) }
+            }
+            7 ->{
+                FirstRepository.getUserLikeJoke(userId,attentionPage.value?:1).unSafeSubscribeBy { dealData(it) }
+            }
         }
     }
 
@@ -101,33 +111,21 @@ class FirstTextViewModel : ViewModel() {
     }
 
     fun likeJoke(id: Int, status: Boolean, block: (Boolean) -> Unit) {
-        FirstTextService.INSTANCE.likeJoke(id, status)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .throwApiExceptionIfFail()
+        FirstRepository.likeJoke(id, status)
             .unSafeSubscribeBy {
                 if (it.code == 200) block(true)
             }
     }
 
     fun dislikeJoke(id: Int, status: Boolean, block: (Boolean) -> Unit) {
-        FirstTextService.INSTANCE.dislikeJoke(id, status)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .throwApiExceptionIfFail()
-            .doOnError {
-                toast(it.toString())
-            }
+        FirstRepository.dislikeJoke(id, status)
             .unSafeSubscribeBy {
                 if (it.code == 200) block(true)
             }
     }
 
     fun followUser(status: String, userId: String, block: (Boolean) -> Unit) {
-        FirstTextService.INSTANCE.followUser(status, userId)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .throwApiExceptionIfFail()
+        FirstRepository.followUser(status, userId)
             .unSafeSubscribeBy {
                 if (it.code == 200) block(true)
             }

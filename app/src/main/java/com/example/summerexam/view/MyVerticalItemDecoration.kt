@@ -19,6 +19,7 @@ class MyVerticalItemDecoration(val space:Int):RecyclerView.ItemDecoration() {
     ) {
         super.getItemOffsets(outRect, view, parent, state)
         outRect.bottom = space
-        // Add top margin only for the first item to avoid double space between items
+    // Add top margin only for the first item to avoid double space between items
+
     }
 }

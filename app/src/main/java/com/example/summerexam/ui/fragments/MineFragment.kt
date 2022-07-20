@@ -18,6 +18,7 @@ import com.example.summerexam.extensions.appContext
 import com.example.summerexam.extensions.edit
 import com.example.summerexam.extensions.getSp
 import com.example.summerexam.baseui.BaseFragment
+import com.example.summerexam.ui.activities.UserinfoActivity
 
 /**
  * description ： TODO:类的作用
@@ -71,6 +72,10 @@ class MineFragment : BaseFragment() {
         mRelativeLayout.setOnClickListener {
             if (viewModel.token.value == "123") {
                 val intent = Intent(context, LoginActivity::class.java)
+                startActivity(intent)
+            }else{
+                val intent = Intent(context,UserinfoActivity::class.java)
+                intent.putExtra("userId",viewModel.userId)
                 startActivity(intent)
             }
         }

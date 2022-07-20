@@ -18,13 +18,16 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name="com.example.summerexam.ui.activities.SearchActivity"
+            android:name=".ui.activities.UserinfoActivity"
             android:exported="false" />
         <activity
-            android:name="com.example.summerexam.ui.activities.LoginActivity"
+            android:name=".ui.activities.SearchActivity"
             android:exported="false" />
         <activity
-            android:name="com.example.summerexam.ui.activities.MainActivity"
+            android:name=".ui.activities.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

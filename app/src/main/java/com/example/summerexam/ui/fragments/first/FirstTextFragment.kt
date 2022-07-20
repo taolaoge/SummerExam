@@ -21,7 +21,6 @@ import com.example.summerexam.extensions.appContext
 import com.example.summerexam.extensions.getSp
 import com.example.summerexam.extensions.toast
 import com.example.summerexam.baseui.BaseFragment
-import com.example.summerexam.view.MyLinearLayoutManager
 import xyz.doikki.videocontroller.StandardVideoController
 import xyz.doikki.videocontroller.component.*
 import xyz.doikki.videoplayer.controller.GestureVideoController
@@ -85,7 +84,7 @@ open class FirstTextFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         initView()
-        return inflater.inflate(R.layout.fragment_only_text, container, false)
+        return inflater.inflate(R.layout.fragment_first_text, container, false)
     }
 
     private fun initView() {
@@ -189,6 +188,7 @@ open class FirstTextFragment : BaseFragment() {
         val bundle = arguments
         viewModel.page.value = bundle?.getInt("page")
         viewModel.keyword.value = bundle?.getString("keyword")?:""
+        viewModel.userId = bundle?.getString("userId")?:""
         viewModel.isLoading.observe(viewLifecycleOwner) {
             if (!it) freshRecycleViewData()
         }
@@ -209,7 +209,7 @@ open class FirstTextFragment : BaseFragment() {
             //当token改变时，如果在关注页面
             if (viewModel.page.value == 0) {
                 if (it == "123") {
-                    if (viewModel.newTextData.size != 0) viewModel.clearList(){mRvText.adapter?.notifyItemRangeRemoved(0,viewModel.oldTextData.size)}
+                    if (viewModel.newTextData.size != 0) viewModel.clearList(){mRvText.adapter?.notifyDataSetChanged()}
                 } else {
                     freshRecycleView(mRvText)
                 }
@@ -221,7 +221,7 @@ open class FirstTextFragment : BaseFragment() {
 
     private fun initSwipeLayout() {
         mSwipeLayout.setOnRefreshListener {
-            if(viewModel.page.value != 5) viewModel.clearList(){mRvText.adapter?.notifyItemRangeRemoved(0,viewModel.oldTextData.size)}
+            if(viewModel.page.value != 5 or 6 or 7) viewModel.clearList(){mRvText.adapter?.notifyDataSetChanged()}
             else mSwipeLayout.isRefreshing = false
         }
     }
