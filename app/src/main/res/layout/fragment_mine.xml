@@ -3,124 +3,133 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/grey">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:id="@+id/mine_rl_login"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/mine_cl_login"
             android:layout_width="match_parent"
-            android:layout_height="220dp">
+            android:layout_height="120dp">
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/img_mine_head"
+                android:id="@+id/img_mine_avatar"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="20dp"
                 android:src="@drawable/ic_head_img"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:shapeAppearanceOverlay="@style/circleImageStyle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-                app:shapeAppearanceOverlay="@style/circleImageStyle" />
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"/>
 
             <TextView
                 android:id="@+id/tv_mine_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/img_mine_head"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="0dp"
-                android:layout_toRightOf="@id/img_mine_head"
                 android:text="登陆/注册"
-                android:textSize="25dp" />
+                android:textSize="24sp"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toTopOf="@id/img_mine_avatar"
+                app:layout_constraintStart_toEndOf="@id/img_mine_avatar"
+                android:layout_marginStart="16dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/img_mine_head"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="0dp"
-                android:layout_toEndOf="@id/img_mine_head"
                 android:text="快来开始你的创作吧~"
-                android:textSize="15dp" />
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/img_mine_avatar"
+                app:layout_constraintStart_toEndOf="@id/img_mine_avatar"
+                android:layout_marginStart="16dp"/>
 
-            <TextView
-                android:id="@+id/tv_mine_follow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_mine_follow_detail"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="5dp"
-                android:text="关注"
-                android:textSize="15dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/tv_mine_follow_detail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/img_mine_head"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="30dp"
-                android:text="0"
-                android:textSize="20dp" />
+        <TextView
+            android:id="@+id/tv_mine_follow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="关注"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_mine_followers"
+            app:layout_constraintTop_toBottomOf="@id/mine_cl_login"
+            android:layout_marginTop="38dp"/>
 
-            <TextView
-                android:id="@+id/tv_mine_followers_detail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/img_mine_head"
-                android:layout_marginStart="68dp"
-                android:layout_marginTop="30dp"
-                android:layout_toRightOf="@id/tv_mine_follow_detail"
-                android:text="0"
-                android:textSize="20dp" />
+        <TextView
+            android:id="@+id/tv_mine_follow_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="0"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toTopOf="@id/tv_mine_follow"
+            app:layout_constraintStart_toStartOf="@id/tv_mine_follow"
+            app:layout_constraintEnd_toEndOf="@id/tv_mine_follow"
+            android:layout_marginBottom="8dp"/>
 
-            <TextView
-                android:id="@+id/tv_mine_followers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_mine_followers_detail"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="5dp"
-                android:layout_toRightOf="@id/tv_mine_follow"
-                android:text="粉丝"
-                android:textSize="15dp" />
+        <TextView
+            android:id="@+id/tv_mine_followers_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="0"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toTopOf="@id/tv_mine_followers"
+            app:layout_constraintStart_toStartOf="@id/tv_mine_followers"
+            app:layout_constraintEnd_toEndOf="@id/tv_mine_followers"
+            android:layout_marginBottom="8dp"/>
 
-            <TextView
-                android:id="@+id/tv_mine_coins"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_mine_coins_detail"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="5dp"
-                android:layout_toEndOf="@id/tv_mine_followers"
-                android:text="乐豆"
-                android:textSize="15dp" />
+        <TextView
+            android:id="@+id/tv_mine_followers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="粉丝"
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@id/tv_mine_follow"
+            app:layout_constraintEnd_toStartOf="@id/tv_mine_coins"
+            app:layout_constraintTop_toTopOf="@id/tv_mine_follow"
+            app:layout_constraintBottom_toBottomOf="@id/tv_mine_follow"/>
 
-            <TextView
-                android:id="@+id/tv_mine_coins_detail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/img_mine_head"
-                android:layout_marginStart="67dp"
-                android:layout_marginTop="30dp"
-                android:layout_toRightOf="@id/tv_mine_followers_detail"
-                android:text="0"
-                android:textSize="20dp" />
-        </RelativeLayout>
+        <TextView
+            android:id="@+id/tv_mine_coins"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="乐豆"
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@id/tv_mine_followers"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_mine_follow"
+            app:layout_constraintBottom_toBottomOf="@id/tv_mine_follow"/>
+
+        <TextView
+            android:id="@+id/tv_mine_coins_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="0"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@id/tv_mine_coins"
+            app:layout_constraintBottom_toTopOf="@id/tv_mine_coins"
+            app:layout_constraintEnd_toEndOf="@id/tv_mine_coins"
+            android:layout_marginBottom="8dp"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_user_extra"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:background="@color/white">
+            android:background="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_mine_follow"
+            android:layout_marginTop="16dp">
 
             <ImageView
                 android:id="@+id/img_mine_post"
@@ -129,8 +138,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/img_mine_comment"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:src="@drawable/ic_post" />
+                android:src="@drawable/ic_post"
+                android:layout_marginTop="20dp"/>
 
             <ImageView
                 android:id="@+id/img_mine_comment"
@@ -168,8 +177,7 @@
                 app:layout_constraintStart_toStartOf="@id/img_mine_post"
                 app:layout_constraintEnd_toEndOf="@id/img_mine_post"
                 app:layout_constraintTop_toBottomOf="@id/img_mine_post"
-                android:text="帖子"
-                android:textSize="15dp" />
+                android:text="帖子"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -177,8 +185,7 @@
                 app:layout_constraintStart_toStartOf="@id/img_mine_comment"
                 app:layout_constraintEnd_toEndOf="@id/img_mine_comment"
                 app:layout_constraintTop_toBottomOf="@id/img_mine_comment"
-                android:text="评论"
-                android:textSize="15dp" />
+                android:text="评论"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -186,8 +193,7 @@
                 app:layout_constraintStart_toStartOf="@id/img_mine_fabulous"
                 app:layout_constraintEnd_toEndOf="@id/img_mine_fabulous"
                 app:layout_constraintTop_toBottomOf="@id/img_mine_fabulous"
-                android:text="赞过"
-                android:textSize="15dp" />
+                android:text="赞过"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -195,8 +201,7 @@
                 app:layout_constraintStart_toStartOf="@id/img_mine_star"
                 app:layout_constraintEnd_toEndOf="@id/img_mine_star"
                 app:layout_constraintTop_toBottomOf="@id/img_mine_star"
-                android:text="收藏"
-                android:textSize="15dp" />
+                android:text="收藏"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -204,11 +209,13 @@
             android:id="@+id/btn_mine_out"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="30dp"
             android:background="@drawable/shape_btn"
-            android:text="退出登陆" />
-    </androidx.appcompat.widget.LinearLayoutCompat>
+            android:text="退出登陆"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_user_extra"
+            android:layout_marginTop="16dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </ScrollView>

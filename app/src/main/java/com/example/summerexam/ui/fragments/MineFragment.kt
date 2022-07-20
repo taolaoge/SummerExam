@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.summerexam.R
@@ -27,14 +28,14 @@ import com.example.summerexam.ui.activities.UserinfoActivity
  * date : 2022/7/14
  */
 class MineFragment : BaseFragment() {
-    private val mRelativeLayout by R.id.mine_rl_login.view<RelativeLayout>()
+    private val mRelativeLayout by R.id.mine_cl_login.view<ConstraintLayout>()
     private val viewModel by lazy { ViewModelProvider(this)[MineViewModel::class.java] }
     private val mTvFollow by R.id.tv_mine_follow_detail.view<TextView>()
     private val mTvFollowers by R.id.tv_mine_followers_detail.view<TextView>()
     private val mTvCoin by R.id.tv_mine_coins_detail.view<TextView>()
     private val mTvUserName by R.id.tv_mine_username.view<TextView>()
     private val mBtnOut by R.id.btn_mine_out.view<Button>()
-    private val mImgUser by R.id.img_mine_head.view<ImageView>()
+    private val mImgUser by R.id.img_mine_avatar.view<ImageView>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

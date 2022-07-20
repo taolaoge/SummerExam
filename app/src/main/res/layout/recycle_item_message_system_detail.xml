@@ -38,8 +38,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginStart="62dp"
-        android:layout_marginEnd="16dp"
-        />
+        android:layout_marginEnd="16dp" />
 
     <TextView
         android:id="@+id/tv_message_system_detail_time"

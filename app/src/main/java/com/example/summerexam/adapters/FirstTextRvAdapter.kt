@@ -125,13 +125,13 @@ class FirstTextRvAdapter(
             0 -> {
                 OnlyTextViewHolder(
                     LayoutInflater.from(parent.context)
-                        .inflate(R.layout.only_text_recycle_item, parent, false)
+                        .inflate(R.layout.recycle_item_first_text, parent, false)
                 )
             }
             1 -> {
                 BottomHolder(
                     LayoutInflater.from(parent.context)
-                        .inflate(R.layout.only_text_recycle_item_bottom, parent, false)
+                        .inflate(R.layout.recycle_item_first_text_bottom, parent, false)
                 )
             }
             else -> {

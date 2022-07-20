@@ -1,6 +1,5 @@
 package com.example.summerexam.adapters
 
-import android.text.Layout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +22,7 @@ class SearchRvAdapter(private val data: ArrayList<FirstTextResponseItem>) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TextHolder {
         return TextHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.only_text_recycle_item, parent, false)
+                .inflate(R.layout.recycle_item_first_text, parent, false)
         )
     }
 

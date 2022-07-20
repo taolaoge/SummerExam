@@ -23,7 +23,8 @@
         android:layout_marginStart="16dp"
         app:layout_constraintStart_toEndOf="@+id/img_comment_avatar"
         app:layout_constraintTop_toTopOf="@+id/img_comment_avatar"
-        tools:text="nickname" />
+        tools:text="nickname"
+        app:layout_constraintBottom_toTopOf="@id/tv_comment_content"/>
 
     <TextView
         android:id="@+id/tv_comment_content"
@@ -35,10 +36,9 @@
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toEndOf="@id/img_comment_avatar"
         app:layout_constraintEnd_toEndOf="@id/img_comment_love"
-        app:layout_constraintBottom_toBottomOf="@id/img_comment_avatar"
         android:layout_marginStart="82dp"
         android:layout_marginEnd="36dp"
-        tools:text="content" />
+        tools:text="sssssssssssssssssssssssssssss" />
 
     <ImageView
         android:id="@+id/img_comment_love"

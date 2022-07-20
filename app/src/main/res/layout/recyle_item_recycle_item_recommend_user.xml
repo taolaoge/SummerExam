@@ -56,8 +56,8 @@
 
         <Button
             android:id="@+id/btn_recommend_user_follow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
             android:background="@drawable/shape_btn"
             android:text="+关注"
             app:layout_constraintBottom_toBottomOf="parent"
