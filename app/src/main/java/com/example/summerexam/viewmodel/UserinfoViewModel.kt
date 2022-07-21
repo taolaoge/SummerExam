@@ -25,13 +25,14 @@ class UserinfoViewModel : ViewModel() {
 
 
 
-    fun getTargetUserinfo(userId:String){
+    fun getTargetUserinfo(userId:String,block:()->Unit){
         UserinfoService.INSTANCE.getTargetUserInfo(userId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .mapOrThrowApiException()
             .unSafeSubscribeBy {
                 targetUserinfoResponse = it
+                block()
             }
     }
 

@@ -1,11 +1,14 @@
 package com.example.summerexam.adapters
 
+import android.graphics.BitmapFactory
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +23,7 @@ import com.example.summerexam.view.MyHorizontalItemDecoration
 import com.example.summerexam.view.PrepareView
 import com.example.summerexam.extensions.gone
 import com.example.summerexam.extensions.visible
+import com.example.summerexam.network.TAG
 
 /**
  * description ： TODO:类的作用
@@ -35,6 +39,7 @@ class FirstTextRvAdapter(
     private val clickComment: ((Int) -> Unit),
     private val clickFollowing: (Boolean, String, Int) -> Unit,
     private val clickRecommendFollow:(Boolean,String,Int,block:()->Unit) -> Unit,
+    private val clickPicture:(String)->Unit,
     private val clickVideo:(Int) -> Unit
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -53,6 +58,7 @@ class FirstTextRvAdapter(
         val mImgDislike: ImageView = view.findViewById(R.id.img_text_dislike)
         val mImgComment: ImageView = view.findViewById(R.id.img_text_comment)
         val mImgPicture: ImageView = view.findViewById(R.id.img_picture)
+        val mCvPicture:CardView = view.findViewById(R.id.cv_picture_container)
         val mPlayerContainer = itemView.findViewById<FrameLayout?>(R.id.fl_player_container)
         val mPrepareView = itemView.findViewById<PrepareView>(R.id.prepare_view)
         val mThumb = mPrepareView.findViewById<ImageView>(R.id.thumb)
@@ -87,6 +93,9 @@ class FirstTextRvAdapter(
             }
             mPlayerContainer.setOnClickListener {
                 clickVideo(mPosition)
+            }
+            mImgPicture.setOnClickListener {
+                clickPicture(data[mPosition].joke.imageUrl.decrypt())
             }
         }
     }
@@ -172,16 +181,17 @@ class FirstTextRvAdapter(
 
             holder.run {
                 if (text.joke.imageUrl.decrypt() != "") {
-                    holder.mImgPicture.visible()
+                    getPictureSize(text.joke.imageUrl.decrypt())
+                    holder.mCvPicture.visible()
                     Glide.with(itemView.context).load(text.joke.imageUrl.decrypt())
-                        .apply(RequestOptions.bitmapTransform(RoundedCorners(15)))
+                        .override(500,500)
+                        .centerCrop()
                         .into(this.mImgPicture)
-                } else holder.mImgPicture.gone()
+                } else holder.mCvPicture.gone()
                 if (text.joke.videoUrl.decrypt() != ""){
                     holder.mPlayerContainer.visible()
                     Glide.with(holder.mThumb.context)
                         .load(text.joke.thumbUrl.decrypt())
-                        .placeholder(android.R.color.darker_gray)
                         .into(holder.mThumb)
                 } else holder.mPlayerContainer.gone()
                 Glide.with(this.itemView.context).load(text.user.avatar).into(this.mImgAvatar)
@@ -207,6 +217,15 @@ class FirstTextRvAdapter(
             ), true
         )
         diffResult.dispatchUpdatesTo(rv.adapter!!)
+    }
+
+    private fun getPictureSize(url:String){
+        val options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true
+        val mbp = BitmapFactory.decodeFile(url,options)
+        val outHeight = options.outHeight
+        val outWidth = options.outWidth
+        Log.d(TAG, "getPictureSize:通过Options获取到的图片大小 + width: $outWidth +: $outHeight ")
     }
 
     override fun getItemCount(): Int {

@@ -1,5 +1,6 @@
 package com.example.summerexam.ui.fragments.first
 
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
@@ -23,6 +24,7 @@ import com.example.summerexam.extensions.getSp
 import com.example.summerexam.extensions.toast
 import com.example.summerexam.baseui.BaseFragment
 import com.example.summerexam.network.TAG
+import com.example.summerexam.ui.activities.WebViewActivity
 import xyz.doikki.videocontroller.StandardVideoController
 import xyz.doikki.videocontroller.component.*
 import xyz.doikki.videoplayer.controller.GestureVideoController
@@ -52,7 +54,8 @@ open class FirstTextFragment : BaseFragment() {
                         ::clickLikeOrDislike,
                         ::clickComment,
                         ::clickFollowing,
-                        ::clickRecommendFollowing
+                        ::clickRecommendFollowing,
+                        ::clickPicture
                     ) {
                         startPlay(it)
                     }
@@ -189,8 +192,8 @@ open class FirstTextFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         val bundle = arguments
         viewModel.page.value = bundle?.getInt("page")
-        viewModel.keyword.value = bundle?.getString("keyword")?:""
-        viewModel.userId = bundle?.getString("userId")?:""
+        viewModel.keyword.value = bundle?.getString("keyword") ?: ""
+        viewModel.userId = bundle?.getString("userId") ?: ""
         viewModel.isLoading.observe(viewLifecycleOwner) {
             if (!it) freshRecycleViewData()
         }
@@ -211,7 +214,7 @@ open class FirstTextFragment : BaseFragment() {
             //当token改变时，如果在关注页面
             if (viewModel.page.value == 0) {
                 if (it == "123") {
-                    if (viewModel.newTextData.size != 0) viewModel.clearList(){mRvText.adapter?.notifyDataSetChanged()}
+                    if (viewModel.newTextData.size != 0) viewModel.clearList() { mRvText.adapter?.notifyDataSetChanged() }
                 } else {
                     freshRecycleView(mRvText)
                 }
@@ -223,12 +226,12 @@ open class FirstTextFragment : BaseFragment() {
 
     private fun initSwipeLayout() {
         mSwipeLayout.setOnRefreshListener {
-            if(viewModel.page.value != 5 or 6 or 7) viewModel.clearList(){mRvText.adapter?.notifyDataSetChanged()}
+            if (viewModel.page.value != 5 or 6 or 7) viewModel.clearList() { mRvText.adapter?.notifyDataSetChanged() }
             else mSwipeLayout.isRefreshing = false
         }
     }
 
-    private fun freshRecycleView(rv:RecyclerView) {
+    private fun freshRecycleView(rv: RecyclerView) {
         rv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -248,7 +251,7 @@ open class FirstTextFragment : BaseFragment() {
                         val totalItem = manager.itemCount
                         if (lastVisibleItem == (totalItem - 1) && viewModel.isLoading.value == false
                             && viewModel.token.value != "123"
-                        ){
+                        ) {
                             viewModel.getOnlyText()
                         }
                     } else {
@@ -305,7 +308,6 @@ open class FirstTextFragment : BaseFragment() {
                 toast("关注成功")
                 viewModel.newRecommendUserData[position].isAttention = status
                 viewModel.newRecommendUserData[position].fansNum += 1
-                Log.d(TAG, "clickRecommendFollowing: ${viewModel.newRecommendUserData[position].fansNum}")
                 block()
                 viewModel.oldRecommendUserData[position].isAttention = status
             }
@@ -314,7 +316,8 @@ open class FirstTextFragment : BaseFragment() {
                 if (it) {
                     toast("取关成功")
                     viewModel.newRecommendUserData[position].isAttention = status
-                    viewModel.newRecommendUserData[position].fansNum =(viewModel.newRecommendUserData[position].fansNum.toInt()-1)
+                    viewModel.newRecommendUserData[position].fansNum =
+                        (viewModel.newRecommendUserData[position].fansNum.toInt() - 1)
                     block()
                     viewModel.oldRecommendUserData[position].isAttention = status
                 }
@@ -357,5 +360,11 @@ open class FirstTextFragment : BaseFragment() {
                 }
             }
         }
+    }
+
+    private fun clickPicture(url: String) {
+        val intent = Intent(activity, WebViewActivity::class.java)
+        intent.putExtra("url",url)
+        startActivity(intent)
     }
 }

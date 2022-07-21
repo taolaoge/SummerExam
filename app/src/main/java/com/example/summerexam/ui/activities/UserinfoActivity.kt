@@ -1,54 +1,54 @@
 package com.example.summerexam.ui.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import androidx.fragment.app.Fragment
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
-import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.example.summerexam.R
-import com.example.summerexam.adapters.FirstFragmentAdapter
-import com.example.summerexam.adapters.UserInfoFragmentVpAdapter
 import com.example.summerexam.baseui.BaseActivity
-import com.example.summerexam.ui.fragments.UserinfoJokeFragment
 import com.example.summerexam.ui.fragments.first.FirstTextFragment
 import com.example.summerexam.viewmodel.UserinfoViewModel
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
 
 class UserinfoActivity : BaseActivity() {
     private val viewModel by lazy { ViewModelProvider(this)[UserinfoViewModel::class.java] }
-    private val mViewPager by R.id.vp2_userinfo.view<ViewPager2>()
-
-    private val mTabLayout by R.id.tab_layout_userinfo.view<TabLayout>()
-
+    private val mImgAvatar by R.id.img_userinfo_avatar.view<ImageView>()
+    private val mTvNickname by R.id.tv_userinfo_nickname.view<TextView>()
+    private val mTvJoinTime by R.id.tv_userinfo_jointime.view<TextView>()
+    private val mTvSignature by R.id.tv_userinfo_signature.view<TextView>()
+    private val mTvFabulous by R.id.tv_userinfo_fabulous.view<TextView>()
+    private val mTvFollow by R.id.tv_userinfo_following.view<TextView>()
+    private val mTvFollowers by R.id.tv_userinfo_followers.view<TextView>()
+    private val mImgBackground by R.id.img_userinfo_background.view<ImageView>()
+    private val mImgReturn by R.id.img_userinfo_return.view<ImageView>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_info)
         viewModel.userId = intent.getStringExtra("userId") ?: ""
-        initViewPager()
-    }
-
-    private fun initViewPager() {
-        val fragments = arrayListOf(
-            FirstTextFragment(),
-            FirstTextFragment()
-        ).onEachIndexed { index, userinfoJokeFragment ->
-            userinfoJokeFragment.arguments = Bundle().apply {
-                putInt("page", index+6)
-                putString("userId", viewModel.userId)
+        initFragment()
+        viewModel.getTargetUserinfo(viewModel.userId) {
+            viewModel.targetUserinfoResponse.run {
+                mTvFabulous.text = "$likeNum 获赞"
+                mTvNickname.text = nickname
+                mTvJoinTime.text = "入驻段子乐 $joinTime"
+                mTvSignature.text = sigbature
+                mTvFollow.text = "$attentionNum 关注"
+                mTvFollowers.text = "$fansNum 粉丝"
+                Glide.with(this@UserinfoActivity).load(avatar).into(mImgAvatar)
+                Glide.with(this@UserinfoActivity).load(avatar).into(mImgBackground)
             }
         }
-        val data = arrayOf("作品", "喜欢")
-        mViewPager.adapter = UserInfoFragmentVpAdapter(this, fragments)
-        mViewPager.registerOnPageChangeCallback(object :ViewPager2.OnPageChangeCallback(){
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-            }
-        })
-        TabLayoutMediator(mTabLayout, mViewPager) { tab, position ->
-            tab.text = data[position]
-        }.attach()
+        mImgReturn.setOnClickListener { finish() }
+    }
+
+    private fun initFragment() {
+        val fragment = FirstTextFragment()
+        fragment.arguments = Bundle().apply {
+            putString("userId", viewModel.userId)
+            putInt("page", 7)
+        }
+        supportFragmentManager.beginTransaction().replace(R.id.fl_userinfo_container, fragment)
+            .commit()
     }
 }

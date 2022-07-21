@@ -78,7 +78,6 @@ class FirstTextViewModel : ViewModel() {
                 FirstRepository.searchJoke(keyword.value?:"",attentionPage.value?:0).unSafeSubscribeBy { dealData(it) }
             }
             6->{
-                Log.d(TAG, "getOnlyText:$userId ")
                 FirstRepository.getUserJoke(userId,attentionPage.value?:1).unSafeSubscribeBy { dealData(it) }
             }
             7 ->{

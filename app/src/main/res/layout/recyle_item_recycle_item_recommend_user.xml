@@ -21,7 +21,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/circleImageStyle"
             app:strokeColor="@color/teal_200"
-            app:strokeWidth="2dp"/>
+            />
 
         <TextView
             android:id="@+id/tv_recommend_user_nickname"

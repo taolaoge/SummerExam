@@ -9,7 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="55dp">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/img_text_avatar"
@@ -71,18 +71,18 @@
         tools:text="ssssssssssssssssssssssssssssssss" />
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cv_picture_container"
         app:cardCornerRadius="8dp"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp">
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/img_picture"
-            android:adjustViewBounds="true"
-            android:scaleType="fitStart" />
+            android:adjustViewBounds="true" />
     </androidx.cardview.widget.CardView>
 
 
