@@ -24,6 +24,7 @@ import com.example.summerexam.extensions.getSp
 import com.example.summerexam.extensions.toast
 import com.example.summerexam.baseui.BaseFragment
 import com.example.summerexam.network.TAG
+import com.example.summerexam.ui.activities.UserinfoActivity
 import com.example.summerexam.ui.activities.WebViewActivity
 import xyz.doikki.videocontroller.StandardVideoController
 import xyz.doikki.videocontroller.component.*
@@ -55,7 +56,8 @@ open class FirstTextFragment : BaseFragment() {
                         ::clickComment,
                         ::clickFollowing,
                         ::clickRecommendFollowing,
-                        ::clickPicture
+                        ::clickPicture,
+                        ::clickAvatar
                     ) {
                         startPlay(it)
                     }
@@ -249,7 +251,7 @@ open class FirstTextFragment : BaseFragment() {
                         //获取最后一个完全显示的ItemPosition
                         val lastVisibleItem = manager.findLastCompletelyVisibleItemPosition()
                         val totalItem = manager.itemCount
-                        if (lastVisibleItem == (totalItem - 1) && viewModel.isLoading.value == false
+                        if (lastVisibleItem == (totalItem-1) && viewModel.isLoading.value == false
                             && viewModel.token.value != "123"
                         ) {
                             viewModel.getOnlyText()
@@ -258,7 +260,7 @@ open class FirstTextFragment : BaseFragment() {
                         //获取最后一个完全显示的ItemPosition
                         val lastVisibleItem = manager.findLastCompletelyVisibleItemPosition()
                         val totalItem = manager.itemCount
-                        if (lastVisibleItem == (totalItem - 1) && viewModel.isLoading.value == false) {
+                        if (lastVisibleItem == (totalItem-1) && viewModel.isLoading.value == false) {
                             viewModel.getOnlyText()
                         }
                     }
@@ -365,6 +367,12 @@ open class FirstTextFragment : BaseFragment() {
     private fun clickPicture(url: String) {
         val intent = Intent(activity, WebViewActivity::class.java)
         intent.putExtra("url",url)
+        startActivity(intent)
+    }
+
+    private fun clickAvatar(userId:String){
+        val intent = Intent(activity,UserinfoActivity::class.java)
+        intent.putExtra("userId",userId)
         startActivity(intent)
     }
 }

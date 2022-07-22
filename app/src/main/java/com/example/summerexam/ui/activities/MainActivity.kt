@@ -1,5 +1,6 @@
 package com.example.summerexam.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
@@ -11,6 +12,7 @@ import com.example.summerexam.ui.fragments.MineFragment
 import com.example.summerexam.ui.fragments.MessageFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.example.summerexam.baseui.BaseActivity
+import com.example.summerexam.extensions.startActivity
 
 class MainActivity : BaseActivity() {
     private val mBottomNavigation by R.id.main_bottom_navigation.view<BottomNavigationView>()
@@ -42,6 +44,10 @@ class MainActivity : BaseActivity() {
                 }
                 R.id.bottom_mine -> {
                     mViewPager.setCurrentItem(3,false)
+                }
+                R.id.bottom_add->{
+                    val intent = Intent(this,PostJokeActivity::class.java)
+                    startActivity(intent)
                 }
             }
             true

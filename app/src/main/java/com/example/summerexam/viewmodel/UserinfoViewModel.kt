@@ -7,6 +7,7 @@ import com.example.summerexam.beans.FirstTextResponseItem
 import com.example.summerexam.beans.TargetUserinfoResponse
 import com.example.summerexam.extensions.mapOrThrowApiException
 import com.example.summerexam.extensions.unSafeSubscribeBy
+import com.example.summerexam.repository.FirstRepository
 import com.example.summerexam.services.UserinfoService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -36,5 +37,11 @@ class UserinfoViewModel : ViewModel() {
             }
     }
 
+    fun followUser(status: String, userId: String, block: (Boolean) -> Unit) {
+        FirstRepository.followUser(status, userId)
+            .unSafeSubscribeBy {
+                if (it.code == 200) block(true)
+            }
+    }
 
 }

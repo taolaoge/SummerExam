@@ -1,14 +1,18 @@
 package com.example.summerexam.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.summerexam.beans.FirstTextResponse
 import com.example.summerexam.beans.FirstTextResponseItem
 import com.example.summerexam.extensions.mapOrThrowApiException
 import com.example.summerexam.extensions.unSafeSubscribeBy
+import com.example.summerexam.network.TAG
+import com.example.summerexam.repository.FirstRepository
 import com.example.summerexam.services.UserinfoService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlin.math.absoluteValue
 
 /**
  * description ： TODO:类的作用
@@ -18,7 +22,6 @@ import io.reactivex.rxjava3.schedulers.Schedulers
  */
 class UserJokeViewModel : ViewModel() {
     val page = MutableLiveData(1)
-    val position = MutableLiveData<Int>()
 
     //新的数据集合，差分刷新使用
     val newTextData = ArrayList<FirstTextResponseItem>()
@@ -29,12 +32,7 @@ class UserJokeViewModel : ViewModel() {
     val isLoading = MutableLiveData(true)
 
 
-    fun getList(){
-        if (position.value == 0) getUserJoke()
-        else getUserLikeJoke()
-    }
-
-    private fun getUserJoke() {
+   fun getUserJoke() {
         UserinfoService.INSTANCE.getUserJoke(userId, page.value ?: 1)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -44,15 +42,21 @@ class UserJokeViewModel : ViewModel() {
             }
     }
 
-    private fun getUserLikeJoke() {
-        UserinfoService.INSTANCE.getUserLikeJoke(userId, page.value ?: 1)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .mapOrThrowApiException()
+
+    fun likeJoke(id: Int, status: Boolean, block: (Boolean) -> Unit) {
+        FirstRepository.likeJoke(id, status)
             .unSafeSubscribeBy {
-                dealData(it)
+                if (it.code == 200) block(true)
             }
     }
+
+    fun dislikeJoke(id: Int, status: Boolean, block: (Boolean) -> Unit) {
+        FirstRepository.dislikeJoke(id, status)
+            .unSafeSubscribeBy {
+                if (it.code == 200) block(true)
+            }
+    }
+
 
     private fun dealData(it: FirstTextResponse) {
         oldTextData = newTextData
@@ -60,7 +64,6 @@ class UserJokeViewModel : ViewModel() {
             newTextData.add(data)
         }
         isLoading.value = false
-        //请求成功后参数变为false，因为观察了这个数据，达到一个回调的目的
         page.value = page.value?.plus(1)
     }
 }

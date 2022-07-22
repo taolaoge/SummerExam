@@ -2,7 +2,7 @@ package com.example.summerexam.beans
 
 data class TargetUserinfoResponse(
     val attentionNum: String,
-    val attentionState: Int,
+    var attentionState: Int,
     val avatar: String,
     val collectNum: String,
     val commentNum: String,

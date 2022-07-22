@@ -13,6 +13,7 @@ class WebViewActivity : AppCompatActivity() {
         webView.settings.run {
             useWideViewPort = true
             loadWithOverviewMode = true //设置加载进来的页面自适应手机屏幕
+            builtInZoomControls = true  //设置是否支持缩放
         }
         val url = intent.getStringExtra("url")
         if (url != null) webView.loadUrl(url)

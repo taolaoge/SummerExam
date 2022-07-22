@@ -1,142 +1,184 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
     tools:context=".ui.activities.UserinfoActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="412dp"
+        android:fitsSystemWindows="true"
+        android:background="@color/white">
 
-        <ImageView
-            android:id="@+id/img_userinfo_background"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:scaleType="centerCrop"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="-46dp" />
+            android:layout_height="match_parent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/img_userinfo_avatar"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="125dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/img_userinfo_background"
-            app:shapeAppearanceOverlay="@style/circleImageStyle" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/img_userinfo_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/img_userinfo_return"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_return1"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"/>
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/img_userinfo_avatar"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="125dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/img_userinfo_background"
+                    app:shapeAppearanceOverlay="@style/circleImageStyle" />
 
-        <TextView
-            android:id="@+id/tv_userinfo_nickname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/img_userinfo_avatar"
-            tools:text="nickname" />
+                <ImageView
+                    android:id="@+id/img_userinfo_return"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/ic_return1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_userinfo_jointime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_userinfo_nickname"
-            tools:text="birthday" />
+                <TextView
+                    android:id="@+id/tv_userinfo_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/img_userinfo_avatar"
+                    tools:text="nickname" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            app:layout_constraintTop_toBottomOf="@id/tv_userinfo_jointime"
-            android:layout_marginTop="15.5dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:background="@color/grey_black"/>
+                <TextView
+                    android:id="@+id/tv_userinfo_jointime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_userinfo_nickname"
+                    tools:text="birthday" />
 
-        <TextView
-            android:id="@+id/tv_userinfo_signature"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_userinfo_jointime"
-            tools:text="他正在想一个爆炸的签名" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="15.5dp"
+                    android:layout_marginEnd="24dp"
+                    android:background="@color/grey_black"
+                    app:layout_constraintTop_toBottomOf="@id/tv_userinfo_jointime" />
 
-        <TextView
-            android:id="@+id/tv_userinfo_fabulous"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_userinfo_signature"
-            tools:text="0 获赞" />
+                <TextView
+                    android:id="@+id/tv_userinfo_signature"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="32dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_userinfo_jointime"
+                    tools:text="他正在想一个爆炸的签名" />
+
+                <TextView
+                    android:id="@+id/tv_userinfo_fabulous"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_userinfo_signature"
+                    tools:text="0 获赞" />
 
 
-        <TextView
-            android:id="@+id/tv_userinfo_following"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="@id/tv_userinfo_fabulous"
-            app:layout_constraintStart_toEndOf="@id/tv_userinfo_fabulous"
-            app:layout_constraintTop_toTopOf="@id/tv_userinfo_fabulous"
-            tools:text="0 关注" />
+                <TextView
+                    android:id="@+id/tv_userinfo_following"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_userinfo_fabulous"
+                    app:layout_constraintStart_toEndOf="@id/tv_userinfo_fabulous"
+                    app:layout_constraintTop_toTopOf="@id/tv_userinfo_fabulous"
+                    tools:text="0 关注" />
 
-        <TextView
-            android:id="@+id/tv_userinfo_followers"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="@id/tv_userinfo_fabulous"
-            app:layout_constraintStart_toEndOf="@id/tv_userinfo_following"
-            app:layout_constraintTop_toTopOf="@id/tv_userinfo_fabulous"
-            tools:text="0 粉丝" />
+                <TextView
+                    android:id="@+id/tv_userinfo_followers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_userinfo_fabulous"
+                    app:layout_constraintStart_toEndOf="@id/tv_userinfo_following"
+                    app:layout_constraintTop_toTopOf="@id/tv_userinfo_fabulous"
+                    tools:text="0 粉丝" />
 
-        <TextView
-            android:id="@+id/tv_userinfo_joke"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="他的作品"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_userinfo_fabulous"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="他的作品"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_userinfo_fabulous"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:background="@color/grey"/>
+
+                <Button
+                    android:id="@+id/btn_userinfo"
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    tools:text="已关注"
+                    android:background="@drawable/shape_btn"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img_userinfo_background"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="16dp"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/grey"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
         <FrameLayout
-            android:id="@+id/fl_userinfo_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="@id/tv_userinfo_joke"
-            />
+            android:layout_height="match_parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <FrameLayout
+                android:id="@+id/fl_userinfo_container"
+                android:layout_width="match_parent"
+                android:layout_height="800dp"
+                app:layout_constraintTop_toTopOf="parent" />
+        </FrameLayout>
 
-</androidx.core.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

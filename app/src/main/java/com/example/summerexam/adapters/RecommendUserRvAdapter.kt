@@ -21,7 +21,8 @@ import com.example.summerexam.beans.AttentionRecommendResponseItem
 class RecommendUserRvAdapter(
     private val newData: ArrayList<AttentionRecommendResponseItem>,
     private val block: (Boolean, String, Int, RecyclerView) -> Unit,
-    private val rv: RecyclerView
+    private val rv: RecyclerView,
+    private val clickAvatar:(String) ->Unit
 ) :
     RecyclerView.Adapter<RecommendUserRvAdapter.UserHolder>() {
 
@@ -37,6 +38,9 @@ class RecommendUserRvAdapter(
                 newData[adapterPosition].run {
                     block(!isAttention, userId.toString(), adapterPosition, rv)
                 }
+            }
+            mImgAvatar.setOnClickListener {
+                clickAvatar(newData[adapterPosition].userId.toString())
             }
         }
     }

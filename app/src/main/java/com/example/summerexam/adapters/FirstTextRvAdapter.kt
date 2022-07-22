@@ -13,8 +13,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
 import com.example.summerexam.R
 import com.example.summerexam.beans.AttentionRecommendResponseItem
 import com.example.summerexam.beans.FirstTextResponseItem
@@ -40,6 +38,7 @@ class FirstTextRvAdapter(
     private val clickFollowing: (Boolean, String, Int) -> Unit,
     private val clickRecommendFollow:(Boolean,String,Int,block:()->Unit) -> Unit,
     private val clickPicture:(String)->Unit,
+    private val clickAvatar:(String)->Unit,
     private val clickVideo:(Int) -> Unit
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -49,8 +48,8 @@ class FirstTextRvAdapter(
         val mImgAvatar: ImageView = view.findViewById(R.id.img_text_avatar)
         val mTvNickname: TextView = view.findViewById(R.id.tv_text_nickname)
         val mTvSignature: TextView = view.findViewById(R.id.tv_text_signature)
-        val mTvContent: TextView = view.findViewById(R.id.tv_text_content)
-        val mTvLike: TextView = view.findViewById(R.id.tv_text_like_detail)
+        val mTvContent: TextView = view.findViewById(R.id.tv_user_joke_content)
+        val mTvLike: TextView = view.findViewById(R.id.tv_user_text_detail)
         val mTvDislike: TextView = view.findViewById(R.id.tv_text_dislike_detail)
         val mTvComment: TextView = view.findViewById(R.id.tv_text_comment_detail)
         val mTvShare: TextView = view.findViewById(R.id.tv_text_share_detail)
@@ -97,6 +96,9 @@ class FirstTextRvAdapter(
             mImgPicture.setOnClickListener {
                 clickPicture(data[mPosition].joke.imageUrl.decrypt())
             }
+            mImgAvatar.setOnClickListener {
+                clickAvatar(data[mPosition].user.userId.toString())
+            }
         }
     }
 
@@ -106,7 +108,10 @@ class FirstTextRvAdapter(
         val mRvRecommendUser:RecyclerView = view.findViewById(R.id.rv_recommend_user)
         init {
             mRvRecommendUser.run {
-                adapter = RecommendUserRvAdapter(newRecommendUserData,::callback,this)
+                adapter = RecommendUserRvAdapter(newRecommendUserData,::callback,this){
+                    Log.d(TAG, ":$it ")
+                    clickAvatar(it)
+                }
                 val linearLayoutManager = LinearLayoutManager(itemView.context)
                 linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
                 layoutManager = linearLayoutManager
@@ -178,7 +183,6 @@ class FirstTextRvAdapter(
                 text = data[position-1]
                 holder.mPosition = position-1
             }
-
             holder.run {
                 if (text.joke.imageUrl.decrypt() != "") {
                     getPictureSize(text.joke.imageUrl.decrypt())
@@ -229,8 +233,8 @@ class FirstTextRvAdapter(
     }
 
     override fun getItemCount(): Int {
-        return if (newRecommendUserData.size == 0) data.size + 1
-        else data.size+2
+        return if (newRecommendUserData.size == 0) data.size
+        else data.size+1
     }
 
     /**

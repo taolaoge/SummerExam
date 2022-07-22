@@ -22,6 +22,13 @@ interface UserinfoService {
         }
     }
 
+    /**
+     * 获取指定用户发布的作品
+     *
+     * @param targetUserId
+     * @param page
+     * @return
+     */
     @POST("jokes/whole_jokes/list")
     @FormUrlEncoded
     fun getUserJoke(
@@ -29,6 +36,12 @@ interface UserinfoService {
         @Field("page") page: Int
     ): Single<ApiWrapper<FirstTextResponse>>
 
+    /**
+     *
+     *
+     * @param targetUserId
+     * @return
+     */
     @POST("user/info/target")
     @FormUrlEncoded
     fun getTargetUserInfo(
