@@ -21,20 +21,21 @@ import io.reactivex.rxjava3.schedulers.Schedulers
  * date : 2022/7/15
  */
 class FirstTextViewModel : ViewModel() {
-    val token = MutableLiveData(appContext.getSp("token").getString("token","123"))
-    private val attentionPage = MutableLiveData(0)
+    val token = MutableLiveData(appContext.getSp("token").getString("token", "123"))
+    private val attentionPage = MutableLiveData(1)
 
     val keyword = MutableLiveData<String>()
     var userId = ""
 
     val noTokenIsLoading = MutableLiveData(false)
+
     //关注fragment中推荐关注的用户列表
     val newRecommendUserData = ArrayList<AttentionRecommendResponseItem>()
     var oldRecommendUserData = ArrayList<AttentionRecommendResponseItem>()
 
     //新的数据集合，差分刷新使用
     val newTextData = ArrayList<FirstTextResponseItem>()
-    var oldTextData = ArrayList<FirstTextResponseItem>()
+    val oldTextData = ArrayList<FirstTextResponseItem>()
 
     val page = MutableLiveData<Int>()
 
@@ -51,16 +52,21 @@ class FirstTextViewModel : ViewModel() {
      */
     val isSwipeLayoutRefreshing = MutableLiveData<Boolean>()
 
+    private fun getRecommendList() {
+        FirstRepository.getAttentionRecommend()
+            .unSafeSubscribeBy { dealRecommendUserData(it) }
+    }
+
     fun getOnlyText() {
         isLoading.value = true
         noTokenIsLoading.value = true
         when (page.value) {
             0 -> {
                 if (token.value != "123") {
-                    FirstRepository.getAttentionList(attentionPage.value?:0).unSafeSubscribeBy { dealData(it) }
+                    FirstRepository.getAttentionList(attentionPage.value ?: 0)
+                        .unSafeSubscribeBy { dealData(it) }
                 }
-                FirstRepository.getAttentionRecommend()
-                    .unSafeSubscribeBy { dealRecommendUserData(it) }
+                getRecommendList()
             }
             1 -> {
                 FirstRepository.getRecommend().unSafeSubscribeBy { dealData(it) }
@@ -74,14 +80,17 @@ class FirstTextViewModel : ViewModel() {
             4 -> {
                 FirstRepository.getPicture().unSafeSubscribeBy { dealData(it) }
             }
-            5->{
-                FirstRepository.searchJoke(keyword.value?:"",attentionPage.value?:0).unSafeSubscribeBy { dealData(it) }
+            5 -> {
+                FirstRepository.searchJoke(keyword.value ?: "", attentionPage.value ?: 0)
+                    .unSafeSubscribeBy { dealData(it) }
             }
-            6->{
-                FirstRepository.getUserJoke(userId,attentionPage.value?:1).unSafeSubscribeBy { dealData(it) }
+            6 -> {
+                FirstRepository.getUserJoke(userId, attentionPage.value ?: 1)
+                    .unSafeSubscribeBy { dealData(it) }
             }
-            7 ->{
-                FirstRepository.getUserLikeJoke(userId,attentionPage.value?:1).unSafeSubscribeBy { dealData(it) }
+            7 -> {
+                FirstRepository.getUserLikeJoke(userId, attentionPage.value ?: 1)
+                    .unSafeSubscribeBy { dealData(it) }
             }
         }
     }
@@ -90,7 +99,6 @@ class FirstTextViewModel : ViewModel() {
     private fun dealRecommendUserData(it: AttentionRecommendResponse) {
         for (data in it) {
             newRecommendUserData.add(data)
-            oldRecommendUserData.add(data)
         }
         noTokenIsLoading.value = true
         isLoading.value = false
@@ -99,7 +107,6 @@ class FirstTextViewModel : ViewModel() {
     }
 
     private fun dealData(it: FirstTextResponse) {
-        oldTextData = newTextData
         for (data in it) {
             newTextData.add(data)
         }
@@ -131,13 +138,21 @@ class FirstTextViewModel : ViewModel() {
     }
 
     fun clearList(block: () -> Unit) {
-        newRecommendUserData.clear()
         newTextData.clear()
         block()
-        oldRecommendUserData.clear()
         oldTextData.clear()
         //下拉刷新数据时，先将此参数变为true，意味着正在请求
         isSwipeLayoutRefreshing.value = true
         getOnlyText()
+    }
+
+    fun clearRecommendList(block:()->Unit) {
+        newRecommendUserData.clear()
+        isSwipeLayoutRefreshing.value = true
+        FirstRepository.getAttentionRecommend()
+            .unSafeSubscribeBy {
+                dealRecommendUserData(it)
+                block()
+            }
     }
 }

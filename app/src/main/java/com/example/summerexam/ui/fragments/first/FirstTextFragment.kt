@@ -41,13 +41,14 @@ import xyz.doikki.videoplayer.player.VideoViewManager
  */
 open class FirstTextFragment : BaseFragment() {
     private lateinit var mLayoutManager: LinearLayoutManager
+    private lateinit var mAdapter: FirstTextRvAdapter
     private val mRvText by R.id.rv_only_text.view<RecyclerView>()
         .addInitialize {
             mLayoutManager = LinearLayoutManager(context)
             overScrollMode = View.OVER_SCROLL_NEVER
             this.run {
                 layoutManager = mLayoutManager
-                adapter =
+                mAdapter =
                     FirstTextRvAdapter(
                         viewModel.newTextData,
                         viewModel.newRecommendUserData,
@@ -61,6 +62,7 @@ open class FirstTextFragment : BaseFragment() {
                     ) {
                         startPlay(it)
                     }
+                adapter = mAdapter
                 addItemDecoration(
                     MyVerticalItemDecoration(20)
                 )
@@ -197,10 +199,14 @@ open class FirstTextFragment : BaseFragment() {
         viewModel.keyword.value = bundle?.getString("keyword") ?: ""
         viewModel.userId = bundle?.getString("userId") ?: ""
         viewModel.isLoading.observe(viewLifecycleOwner) {
-            if (!it) freshRecycleViewData()
+            if (!it) {
+                freshRecycleViewData()
+            }
         }
         viewModel.isSwipeLayoutRefreshing.observe(viewLifecycleOwner) {
-            if (!it) mSwipeLayout.isRefreshing = false
+            if (!it) {
+                mSwipeLayout.isRefreshing = false
+            }
         }
         viewModel.page.observe(viewLifecycleOwner) {
             viewModel.getOnlyText()
@@ -216,7 +222,7 @@ open class FirstTextFragment : BaseFragment() {
             //当token改变时，如果在关注页面
             if (viewModel.page.value == 0) {
                 if (it == "123") {
-                    if (viewModel.newTextData.size != 0) viewModel.clearList() { mRvText.adapter?.notifyDataSetChanged() }
+                    if (viewModel.newTextData.size != 0) viewModel.clearList() { freshRecycleViewData() }
                 } else {
                     freshRecycleView(mRvText)
                 }
@@ -228,8 +234,13 @@ open class FirstTextFragment : BaseFragment() {
 
     private fun initSwipeLayout() {
         mSwipeLayout.setOnRefreshListener {
-            if (viewModel.page.value != 5 or 6 or 7) viewModel.clearList() { mRvText.adapter?.notifyDataSetChanged() }
-            else mSwipeLayout.isRefreshing = false
+            if (viewModel.page.value != 5 && viewModel.page.value != 0) viewModel.clearList() {
+                freshRecycleViewData()
+            } else if (viewModel.page.value == 0) {
+                viewModel.clearRecommendList(){
+                    mAdapter.freshRecycleViewData()
+                }
+            } else mSwipeLayout.isRefreshing = false
         }
     }
 
@@ -251,7 +262,7 @@ open class FirstTextFragment : BaseFragment() {
                         //获取最后一个完全显示的ItemPosition
                         val lastVisibleItem = manager.findLastCompletelyVisibleItemPosition()
                         val totalItem = manager.itemCount
-                        if (lastVisibleItem == (totalItem-1) && viewModel.isLoading.value == false
+                        if (lastVisibleItem == (totalItem - 1) && viewModel.isLoading.value == false
                             && viewModel.token.value != "123"
                         ) {
                             viewModel.getOnlyText()
@@ -260,7 +271,7 @@ open class FirstTextFragment : BaseFragment() {
                         //获取最后一个完全显示的ItemPosition
                         val lastVisibleItem = manager.findLastCompletelyVisibleItemPosition()
                         val totalItem = manager.itemCount
-                        if (lastVisibleItem == (totalItem-1) && viewModel.isLoading.value == false) {
+                        if (lastVisibleItem == (totalItem - 1) && viewModel.isLoading.value == false) {
                             viewModel.getOnlyText()
                         }
                     }
@@ -276,6 +287,10 @@ open class FirstTextFragment : BaseFragment() {
             ), true
         )
         diffResult.dispatchUpdatesTo(mRvText.adapter!!)
+        viewModel.oldTextData.clear()
+        for (i in viewModel.newTextData) {
+            viewModel.oldTextData.add(i)
+        }
     }
 
     private fun clickComment(id: Int) {
@@ -366,13 +381,13 @@ open class FirstTextFragment : BaseFragment() {
 
     private fun clickPicture(url: String) {
         val intent = Intent(activity, WebViewActivity::class.java)
-        intent.putExtra("url",url)
+        intent.putExtra("url", url)
         startActivity(intent)
     }
 
-    private fun clickAvatar(userId:String){
-        val intent = Intent(activity,UserinfoActivity::class.java)
-        intent.putExtra("userId",userId)
+    private fun clickAvatar(userId: String) {
+        val intent = Intent(activity, UserinfoActivity::class.java)
+        intent.putExtra("userId", userId)
         startActivity(intent)
     }
 }

@@ -2,6 +2,7 @@ package com.example.summerexam.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,7 @@ import com.example.summerexam.extensions.appContext
 import com.example.summerexam.extensions.edit
 import com.example.summerexam.extensions.getSp
 import com.example.summerexam.baseui.BaseFragment
+import com.example.summerexam.network.TAG
 import com.example.summerexam.ui.activities.UserinfoActivity
 
 /**
@@ -77,6 +79,7 @@ class MineFragment : BaseFragment() {
             }else{
                 val intent = Intent(context,UserinfoActivity::class.java)
                 intent.putExtra("userId",viewModel.userId)
+                Log.d(TAG, "onViewCreated: ${viewModel.userId}")
                 startActivity(intent)
             }
         }

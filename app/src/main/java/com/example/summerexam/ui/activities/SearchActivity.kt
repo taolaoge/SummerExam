@@ -23,7 +23,7 @@ class SearchActivity : BaseActivity() {
             val fragment = FirstTextFragment()
             fragment.arguments = Bundle().apply {
                 putString("keyword",mEdSearch.text.toString())
-                putInt("page",6)
+                putInt("page",5)
             }
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fl_search,fragment).commit()

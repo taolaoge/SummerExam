@@ -42,6 +42,7 @@ class FirstTextRvAdapter(
     private val clickVideo:(Int) -> Unit
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private var mRvRecommendUser:RecyclerView? = null
 
     inner class OnlyTextViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val mTvFollowing: TextView = view.findViewById(R.id.tv_text_following)
@@ -109,7 +110,6 @@ class FirstTextRvAdapter(
         init {
             mRvRecommendUser.run {
                 adapter = RecommendUserRvAdapter(newRecommendUserData,::callback,this){
-                    Log.d(TAG, ":$it ")
                     clickAvatar(it)
                 }
                 val linearLayoutManager = LinearLayoutManager(itemView.context)
@@ -124,7 +124,7 @@ class FirstTextRvAdapter(
 
     private fun callback(status: Boolean,id:String,position: Int,rv:RecyclerView){
         clickRecommendFollow(status,id,position){
-            freshRecycleViewData(rv)
+            freshRecycleViewData()
         }
     }
 
@@ -161,6 +161,7 @@ class FirstTextRvAdapter(
      * 获取item的类型
      */
     override fun getItemViewType(position: Int): Int {
+        Log.d(TAG, "getItemViewType: ${newRecommendUserData.size}")
         return if (newRecommendUserData.size == 0){
             if (position == data.size) 1 else 0
         }else{
@@ -185,7 +186,6 @@ class FirstTextRvAdapter(
             }
             holder.run {
                 if (text.joke.imageUrl.decrypt() != "") {
-                    getPictureSize(text.joke.imageUrl.decrypt())
                     holder.mCvPicture.visible()
                     Glide.with(itemView.context).load(text.joke.imageUrl.decrypt())
                         .override(500,500)
@@ -210,27 +210,23 @@ class FirstTextRvAdapter(
             }
         }
         if (holder is RecommendUserHolder){
-            freshRecycleViewData(holder.mRvRecommendUser)
+            mRvRecommendUser = holder.mRvRecommendUser
+            freshRecycleViewData()
         }
     }
 
-    private fun freshRecycleViewData(rv:RecyclerView) {
+    fun freshRecycleViewData() {
+        Log.d(TAG, "freshRecycleViewData: ${newRecommendUserData.size}")
         val diffResult = DiffUtil.calculateDiff(
             RecommendUserRvAdapter.DiffCallBack(
                 oldRecommendUserData, newRecommendUserData
             ), true
         )
-        diffResult.dispatchUpdatesTo(rv.adapter!!)
+        diffResult.dispatchUpdatesTo(mRvRecommendUser?.adapter!!)
+        oldRecommendUserData.clear()
+        for (i in newRecommendUserData) oldRecommendUserData.add(i)
     }
 
-    private fun getPictureSize(url:String){
-        val options = BitmapFactory.Options()
-        options.inJustDecodeBounds = true
-        val mbp = BitmapFactory.decodeFile(url,options)
-        val outHeight = options.outHeight
-        val outWidth = options.outWidth
-        Log.d(TAG, "getPictureSize:通过Options获取到的图片大小 + width: $outWidth +: $outHeight ")
-    }
 
     override fun getItemCount(): Int {
         return if (newRecommendUserData.size == 0) data.size
@@ -259,7 +255,7 @@ class FirstTextRvAdapter(
         }
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return false
+            return oldItemPosition == newItemPosition
         }
 
         override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any = ""

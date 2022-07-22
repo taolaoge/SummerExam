@@ -4,23 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows = "true"
     tools:context=".ui.activities.UserinfoActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+
         android:layout_width="match_parent"
         android:layout_height="412dp"
         android:fitsSystemWindows="true"
         android:background="@color/white">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:fitsSystemWindows = "true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:fitsSystemWindows = "true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <ImageView
+                    android:fitsSystemWindows = "true"
                     android:id="@+id/img_userinfo_background"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
@@ -31,6 +36,7 @@
                     android:id="@+id/img_userinfo_avatar"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
+                    android:fitsSystemWindows = "true"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="125dp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -161,7 +167,7 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
+   <!-- <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/grey"
@@ -179,6 +185,10 @@
         </FrameLayout>
 
     </androidx.core.widget.NestedScrollView>
-
-
+-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_userinfo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
