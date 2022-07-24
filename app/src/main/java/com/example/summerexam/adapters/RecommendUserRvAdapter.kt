@@ -1,5 +1,6 @@
 package com.example.summerexam.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,10 +8,12 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.summerexam.R
 import com.example.summerexam.beans.AttentionRecommendResponseItem
+import com.example.summerexam.network.TAG
 
 /**
  * description ： TODO:类的作用
@@ -19,12 +22,11 @@ import com.example.summerexam.beans.AttentionRecommendResponseItem
  * date : 2022/7/19
  */
 class RecommendUserRvAdapter(
-    private val newData: ArrayList<AttentionRecommendResponseItem>,
     private val block: (Boolean, String, Int, RecyclerView) -> Unit,
     private val rv: RecyclerView,
     private val clickAvatar:(String) ->Unit
 ) :
-    RecyclerView.Adapter<RecommendUserRvAdapter.UserHolder>() {
+    ListAdapter<AttentionRecommendResponseItem,RecommendUserRvAdapter.UserHolder>(DiffCallBack) {
 
     inner class UserHolder(view: View) : RecyclerView.ViewHolder(view) {
         val mImgAvatar: ImageView = view.findViewById(R.id.img_recommend_user_avatar)
@@ -35,12 +37,12 @@ class RecommendUserRvAdapter(
 
         init {
             mBtnFollow.setOnClickListener {
-                newData[adapterPosition].run {
+                getItem(adapterPosition).run {
                     block(!isAttention, userId.toString(), adapterPosition, rv)
                 }
             }
             mImgAvatar.setOnClickListener {
-                clickAvatar(newData[adapterPosition].userId.toString())
+                clickAvatar(getItem(adapterPosition).userId.toString())
             }
         }
     }
@@ -53,7 +55,7 @@ class RecommendUserRvAdapter(
     }
 
     override fun onBindViewHolder(holder: UserHolder, position: Int) {
-        val user = newData[position]
+        val user = getItem(position)
         holder.run {
             Glide.with(itemView.context).load(user.avatar).into(mImgAvatar)
             mTvJoke.text = "发表 ${user.jokesNum}"
@@ -67,33 +69,26 @@ class RecommendUserRvAdapter(
         }
     }
 
-    override fun getItemCount(): Int = newData.size
 
     /**
      * 差分刷新固定写法
      */
-    class DiffCallBack(
-        private val mOldData: List<AttentionRecommendResponseItem>,
-        private val mNewData: List<AttentionRecommendResponseItem>
-    ) :
-        DiffUtil.Callback() {
-
-        override fun getOldListSize(): Int {
-            return mOldData.size
+    object DiffCallBack :
+        DiffUtil.ItemCallback<AttentionRecommendResponseItem>() {
+        override fun areItemsTheSame(
+            oldItem: AttentionRecommendResponseItem,
+            newItem: AttentionRecommendResponseItem
+        ): Boolean {
+            return oldItem.userId == newItem.userId
         }
 
-        override fun getNewListSize(): Int {
-            return mNewData.size
+        override fun areContentsTheSame(
+            oldItem: AttentionRecommendResponseItem,
+            newItem: AttentionRecommendResponseItem
+        ): Boolean {
+            return oldItem == newItem
         }
 
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return mOldData[oldItemPosition].isAttention == mNewData[newItemPosition].isAttention
-        }
 
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return false
-        }
-
-        override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any = ""
     }
 }

@@ -39,36 +39,26 @@ import xyz.doikki.videoplayer.player.VideoViewManager
  * email : 1678921845@qq.com
  * date : 2022/7/15
  */
-open class FirstTextFragment : BaseFragment() {
+class FirstTextFragment : BaseFragment(), FirstTextRvAdapter.IClick {
     private lateinit var mLayoutManager: LinearLayoutManager
     private lateinit var mAdapter: FirstTextRvAdapter
     private val mRvText by R.id.rv_only_text.view<RecyclerView>()
         .addInitialize {
             mLayoutManager = LinearLayoutManager(context)
+            mAdapter =
+                FirstTextRvAdapter(
+                    this@FirstTextFragment
+                )
+            adapter = mAdapter
             overScrollMode = View.OVER_SCROLL_NEVER
+            layoutManager = mLayoutManager
             this.run {
-                layoutManager = mLayoutManager
-                mAdapter =
-                    FirstTextRvAdapter(
-                        viewModel.newTextData,
-                        viewModel.newRecommendUserData,
-                        viewModel.oldRecommendUserData,
-                        ::clickLikeOrDislike,
-                        ::clickComment,
-                        ::clickFollowing,
-                        ::clickRecommendFollowing,
-                        ::clickPicture,
-                        ::clickAvatar
-                    ) {
-                        startPlay(it)
-                    }
-                adapter = mAdapter
                 addItemDecoration(
                     MyVerticalItemDecoration(20)
                 )
             }
         }
-    private val viewModel by lazy { ViewModelProvider(this)[FirstTextViewModel::class.java] }
+    val viewModel by lazy { ViewModelProvider(this)[FirstTextViewModel::class.java] }
     private val mSwipeLayout by R.id.swipe_layout_only_text.view<SwipeRefreshLayout>()
     private lateinit var mVideoView: VideoView<AndroidMediaPlayer>
     lateinit var mController: GestureVideoController
@@ -172,14 +162,14 @@ open class FirstTextFragment : BaseFragment() {
             releaseVideoView()
         }
         val itemView: View
-        if (viewModel.newRecommendUserData.size != 0) {
+        if (viewModel.newRecommendUserData.value?.size != 0) {
             itemView = mLayoutManager.findViewByPosition(newPosition + 1) ?: return
             mCurPos = newPosition + 1
         } else {
             itemView = mLayoutManager.findViewByPosition(newPosition) ?: return
             mCurPos = newPosition
         }
-        mVideoView.setUrl(viewModel.newTextData[newPosition].joke.videoUrl.decrypt())
+        mVideoView.setUrl(viewModel.newTextData.value?.get(newPosition)?.joke?.videoUrl?.decrypt())
         mVideoView.setVideoController(mController)
         val viewHolder: FirstTextRvAdapter.OnlyTextViewHolder =
             itemView.tag as FirstTextRvAdapter.OnlyTextViewHolder
@@ -194,52 +184,48 @@ open class FirstTextFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initObserve()
         val bundle = arguments
-        viewModel.page.value = bundle?.getInt("page")
-        viewModel.keyword.value = bundle?.getString("keyword") ?: ""
+        viewModel.putPage(bundle?.getInt("page") ?: 1)
+        viewModel.putKeyword(bundle?.getString("keyword") ?: "")
         viewModel.userId = bundle?.getString("userId") ?: ""
-        viewModel.isLoading.observe(viewLifecycleOwner) {
-            if (!it) {
-                freshRecycleViewData()
-            }
+        initSwipeLayout()
+        freshRecycleView(mRvText)
+    }
+
+    private fun initObserve(){
+        viewModel.newTextData.observe(viewLifecycleOwner){
+            Log.d(TAG, "initObserve: $it")
+            mAdapter.submitList(it)
+            mSwipeLayout.isRefreshing = false
         }
-        viewModel.isSwipeLayoutRefreshing.observe(viewLifecycleOwner) {
-            if (!it) {
-                mSwipeLayout.isRefreshing = false
-            }
+        viewModel.newRecommendUserData.observe(viewLifecycleOwner){
+            mAdapter.freshList(viewModel.newRecommendUserData.value)
+            mSwipeLayout.isRefreshing = false
         }
         viewModel.page.observe(viewLifecycleOwner) {
             viewModel.getOnlyText()
-        }
-        viewModel.noTokenIsLoading.observe(viewLifecycleOwner) {
-            if (viewModel.page.value == 0) {
-                if (viewModel.token.value == "123") {
-                    mRvText.adapter?.notifyDataSetChanged()
-                }
-            }
         }
         viewModel.token.observe(viewLifecycleOwner) {
             //当token改变时，如果在关注页面
             if (viewModel.page.value == 0) {
                 if (it == "123") {
-                    if (viewModel.newTextData.size != 0) viewModel.clearList() { freshRecycleViewData() }
+                    if (viewModel.newTextData.value?.size != 0) viewModel.clearList()
                 } else {
                     freshRecycleView(mRvText)
                 }
             }
         }
-        initSwipeLayout()
-        freshRecycleView(mRvText)
+        viewModel.code.observe(viewLifecycleOwner) {
+            if (it == 200) toast("操作成功")
+        }
     }
 
     private fun initSwipeLayout() {
         mSwipeLayout.setOnRefreshListener {
-            if (viewModel.page.value != 5 && viewModel.page.value != 0) viewModel.clearList() {
-                freshRecycleViewData()
-            } else if (viewModel.page.value == 0) {
-                viewModel.clearRecommendList(){
-                    mAdapter.freshRecycleViewData()
-                }
+            if (viewModel.page.value != 5 && viewModel.page.value != 0) viewModel.clearList()
+            else if (viewModel.page.value == 0) {
+                viewModel.clearRecommendList()
             } else mSwipeLayout.isRefreshing = false
         }
     }
@@ -262,8 +248,7 @@ open class FirstTextFragment : BaseFragment() {
                         //获取最后一个完全显示的ItemPosition
                         val lastVisibleItem = manager.findLastCompletelyVisibleItemPosition()
                         val totalItem = manager.itemCount
-                        if (lastVisibleItem == (totalItem - 1) && viewModel.isLoading.value == false
-                            && viewModel.token.value != "123"
+                        if (lastVisibleItem == (totalItem - 1) && !viewModel.isLoading && viewModel.token.value != "123"
                         ) {
                             viewModel.getOnlyText()
                         }
@@ -271,7 +256,7 @@ open class FirstTextFragment : BaseFragment() {
                         //获取最后一个完全显示的ItemPosition
                         val lastVisibleItem = manager.findLastCompletelyVisibleItemPosition()
                         val totalItem = manager.itemCount
-                        if (lastVisibleItem == (totalItem - 1) && viewModel.isLoading.value == false) {
+                        if (lastVisibleItem == (totalItem - 1) && !viewModel.isLoading) {
                             viewModel.getOnlyText()
                         }
                     }
@@ -280,20 +265,8 @@ open class FirstTextFragment : BaseFragment() {
         })
     }
 
-    private fun freshRecycleViewData() {
-        val diffResult = DiffUtil.calculateDiff(
-            FirstTextRvAdapter.DiffCallBack(
-                viewModel.oldTextData, viewModel.newTextData
-            ), true
-        )
-        diffResult.dispatchUpdatesTo(mRvText.adapter!!)
-        viewModel.oldTextData.clear()
-        for (i in viewModel.newTextData) {
-            viewModel.oldTextData.add(i)
-        }
-    }
 
-    private fun clickComment(id: Int) {
+    override fun clickComment(id: Int) {
         val commentBottomFragment = CommentBottomFragment()
         val bundle = Bundle()
         bundle.putInt("jokeId", id)
@@ -304,42 +277,18 @@ open class FirstTextFragment : BaseFragment() {
         )
     }
 
-    private fun clickFollowing(status: Boolean, userId: String, position: Int) {
-        if (status) viewModel.followUser("1", userId) {
-            if (it) {
-                toast("关注成功")
-                viewModel.newTextData[position].info.isAttention = true
-                freshRecycleViewData()
-            }
-        }
+    override fun clickFollowing(status: Boolean, userId: String, position: Int) {
+        if (status) viewModel.followUser("1", userId,position,1)
     }
 
-    private fun clickRecommendFollowing(
+    override fun clickRecommendFollow(
         status: Boolean,
         userId: String,
         position: Int,
         block: () -> Unit
     ) {
-        if (status) viewModel.followUser("1", userId) {
-            if (it) {
-                toast("关注成功")
-                viewModel.newRecommendUserData[position].isAttention = status
-                viewModel.newRecommendUserData[position].fansNum += 1
-                block()
-                viewModel.oldRecommendUserData[position].isAttention = status
-            }
-        } else {
-            viewModel.followUser("0", userId) {
-                if (it) {
-                    toast("取关成功")
-                    viewModel.newRecommendUserData[position].isAttention = status
-                    viewModel.newRecommendUserData[position].fansNum =
-                        (viewModel.newRecommendUserData[position].fansNum.toInt() - 1)
-                    block()
-                    viewModel.oldRecommendUserData[position].isAttention = status
-                }
-            }
-        }
+        if (status) viewModel.followUser("1", userId,position,0)
+        else viewModel.followUser("0", userId,position,0)
     }
 
     /**
@@ -347,47 +296,30 @@ open class FirstTextFragment : BaseFragment() {
      * 第三个参数为此段子在rv中的位置，方便对他进行数值的修改
      * 第四个参数为用户点赞或者点踩，点赞what就为true，点踩what就为false
      */
-    private fun clickLikeOrDislike(id: Int, status: Boolean, position: Int, what: Boolean) {
-        viewModel.newTextData[position].info.run {
+    override fun clickLikeOrDislike(id: Int, status: Boolean, position: Int, what: Boolean) {
+        viewModel.newTextData.value?.get(position)?.info.run {
             if (!what) {
-                viewModel.dislikeJoke(id, status) {
-                    if (it) {
-                        if (status) {
-                            disLikeNum += 1
-                            isUnlike = true
-                        } else {
-                            disLikeNum -= 1
-                            isUnlike = false
-                        }
-                    }
-                    freshRecycleViewData()
-                }
+                viewModel.dislikeJoke(id, status,position)
             } else {
-                viewModel.likeJoke(id, status) {
-                    if (it) {
-                        if (status) {
-                            likeNum += 1
-                            isLike = true
-                        } else {
-                            likeNum -= 1
-                            isLike = false
-                        }
-                    }
-                    freshRecycleViewData()
-                }
+                viewModel.likeJoke(id, status,position)
             }
         }
     }
 
-    private fun clickPicture(url: String) {
+    override fun clickPicture(url: String) {
         val intent = Intent(activity, WebViewActivity::class.java)
         intent.putExtra("url", url)
         startActivity(intent)
     }
 
-    private fun clickAvatar(userId: String) {
+    override fun clickAvatar(userId: String) {
         val intent = Intent(activity, UserinfoActivity::class.java)
         intent.putExtra("userId", userId)
         startActivity(intent)
     }
+
+    override fun clickVideo(position: Int) {
+        startPlay(position)
+    }
+
 }

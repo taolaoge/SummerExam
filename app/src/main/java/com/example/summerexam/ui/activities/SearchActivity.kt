@@ -19,7 +19,7 @@ class SearchActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         mTvSearch.setOnClickListener{
-            viewModel.keyword.value = mEdSearch.text.toString()
+            viewModel.putKeyword(mEdSearch.text.toString())
             val fragment = FirstTextFragment()
             fragment.arguments = Bundle().apply {
                 putString("keyword",mEdSearch.text.toString())

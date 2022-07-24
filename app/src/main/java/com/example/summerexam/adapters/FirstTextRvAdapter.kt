@@ -1,6 +1,5 @@
 package com.example.summerexam.adapters
 
-import android.graphics.BitmapFactory
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +10,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.summerexam.R
@@ -30,19 +30,23 @@ import com.example.summerexam.network.TAG
  * date : 2022/7/15
  */
 class FirstTextRvAdapter(
-    private val data: ArrayList<FirstTextResponseItem>,
-    private val newRecommendUserData:ArrayList<AttentionRecommendResponseItem>,
-    private val oldRecommendUserData:ArrayList<AttentionRecommendResponseItem>,
-    private val clickLikeOrDislike: (id: Int, status: Boolean, position: Int, what: Boolean) -> Unit,
-    private val clickComment: ((Int) -> Unit),
-    private val clickFollowing: (Boolean, String, Int) -> Unit,
-    private val clickRecommendFollow:(Boolean,String,Int,block:()->Unit) -> Unit,
-    private val clickPicture:(String)->Unit,
-    private val clickAvatar:(String)->Unit,
-    private val clickVideo:(Int) -> Unit
+    private val iClick: IClick
 ) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private var mRvRecommendUser:RecyclerView? = null
+    ListAdapter<FirstTextResponseItem, RecyclerView.ViewHolder>(
+        DiffCallBack
+    ) {
+    private var mAdapter: RecommendUserRvAdapter? = null
+    private var newRecommendUserData: List<AttentionRecommendResponseItem>? = null
+
+    interface IClick {
+        fun clickLikeOrDislike(id: Int, status: Boolean, position: Int, what: Boolean)
+        fun clickComment(id: Int)
+        fun clickFollowing(isAttention: Boolean, userId: String, position: Int)
+        fun clickRecommendFollow(status: Boolean, userId: String, position: Int, block: () -> Unit)
+        fun clickPicture(pictureUrl: String)
+        fun clickAvatar(avatarUrl: String)
+        fun clickVideo(position: Int)
+    }
 
     inner class OnlyTextViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val mTvFollowing: TextView = view.findViewById(R.id.tv_text_following)
@@ -58,76 +62,76 @@ class FirstTextRvAdapter(
         val mImgDislike: ImageView = view.findViewById(R.id.img_text_dislike)
         val mImgComment: ImageView = view.findViewById(R.id.img_text_comment)
         val mImgPicture: ImageView = view.findViewById(R.id.img_picture)
-        val mCvPicture:CardView = view.findViewById(R.id.cv_picture_container)
+        val mCvPicture: CardView = view.findViewById(R.id.cv_picture_container)
         val mPlayerContainer = itemView.findViewById<FrameLayout?>(R.id.fl_player_container)
         val mPrepareView = itemView.findViewById<PrepareView>(R.id.prepare_view)
         val mThumb = mPrepareView.findViewById<ImageView>(R.id.thumb)
         var mPosition = 0
 
-        //通过tag将ViewHolder和itemView绑定
-        //通过tag将ViewHolder和itemView绑定
 
         init {
             //通过tag将ViewHolder和itemView绑定
             itemView.tag = this
 
             mImgLike.setOnClickListener {
-                data[mPosition].run {
-                    clickLikeOrDislike(joke.jokesId, !info.isLike,mPosition, true)
+                getItem(mPosition).run {
+                    iClick.clickLikeOrDislike(joke.jokesId, !info.isLike, mPosition, true)
                 }
             }
             mImgDislike.setOnClickListener {
-                data[mPosition].run {
-                    clickLikeOrDislike(joke.jokesId, !info.isUnlike, mPosition, false)
+                getItem(mPosition).run {
+                    iClick.clickLikeOrDislike(joke.jokesId, !info.isUnlike, mPosition, false)
                 }
             }
             mImgComment.setOnClickListener {
-                data[mPosition].run {
-                    clickComment(joke.jokesId)
+                getItem(mPosition).run {
+                    iClick.clickComment(joke.jokesId)
                 }
             }
             mTvFollowing.setOnClickListener {
-                data[mPosition].run {
-                    clickFollowing(!info.isAttention, user.userId.toString(), mPosition)
+                getItem(mPosition).run {
+                    iClick.clickFollowing(!info.isAttention, user.userId.toString(), mPosition)
                 }
             }
             mPlayerContainer.setOnClickListener {
-                clickVideo(mPosition)
+                iClick.clickVideo(mPosition)
             }
             mImgPicture.setOnClickListener {
-                clickPicture(data[mPosition].joke.imageUrl.decrypt())
+                iClick.clickPicture(getItem(mPosition).joke.imageUrl.decrypt())
             }
             mImgAvatar.setOnClickListener {
-                clickAvatar(data[mPosition].user.userId.toString())
+                iClick.clickAvatar(getItem(mPosition).user.userId.toString())
             }
         }
     }
 
     inner class BottomHolder(view: View) : RecyclerView.ViewHolder(view) {}
 
-    inner class RecommendUserHolder(view:View):RecyclerView.ViewHolder(view){
-        val mRvRecommendUser:RecyclerView = view.findViewById(R.id.rv_recommend_user)
+    inner class RecommendUserHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val mRvRecommendUser: RecyclerView = view.findViewById(R.id.rv_recommend_user)
+
         init {
             mRvRecommendUser.run {
-                adapter = RecommendUserRvAdapter(newRecommendUserData,::callback,this){
-                    clickAvatar(it)
+                mAdapter = RecommendUserRvAdapter(::callback, this) {
+                    iClick.clickAvatar(it)
                 }
                 val linearLayoutManager = LinearLayoutManager(itemView.context)
                 linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
                 layoutManager = linearLayoutManager
+                adapter = mAdapter
                 addItemDecoration(
                     MyHorizontalItemDecoration(20)
                 )
             }
+            setIsRecyclable(false)
         }
     }
 
-    private fun callback(status: Boolean,id:String,position: Int,rv:RecyclerView){
-        clickRecommendFollow(status,id,position){
+    private fun callback(status: Boolean, id: String, position: Int, rv: RecyclerView) {
+        iClick.clickRecommendFollow(status, id, position) {
             freshRecycleViewData()
         }
     }
-
 
     /**
      *得到当前position的item的种类
@@ -151,7 +155,7 @@ class FirstTextRvAdapter(
             else -> {
                 RecommendUserHolder(
                     LayoutInflater.from(parent.context)
-                        .inflate(R.layout.recycle_item_recommend_user,parent,false)
+                        .inflate(R.layout.recycle_item_recommend_user, parent, false)
                 )
             }
         }
@@ -161,38 +165,32 @@ class FirstTextRvAdapter(
      * 获取item的类型
      */
     override fun getItemViewType(position: Int): Int {
-        Log.d(TAG, "getItemViewType: ${newRecommendUserData.size}")
-        return if (newRecommendUserData.size == 0){
-            if (position == data.size) 1 else 0
-        }else{
-            when (position) {
-                0 -> 2
-                data.size +1 -> 1
-                else -> 0
-            }
+        return if (newRecommendUserData == null) 0
+        else {
+            if (position == 0) 3
+            else 0
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is OnlyTextViewHolder) {
             val text: FirstTextResponseItem
-            if (newRecommendUserData.size == 0){
-                text = data[position]
+            if (newRecommendUserData == null) {
+                text = getItem(position)
                 holder.mPosition = position
-            }
-            else{
-                text = data[position-1]
-                holder.mPosition = position-1
+            } else {
+                text = getItem(position - 1)
+                holder.mPosition = position - 1
             }
             holder.run {
                 if (text.joke.imageUrl.decrypt() != "") {
                     holder.mCvPicture.visible()
                     Glide.with(itemView.context).load(text.joke.imageUrl.decrypt())
-                        .override(500,500)
+                        .override(500, 500)
                         .centerCrop()
                         .into(this.mImgPicture)
                 } else holder.mCvPicture.gone()
-                if (text.joke.videoUrl.decrypt() != ""){
+                if (text.joke.videoUrl.decrypt() != "") {
                     holder.mPlayerContainer.visible()
                     Glide.with(holder.mThumb.context)
                         .load(text.joke.thumbUrl.decrypt())
@@ -209,55 +207,38 @@ class FirstTextRvAdapter(
                 if (text.info.isAttention) mTvFollowing.gone() else mTvFollowing.visible()
             }
         }
-        if (holder is RecommendUserHolder){
-            mRvRecommendUser = holder.mRvRecommendUser
+        if (holder is RecommendUserHolder) {
             freshRecycleViewData()
         }
     }
 
-    fun freshRecycleViewData() {
-        Log.d(TAG, "freshRecycleViewData: ${newRecommendUserData.size}")
-        val diffResult = DiffUtil.calculateDiff(
-            RecommendUserRvAdapter.DiffCallBack(
-                oldRecommendUserData, newRecommendUserData
-            ), true
-        )
-        diffResult.dispatchUpdatesTo(mRvRecommendUser?.adapter!!)
-        oldRecommendUserData.clear()
-        for (i in newRecommendUserData) oldRecommendUserData.add(i)
+    fun freshList(list: List<AttentionRecommendResponseItem>?) {
+        newRecommendUserData = list
+        freshRecycleViewData()
     }
 
-
-    override fun getItemCount(): Int {
-        return if (newRecommendUserData.size == 0) data.size
-        else data.size+1
+    fun freshRecycleViewData() {
+        mAdapter?.submitList(newRecommendUserData)
     }
 
     /**
      * 差分刷新固定写法
      */
-    class DiffCallBack(
-        private val mOldData: List<FirstTextResponseItem>,
-        private val mNewData: List<FirstTextResponseItem>
-    ) :
-        DiffUtil.Callback() {
-
-        override fun getOldListSize(): Int {
-            return mOldData.size
+    object DiffCallBack : DiffUtil.ItemCallback<FirstTextResponseItem>() {
+        override fun areItemsTheSame(
+            oldItem: FirstTextResponseItem,
+            newItem: FirstTextResponseItem
+        ): Boolean {
+            return oldItem.joke.jokesId == newItem.joke.jokesId && oldItem.info.isAttention == newItem.info.isAttention
+                    && oldItem.info.likeNum == newItem.info.likeNum && oldItem.info.disLikeNum == newItem.info.disLikeNum
         }
 
-        override fun getNewListSize(): Int {
-            return mNewData.size
+        override fun areContentsTheSame(
+            oldItem: FirstTextResponseItem,
+            newItem: FirstTextResponseItem
+        ): Boolean {
+            return oldItem == newItem
         }
 
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return mOldData[oldItemPosition].joke.jokesId == mNewData[newItemPosition].joke.jokesId
-        }
-
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldItemPosition == newItemPosition
-        }
-
-        override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any = ""
     }
 }

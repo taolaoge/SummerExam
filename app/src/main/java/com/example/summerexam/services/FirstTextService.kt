@@ -1,7 +1,9 @@
 package com.example.summerexam.services
 
 import com.example.summerexam.beans.AttentionRecommendResponse
+import com.example.summerexam.beans.AttentionRecommendResponseItem
 import com.example.summerexam.beans.FirstTextResponse
+import com.example.summerexam.beans.FirstTextResponseItem
 import com.example.summerexam.network.ApiGenerator
 import com.ndhzs.lib.common.network.ApiWrapper
 import io.reactivex.rxjava3.core.Single
@@ -60,19 +62,19 @@ interface FirstTextService {
      * 获取首页趣图数据
      */
     @POST("home/pic")
-    fun getPicture(): Single<ApiWrapper<FirstTextResponse>>
+    fun getPicture(): Single<ApiWrapper<List<FirstTextResponseItem>>>
 
     /**
      * 获取首页最新列表数据
      */
     @POST("home/latest")
-    fun getLatest(): Single<ApiWrapper<FirstTextResponse>>
+    fun getLatest(): Single<ApiWrapper<List<FirstTextResponseItem>>>
 
     /**
      * 获取推荐列表的数据
      */
     @POST("home/recommend")
-    fun getRecommend(): Single<ApiWrapper<FirstTextResponse>>
+    fun getRecommend(): Single<ApiWrapper<List<FirstTextResponseItem>>>
 
     /**
      *获取关注的用户发布的段子列表
@@ -85,7 +87,7 @@ interface FirstTextService {
      * 获取主页的推荐关注数据
      */
     @POST("home/attention/recommend")
-    fun getAttentionRecommend(): Single<ApiWrapper<AttentionRecommendResponse>>
+    fun getAttentionRecommend(): Single<ApiWrapper<List<AttentionRecommendResponseItem>>>
 
     /**
      * 搜索段子的方法
@@ -95,5 +97,5 @@ interface FirstTextService {
      */
     @POST("home/jokes/search")
     @FormUrlEncoded
-    fun searchJoke(@Field("keyword") keyword:String,@Field("page") page:Int): Single<ApiWrapper<FirstTextResponse>>
+    fun searchJoke(@Field("keyword") keyword:String,@Field("page") page:Int): Single<ApiWrapper<List<FirstTextResponseItem>>>
 }
