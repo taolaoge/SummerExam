@@ -33,34 +33,30 @@ class FirstTextViewModel : BaseViewModel() {
 
     var userId = ""
 
-    private val _code = MutableLiveData<Int>()
-    val code: LiveData<Int>
-        get() = _code
-
-    val noTokenIsLoading = MutableLiveData(false)
-
     //关注fragment中推荐关注的用户列表
     private val _newRecommendUserData =
         MutableLiveData<List<AttentionRecommendResponseItem>>()
+
+
     val newRecommendUserData: LiveData<List<AttentionRecommendResponseItem>>
         get() = _newRecommendUserData
-
-    private val _oldRecommendUserData =
-        MutableLiveData<List<AttentionRecommendResponseItem>>()
-    val oldRecommendUserData: LiveData<List<AttentionRecommendResponseItem>>
-        get() = _newRecommendUserData
-
     //新的数据集合，差分刷新使用
     private val _newTextData =
         MutableLiveData<List<FirstTextResponseItem>>()
+
+
     val newTextData: LiveData<List<FirstTextResponseItem>>
         get() = _newTextData
 
-    val oldTextData = ArrayList<FirstTextResponseItem>()
+    private val _needRefresh = MutableLiveData<Boolean>()
+    val needRefresh: LiveData<Boolean>
+        get() = _needRefresh
 
-    val testList = ArrayList<FirstTextResponseItem>()
+    var freshPosition = 0
 
-    val needRefresh = MutableLiveData<Boolean>()
+    private val _needRefreshRecommend = MutableLiveData<Boolean>()
+    val needRecommend: LiveData<Boolean>
+        get() = _needRefreshRecommend
 
     private val _page = MutableLiveData<Int>()
     val page: LiveData<Int>
@@ -72,13 +68,6 @@ class FirstTextViewModel : BaseViewModel() {
      */
     var isLoading = false
 
-    /**
-     * 监听 判断是否请求数据完成，如果请求数据已完成，此参数变为false
-     * 监听此参数的就会被回调，取消SwipeLayout的动画
-     * 其实接口回调和高阶函数更好，但是这里没有page参数，不好判断是否回调
-     */
-    val isSwipeLayoutRefreshing = MutableLiveData<Boolean>()
-
     private fun getRecommendList() {
         FirstRepository.getAttentionRecommend()
             .safeSubscribeBy { dealRecommendUserData(it) }
@@ -86,7 +75,6 @@ class FirstTextViewModel : BaseViewModel() {
 
     fun getOnlyText() {
         isLoading = true
-        noTokenIsLoading.value = true
         when (page.value) {
             0 -> {
                 if (token.value != "123") {
@@ -122,12 +110,10 @@ class FirstTextViewModel : BaseViewModel() {
         }
     }
 
-
     private fun dealRecommendUserData(it: List<AttentionRecommendResponseItem>) {
         _newRecommendUserData.value = buildList {
             addAll(it)
         }
-        noTokenIsLoading.value = true
         isLoading = false
         //请求成功后参数变为false，因为观察了这个数据，达到一个回调的目的
     }
@@ -137,8 +123,6 @@ class FirstTextViewModel : BaseViewModel() {
             addAll(newTextData.value ?: emptyList())
             addAll(it)
         }
-        for (i in it) oldTextData.add(i)
-        for (i in it) testList.add(i)
         isLoading = false
         //请求成功后参数变为false，因为观察了这个数据，达到一个回调的目的
         attentionPage.value = attentionPage.value?.plus(1)
@@ -147,14 +131,40 @@ class FirstTextViewModel : BaseViewModel() {
     fun likeJoke(id: Int, status: Boolean, position: Int) {
         FirstRepository.likeJoke(id, status)
             .safeSubscribeBy {
-                _code.value = it.code
+                if (it.code == 200) {
+                    if (!status) {
+                        _newTextData.value?.get(position)?.info?.likeNum =
+                            _newTextData.value?.get(position)?.info?.likeNum?.minus(1) ?: 0
+                        _newTextData.value?.get(position)?.info?.isLike = status
+                    } else {
+                        _newTextData.value?.get(position)?.info?.likeNum =
+                            _newTextData.value?.get(position)?.info?.likeNum?.plus(1) ?: 0
+                        _newTextData.value?.get(position)?.info?.isLike = status
+                    }
+                    toast("操作成功")
+                    freshPosition = position
+                    _needRefresh.value = true
+                }
             }
     }
 
     fun dislikeJoke(id: Int, status: Boolean, position: Int) {
         FirstRepository.dislikeJoke(id, status)
             .safeSubscribeBy {
-                _code.value = it.code
+                if (it.code == 200) {
+                    if (!status) {
+                        _newTextData.value?.get(position)?.info?.disLikeNum =
+                            _newTextData.value?.get(position)?.info?.disLikeNum?.minus(1) ?: 0
+                        _newTextData.value?.get(position)?.info?.isUnlike = status
+                    } else {
+                        _newTextData.value?.get(position)?.info?.disLikeNum =
+                            _newTextData.value?.get(position)?.info?.disLikeNum?.plus(1) ?: 0
+                        _newTextData.value?.get(position)?.info?.isUnlike = status
+                    }
+                    toast("操作成功")
+                    freshPosition = position
+                    _needRefresh.value = true
+                }
             }
     }
 
@@ -164,21 +174,22 @@ class FirstTextViewModel : BaseViewModel() {
     fun followUser(status: String, userId: String, position: Int, type: Int) {
         FirstRepository.followUser(status, userId)
             .safeSubscribeBy {
-                if (type == 1) {
-                   oldTextData[position].info.isAttention = status == "1"
-                   testList[position].info.isAttention = status != "1"
-                    _newTextData.value = buildList {
-                        addAll(oldTextData)
+                if (it.code == 200) {
+                    if (type == 1) {
+                        _newTextData.value?.get(position)?.info?.isAttention = status == "1"
+                        freshPosition = position
+                        _needRefresh.value = true
+                    } else {
+                        _newRecommendUserData.value?.get(position)?.isAttention = status == "1"
+                        freshPosition = position
+                        _needRefreshRecommend.value = true
                     }
-                    needRefresh.value = true
-                } else {
-                    _oldRecommendUserData.value?.get(position)?.isAttention = status == "1"
+                    toast("操作成功")
                 }
-                _code.value = it.code
             }
     }
 
-    fun clearList() {
+    fun freshList() {
         FirstRepository.getOnlyText().safeSubscribeBy {
             _newTextData.value = buildList {
                 addAll(it)
@@ -186,12 +197,20 @@ class FirstTextViewModel : BaseViewModel() {
         }
     }
 
-    fun clearRecommendList() {
+    fun clearAttentionList() {
+        _newTextData.value = emptyList()
+    }
+
+    fun freshRecommendList() {
         FirstRepository.getAttentionRecommend().safeSubscribeBy {
             _newRecommendUserData.value = buildList {
                 addAll(it)
             }
         }
+    }
+
+    fun clearRecommendList(){
+        _newRecommendUserData.value = emptyList()
     }
 
     fun putKeyword(keyword: String) {
@@ -200,5 +219,13 @@ class FirstTextViewModel : BaseViewModel() {
 
     fun putPage(page: Int) {
         _page.value = page
+    }
+
+    fun changeNeedRefresh() {
+        _needRefresh.value = false
+    }
+
+    fun changeNeedRefreshRecommend(){
+        _needRefreshRecommend.value = false
     }
 }

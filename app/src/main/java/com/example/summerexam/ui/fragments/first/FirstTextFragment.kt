@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -21,7 +20,6 @@ import com.example.summerexam.view.MyVerticalItemDecoration
 import com.example.summerexam.viewmodel.FirstTextViewModel
 import com.example.summerexam.extensions.appContext
 import com.example.summerexam.extensions.getSp
-import com.example.summerexam.extensions.toast
 import com.example.summerexam.baseui.BaseFragment
 import com.example.summerexam.network.TAG
 import com.example.summerexam.ui.activities.UserinfoActivity
@@ -162,7 +160,6 @@ class FirstTextFragment : BaseFragment(), FirstTextRvAdapter.IClick {
             releaseVideoView()
         }
         val itemView: View
-        Log.d(TAG, "startPlay: ${viewModel.newRecommendUserData.value == null}")
         if (viewModel.newRecommendUserData.value != null) {
             itemView = mLayoutManager.findViewByPosition(newPosition + 1) ?: return
             mCurPos = newPosition + 1
@@ -194,12 +191,12 @@ class FirstTextFragment : BaseFragment(), FirstTextRvAdapter.IClick {
         freshRecycleView(mRvText)
     }
 
-    private fun initObserve(){
-        viewModel.newTextData.observe(viewLifecycleOwner){
+    private fun initObserve() {
+        viewModel.newTextData.observe(viewLifecycleOwner) {
             mAdapter.submitList(it)
             mSwipeLayout.isRefreshing = false
         }
-        viewModel.newRecommendUserData.observe(viewLifecycleOwner){
+        viewModel.newRecommendUserData.observe(viewLifecycleOwner) {
             mAdapter.freshList(viewModel.newRecommendUserData.value)
             mSwipeLayout.isRefreshing = false
         }
@@ -210,22 +207,34 @@ class FirstTextFragment : BaseFragment(), FirstTextRvAdapter.IClick {
             //当token改变时，如果在关注页面
             if (viewModel.page.value == 0) {
                 if (it == "123") {
-                    if (viewModel.newTextData.value?.size != 0) viewModel.clearList()
+                    if (viewModel.newTextData.value != null) viewModel.clearAttentionList()
                 } else {
                     freshRecycleView(mRvText)
                 }
             }
         }
-        viewModel.code.observe(viewLifecycleOwner) {
-            if (it == 200) toast("操作成功")
+        viewModel.needRefresh.observe(viewLifecycleOwner) {
+            if (it) {
+                if (viewModel.page.value == 0) {
+                    mAdapter.notifyItemChanged(viewModel.freshPosition + 1)
+                } else mAdapter.notifyItemChanged(viewModel.freshPosition)
+
+                viewModel.changeNeedRefresh()
+            }
+        }
+        viewModel.needRecommend.observe(viewLifecycleOwner) {
+            if (it) {
+                mAdapter.freshAttentionList(viewModel.freshPosition)
+                viewModel.changeNeedRefreshRecommend()
+            }
         }
     }
 
     private fun initSwipeLayout() {
         mSwipeLayout.setOnRefreshListener {
-            if (viewModel.page.value != 5 && viewModel.page.value != 0) viewModel.clearList()
+            if (viewModel.page.value != 5 && viewModel.page.value != 0) viewModel.freshList()
             else if (viewModel.page.value == 0) {
-                viewModel.clearRecommendList()
+                viewModel.freshRecommendList()
             } else mSwipeLayout.isRefreshing = false
         }
     }
@@ -248,8 +257,10 @@ class FirstTextFragment : BaseFragment(), FirstTextRvAdapter.IClick {
                         //获取最后一个完全显示的ItemPosition
                         val lastVisibleItem = manager.findLastCompletelyVisibleItemPosition()
                         val totalItem = manager.itemCount
-                        if (lastVisibleItem == (totalItem - 1) && !viewModel.isLoading && viewModel.token.value != "123"
+                        if (lastVisibleItem == (totalItem - 1) && !viewModel.isLoading
+                            && viewModel.token.value != "123"
                         ) {
+                            if (totalItem < 5) viewModel.clearRecommendList()
                             viewModel.getOnlyText()
                         }
                     } else {
@@ -265,7 +276,6 @@ class FirstTextFragment : BaseFragment(), FirstTextRvAdapter.IClick {
         })
     }
 
-
     override fun clickComment(id: Int) {
         val commentBottomFragment = CommentBottomFragment()
         val bundle = Bundle()
@@ -278,7 +288,7 @@ class FirstTextFragment : BaseFragment(), FirstTextRvAdapter.IClick {
     }
 
     override fun clickFollowing(status: Boolean, userId: String, position: Int) {
-        if (status) viewModel.followUser("1", userId,position,1)
+        if (status) viewModel.followUser("1", userId, position, 1)
     }
 
     override fun clickRecommendFollow(
@@ -287,8 +297,8 @@ class FirstTextFragment : BaseFragment(), FirstTextRvAdapter.IClick {
         position: Int,
         block: () -> Unit
     ) {
-        if (status) viewModel.followUser("1", userId,position,0)
-        else viewModel.followUser("0", userId,position,0)
+        if (status) viewModel.followUser("1", userId, position, 0)
+        else viewModel.followUser("0", userId, position, 0)
     }
 
     /**
@@ -299,9 +309,9 @@ class FirstTextFragment : BaseFragment(), FirstTextRvAdapter.IClick {
     override fun clickLikeOrDislike(id: Int, status: Boolean, position: Int, what: Boolean) {
         viewModel.newTextData.value?.get(position)?.info.run {
             if (!what) {
-                viewModel.dislikeJoke(id, status,position)
+                viewModel.dislikeJoke(id, status, position)
             } else {
-                viewModel.likeJoke(id, status,position)
+                viewModel.likeJoke(id, status, position)
             }
         }
     }

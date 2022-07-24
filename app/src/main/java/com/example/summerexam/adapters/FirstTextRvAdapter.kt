@@ -68,7 +68,6 @@ class FirstTextRvAdapter(
         val mThumb = mPrepareView.findViewById<ImageView>(R.id.thumb)
         var mPosition = 0
 
-
         init {
             //通过tag将ViewHolder和itemView绑定
             itemView.tag = this
@@ -217,6 +216,10 @@ class FirstTextRvAdapter(
         freshRecycleViewData()
     }
 
+    fun freshAttentionList(position:Int){
+        mAdapter?.notifyItemChanged(position)
+    }
+
     fun freshRecycleViewData() {
         mAdapter?.submitList(newRecommendUserData)
     }
@@ -229,8 +232,7 @@ class FirstTextRvAdapter(
             oldItem: FirstTextResponseItem,
             newItem: FirstTextResponseItem
         ): Boolean {
-            return oldItem.joke.jokesId == newItem.joke.jokesId && oldItem.info.isAttention == newItem.info.isAttention
-                    && oldItem.info.likeNum == newItem.info.likeNum && oldItem.info.disLikeNum == newItem.info.disLikeNum
+            return oldItem.joke.jokesId == newItem.joke.jokesId
         }
 
         override fun areContentsTheSame(
@@ -239,6 +241,5 @@ class FirstTextRvAdapter(
         ): Boolean {
             return oldItem == newItem
         }
-
     }
 }

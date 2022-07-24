@@ -75,7 +75,18 @@ class CommentBottomFragment : BottomSheetDialogFragment() {
         val bundle = arguments
         viewModel.id = bundle?.getInt("jokeId") ?: 0
         if (viewModel.id != 0) viewModel.getCommentList()
-        viewModel.commentSuccess.observe(this) {
+        initObserver()
+
+        mTvToComment.setOnClickListener {
+            toComment()
+        }
+        mTvBack.setOnClickListener {
+            dismiss()
+        }
+    }
+
+    private fun initObserver() {
+        viewModel.commentSuccess.observe(viewLifecycleOwner) {
             if (it) {
                 mTvCommentCount.text = "评论数量 ${viewModel.count}"
                 mRvComment.run {
@@ -85,11 +96,11 @@ class CommentBottomFragment : BottomSheetDialogFragment() {
                 }
             }
         }
-        mTvToComment.setOnClickListener {
-            toComment()
-        }
-        mTvBack.setOnClickListener {
-            dismiss()
+        viewModel.needRefresh.observe(viewLifecycleOwner){
+            if (it){
+                freshRecycleViewData()
+                viewModel.changeNeedRefresh()
+            }
         }
     }
 
@@ -114,7 +125,7 @@ class CommentBottomFragment : BottomSheetDialogFragment() {
     }
 
     private fun clickLike(id: String, status: Boolean, position: Int) {
-        viewModel.likeComment(id, status)
+        viewModel.likeComment(id, status,position)
     }
 
 }

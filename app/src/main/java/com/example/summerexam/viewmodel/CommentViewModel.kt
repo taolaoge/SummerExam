@@ -7,6 +7,7 @@ import com.example.summerexam.beans.Comment
 import com.example.summerexam.services.CommentService
 import com.example.summerexam.extensions.mapOrThrowApiException
 import com.example.summerexam.extensions.throwApiExceptionIfFail
+import com.example.summerexam.extensions.toast
 import com.example.summerexam.extensions.unSafeSubscribeBy
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -23,6 +24,10 @@ class CommentViewModel : ViewModel() {
     var oldData = ArrayList<Comment>()
     var id = 0
     var count = 0
+
+    private val _needRefresh = MutableLiveData<Boolean>()
+    val needRefresh: LiveData<Boolean>
+        get() = _needRefresh
 
     private val _commentSuccess = MutableLiveData<Boolean>()
     val commentSuccess: LiveData<Boolean>
@@ -48,15 +53,26 @@ class CommentViewModel : ViewModel() {
             }
     }
 
-    fun likeComment(id: String, status: Boolean) {
+    fun likeComment(id: String, status: Boolean,position:Int) {
         CommentService.INSTANCE.likeComment(id, status)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .throwApiExceptionIfFail()
             .unSafeSubscribeBy {
-                _code.value = it.code
+                if (it.code == 200){
+                    toast("操作成功")
+                    newData[position].isLike = status
+                    if (status){
+                        newData[position].likeNum += 1
+                    }else{
+                        newData[position].likeNum -= 1
+                    }
+                    _needRefresh.value = true
+                }
             }
     }
 
-
+    fun changeNeedRefresh(){
+        _needRefresh.value = false
+    }
 }

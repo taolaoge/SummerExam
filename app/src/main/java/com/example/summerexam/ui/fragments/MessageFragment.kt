@@ -42,7 +42,7 @@ class MessageFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.needRefresh.observe(viewLifecycleOwner){
+        viewModel.needRefresh.observe(viewLifecycleOwner) {
             if (it) freshRecycleViewData()
         }
     }

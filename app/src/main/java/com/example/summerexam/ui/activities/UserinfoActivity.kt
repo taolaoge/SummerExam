@@ -129,6 +129,12 @@ class UserinfoActivity : BaseActivity() {
                 mBtnFollow.setBackgroundResource(R.drawable.shape_btn)
             }
         }
+        viewModel.needRefresh.observe(this){
+            if (it){
+                freshRecycleViewData()
+                viewModel.changeNeedRefresh()
+            }
+        }
     }
 
     private fun initUi() {
@@ -285,9 +291,9 @@ class UserinfoActivity : BaseActivity() {
     private fun clickLikeOrDislike(id: Int, status: Boolean, position: Int, what: Boolean) {
         viewModel.newTextData[position].info.run {
             if (!what) {
-                viewModel.dislikeJoke(id, status)
+                viewModel.dislikeJoke(id, status,position)
             } else {
-                viewModel.likeJoke(id, status)
+                viewModel.likeJoke(id, status,position)
             }
         }
     }

@@ -49,22 +49,7 @@ class MineFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.token.observe(this) {
-            //观察token，token只要不为123，即token不为空就会刷新ui
-            if (it != "123") {
-                refreshUi()
-            }
-        }
-        viewModel.userInfoResponse.observe(this){
-            //传入的lambda回调，请求成功后回调此函数更新ui
-            mTvCoin.text = it.info.experienceNum.toString()
-            mTvFollow.text = it.info.attentionNum.toString()
-            mTvFollowers.text = it.info.fansNum.toString()
-            mTvUserName.text = it.user.nickname
-            Glide.with(this).load(it.user.avatar).into(mImgUser)
-            //当请求成功并且token未过期的时候，变为false
-            viewModel.isNeedToken = false
-        }
+
     }
 
     private fun refreshUi() {
@@ -73,6 +58,7 @@ class MineFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initObserver()
         mRelativeLayout.setOnClickListener {
             if (viewModel.token.value == "123") {
                 val intent = Intent(context, LoginActivity::class.java)
@@ -97,6 +83,24 @@ class MineFragment : BaseFragment() {
         }
         Glide.with(this).load("https://jokes-avatar.oss-cn-beijing.aliyuncs.com/aliyun/jokes/avatar/default_avatar.png")
             .into(mImgUser)
+    }
+
+    private fun initObserver() {
+        viewModel.token.observe(viewLifecycleOwner) {
+            //观察token，token只要不为123，即token不为空就会刷新ui
+            if (it != "123") {
+                refreshUi()
+            }
+        }
+        viewModel.userInfoResponse.observe(viewLifecycleOwner){
+            mTvCoin.text = it.info.experienceNum.toString()
+            mTvFollow.text = it.info.attentionNum.toString()
+            mTvFollowers.text = it.info.fansNum.toString()
+            mTvUserName.text = it.user.nickname
+            Glide.with(this).load(it.user.avatar).into(mImgUser)
+            //当请求成功并且token未过期的时候，变为false
+            viewModel.isNeedToken = false
+        }
     }
 
     private fun initUi(){

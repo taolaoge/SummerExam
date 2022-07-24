@@ -16,6 +16,7 @@ import com.example.summerexam.extensions.decrypt
 import com.example.summerexam.extensions.gone
 import com.example.summerexam.extensions.visible
 import com.example.summerexam.view.PrepareView
+import org.w3c.dom.Text
 
 /**
  * description ： TODO:类的作用
@@ -38,6 +39,10 @@ class UserJokeRvAdapter(
         val mTvContent: TextView = view.findViewById(R.id.tv_user_joke_content)
         val mImgPicture: ImageView = view.findViewById(R.id.img_picture_user_joke)
         val mCvPicture: CardView = view.findViewById(R.id.cv_picture_container_user_joke)
+        val mTvLikeNum:TextView = view.findViewById(R.id.tv_user_joke_like_detail)
+        val mTvDisLikeNum:TextView = view.findViewById(R.id.tv_user_joke_dislike_detail)
+        val mTvCommentNum:TextView = view.findViewById(R.id.tv_user_joke_comment_detail)
+        val mTvShareNum:TextView = view.findViewById(R.id.tv_user_joke_share_detail)
         val mPlayerContainer =
             itemView.findViewById<FrameLayout?>(R.id.fl_player_container_user_joke)
         val mPrepareView = itemView.findViewById<PrepareView>(R.id.prepare_view_user_joke)
@@ -82,6 +87,10 @@ class UserJokeRvAdapter(
         val text = data[position]
         holder.mPosition = position
         holder.run {
+            mTvLikeNum.text = text.info.likeNum.toString()
+            mTvDisLikeNum.text = text.info.disLikeNum.toString()
+            mTvCommentNum.text = text.info.commentNum.toString()
+            mTvShareNum.text = text.info.shareNum.toString()
             mTvContent.text = text.joke.content
             if (text.joke.imageUrl.decrypt() != "") {
                 holder.mCvPicture.visible()
