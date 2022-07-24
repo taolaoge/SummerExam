@@ -29,6 +29,9 @@ class SystemMessageActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_system_message)
+        viewModel.needRefresh.observe(this){
+            if (it) freshRecycleViewData()
+        }
     }
 
     private fun freshRecycleViewData() {
@@ -43,8 +46,6 @@ class SystemMessageActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         if (viewModel.newData.size == 0)
-            viewModel.getSystemMessage(){
-                freshRecycleViewData()
-            }
+            viewModel.getSystemMessage()
     }
 }

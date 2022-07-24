@@ -4,7 +4,9 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.nfc.Tag
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -19,6 +21,8 @@ import com.example.summerexam.adapters.UserJokeRvAdapter
 import com.example.summerexam.baseui.BaseActivity
 import com.example.summerexam.extensions.decrypt
 import com.example.summerexam.extensions.gone
+import com.example.summerexam.extensions.toast
+import com.example.summerexam.network.TAG
 import com.example.summerexam.ui.fragments.CommentBottomFragment
 import com.example.summerexam.utils.DkVideoPlayerUtils
 import com.example.summerexam.view.MyVerticalItemDecoration
@@ -80,18 +84,19 @@ class UserinfoActivity : BaseActivity() {
         viewModel.userId = intent.getStringExtra("userId") ?: ""
         initUi()
         viewModel.getUserJoke()
-        viewModel.isLoading.observe(this) {
-            if (!it) freshRecycleViewData()
-        }
         freshRecycleView(mRvUserinfo)
         initView()
+        initObserver()
         mImgReturn.setOnClickListener { finish() }
         mBtnFollow.setOnClickListener { clickFollow() }
     }
 
-    private fun initUi() {
-        viewModel.getTargetUserinfo(viewModel.userId) {
-            viewModel.targetUserinfoResponse?.run {
+    private fun initObserver() {
+        viewModel.code.observe(this) {
+            if (it == 200) toast("请求成功")
+        }
+        viewModel.targetUserinfoResponse.observe(this) {
+            it.run {
                 mTvFabulous.text = "$likeNum 获赞"
                 mTvNickname.text = nickname
                 mTvJoinTime.text = "入驻段子乐 $joinTime"
@@ -105,25 +110,35 @@ class UserinfoActivity : BaseActivity() {
                 } else if (attentionState == 2) {
                     mBtnFollow.text = "已关注"
                     mBtnFollow.setBackgroundResource(R.drawable.shape_btn_follow)
-                }else{
+                } else {
                     mBtnFollow.gone()
                 }
             }
         }
+        viewModel.isLoading.observe(this) {
+            if (!it) freshRecycleViewData()
+        }
+        viewModel.followSuccess.observe(this) {
+            if (it == 1) {
+                viewModel.targetUserinfoResponse.value?.attentionState = 1
+                mBtnFollow.text = "已关注"
+                mBtnFollow.setBackgroundResource(R.drawable.shape_btn_follow)
+            } else if (it == 0) {
+                viewModel.targetUserinfoResponse.value?.attentionState = 0
+                mBtnFollow.text = "+关注"
+                mBtnFollow.setBackgroundResource(R.drawable.shape_btn)
+            }
+        }
+    }
+
+    private fun initUi() {
+        viewModel.getTargetUserinfo(viewModel.userId)
     }
 
     private fun clickFollow() {
-        if (viewModel.targetUserinfoResponse?.attentionState == 0)
-            viewModel.followUser("1", viewModel.userId) {
-                viewModel.targetUserinfoResponse?.attentionState = 1
-                mBtnFollow.text = "已关注"
-                mBtnFollow.setBackgroundResource(R.drawable.shape_btn_follow)
-            }
-        else viewModel.followUser("0", viewModel.userId) {
-            viewModel.targetUserinfoResponse?.attentionState = 0
-            mBtnFollow.text = "+关注"
-            mBtnFollow.setBackgroundResource(R.drawable.shape_btn)
-        }
+        if (viewModel.targetUserinfoResponse.value?.attentionState == 0)
+            viewModel.followUser("1", viewModel.userId)
+        else viewModel.followUser("0", viewModel.userId)
     }
 
     private fun initView() {
@@ -270,31 +285,9 @@ class UserinfoActivity : BaseActivity() {
     private fun clickLikeOrDislike(id: Int, status: Boolean, position: Int, what: Boolean) {
         viewModel.newTextData[position].info.run {
             if (!what) {
-                viewModel.dislikeJoke(id, status) {
-                    if (it) {
-                        if (status) {
-                            disLikeNum += 1
-                            isUnlike = true
-                        } else {
-                            disLikeNum -= 1
-                            isUnlike = false
-                        }
-                    }
-                    freshRecycleViewData()
-                }
+                viewModel.dislikeJoke(id, status)
             } else {
-                viewModel.likeJoke(id, status) {
-                    if (it) {
-                        if (status) {
-                            likeNum += 1
-                            isLike = true
-                        } else {
-                            likeNum -= 1
-                            isLike = false
-                        }
-                    }
-                    freshRecycleViewData()
-                }
+                viewModel.likeJoke(id, status)
             }
         }
     }

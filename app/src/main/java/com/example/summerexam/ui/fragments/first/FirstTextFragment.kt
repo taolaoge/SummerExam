@@ -162,7 +162,8 @@ class FirstTextFragment : BaseFragment(), FirstTextRvAdapter.IClick {
             releaseVideoView()
         }
         val itemView: View
-        if (viewModel.newRecommendUserData.value?.size != 0) {
+        Log.d(TAG, "startPlay: ${viewModel.newRecommendUserData.value == null}")
+        if (viewModel.newRecommendUserData.value != null) {
             itemView = mLayoutManager.findViewByPosition(newPosition + 1) ?: return
             mCurPos = newPosition + 1
         } else {
@@ -195,7 +196,6 @@ class FirstTextFragment : BaseFragment(), FirstTextRvAdapter.IClick {
 
     private fun initObserve(){
         viewModel.newTextData.observe(viewLifecycleOwner){
-            Log.d(TAG, "initObserve: $it")
             mAdapter.submitList(it)
             mSwipeLayout.isRefreshing = false
         }

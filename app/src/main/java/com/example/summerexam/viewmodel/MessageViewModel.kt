@@ -1,5 +1,6 @@
 package com.example.summerexam.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.summerexam.beans.SystemMessageResponseItem
@@ -16,13 +17,17 @@ import io.reactivex.rxjava3.schedulers.Schedulers
  * date : 2022/7/20
  */
 class MessageViewModel : ViewModel() {
+    private val _needRefresh = MutableLiveData<Boolean>()
+    val needRefresh: LiveData<Boolean>
+        get() = _needRefresh
 
     var oldData = ArrayList<SystemMessageResponseItem>()
     val newData = ArrayList<SystemMessageResponseItem>()
 
     val page = MutableLiveData(1)
 
-    fun getSystemMessage(block:()->Unit) {
+    fun getSystemMessage() {
+        _needRefresh.value = false
         MessageService.INSTANCE.getMessageSystem(page.value ?: 1)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -30,7 +35,7 @@ class MessageViewModel : ViewModel() {
             .unSafeSubscribeBy {
                 oldData = newData
                 for (data in it) newData.add(data)
-                block()
+                _needRefresh.value = true
             }
     }
 }

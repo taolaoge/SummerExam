@@ -42,6 +42,9 @@ class MessageFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.needRefresh.observe(viewLifecycleOwner){
+            if (it) freshRecycleViewData()
+        }
     }
 
     override fun onCreateView(
@@ -64,9 +67,7 @@ class MessageFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         if (viewModel.newData.size == 0)
-            viewModel.getSystemMessage() {
-                freshRecycleViewData()
-            }
+            viewModel.getSystemMessage()
     }
 
 }

@@ -55,19 +55,20 @@ class MineFragment : BaseFragment() {
                 refreshUi()
             }
         }
-    }
-
-    private fun refreshUi() {
-        viewModel.refreshUi(){
+        viewModel.userInfoResponse.observe(this){
             //传入的lambda回调，请求成功后回调此函数更新ui
-            mTvCoin.text = viewModel.coin.toString()
-            mTvFollow.text = viewModel.follow.toString()
-            mTvFollowers.text = viewModel.followers.toString()
-            mTvUserName.text = viewModel.username
-            Glide.with(this).load(viewModel.avatar).into(mImgUser)
+            mTvCoin.text = it.info.experienceNum.toString()
+            mTvFollow.text = it.info.attentionNum.toString()
+            mTvFollowers.text = it.info.fansNum.toString()
+            mTvUserName.text = it.user.nickname
+            Glide.with(this).load(it.user.avatar).into(mImgUser)
             //当请求成功并且token未过期的时候，变为false
             viewModel.isNeedToken = false
         }
+    }
+
+    private fun refreshUi() {
+        viewModel.refreshUi()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -78,8 +79,8 @@ class MineFragment : BaseFragment() {
                 startActivity(intent)
             }else{
                 val intent = Intent(context,UserinfoActivity::class.java)
-                intent.putExtra("userId",viewModel.userId)
-                Log.d(TAG, "onViewCreated: ${viewModel.userId}")
+                intent.putExtra("userId",viewModel.userInfoResponse.value?.user?.userId.toString())
+                Log.d(TAG, "onViewCreate: ${viewModel.userInfoResponse.value?.user?.userId}")
                 startActivity(intent)
             }
         }

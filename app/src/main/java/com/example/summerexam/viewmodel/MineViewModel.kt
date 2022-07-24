@@ -1,7 +1,9 @@
 package com.example.summerexam.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.summerexam.beans.UserInfoResponse
 import com.example.summerexam.extensions.*
 import com.example.summerexam.services.MineService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -17,21 +19,19 @@ class MineViewModel : ViewModel() {
     private val _token = MutableLiveData("123")
     val token: MutableLiveData<String>
         get() = _token
+
     //是否需要刷新ui，是否需要重新获取token，这个变量来控制获取到最新token后再次拿到token
     var isNeedToken = true
 
-    var follow = 0
-    var followers = 0
-    var coin = 0
-    var username = ""
-    var avatar = ""
-    var userId = ""
+    private val _userInfoResponse = MutableLiveData<UserInfoResponse>()
+    val userInfoResponse: LiveData<UserInfoResponse>
+        get() = _userInfoResponse
 
-    fun refreshToken(){
-        _token.value = appContext.getSp("token").getString("token","123")
+    fun refreshToken() {
+        _token.value = appContext.getSp("token").getString("token", "123")
     }
 
-    fun refreshUi(block:() -> Unit){
+    fun refreshUi() {
         MineService.INSTANCE.getUserInfo()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -40,13 +40,7 @@ class MineViewModel : ViewModel() {
                 toast(it.toString())
             }
             .unSafeSubscribeBy {
-                follow = it.info.attentionNum
-                followers = it.info.fansNum
-                coin = it.info.experienceNum
-                username = it.user.nickname
-                avatar = it.user.avatar
-                userId = it.user.userId.toString()
-                block()
+                _userInfoResponse.value = it
             }
     }
 }

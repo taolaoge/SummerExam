@@ -23,6 +23,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         initClick()
+        viewModel.needFinish.observe(this){
+            if (appContext.getSp("token").getString("token","123") != "123") finish()
+        }
     }
 
     private fun initClick() {
@@ -37,9 +40,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                 viewModel.getCode(mEdPhone.text.toString())
             }
             mBtnLogin -> {
-                viewModel.login(mEdCode.text.toString(),mEdPhone.text.toString()){
-                    if (appContext.getSp("token").getString("token","123") != "123") finish()
-                }
+                viewModel.login(mEdCode.text.toString(),mEdPhone.text.toString())
             }
             mTvBack -> {finish()}
         }

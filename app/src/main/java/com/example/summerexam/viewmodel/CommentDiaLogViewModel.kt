@@ -1,5 +1,7 @@
 package com.example.summerexam.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.summerexam.services.CommentService
 import com.example.summerexam.extensions.mapOrThrowApiException
@@ -15,15 +17,21 @@ import io.reactivex.rxjava3.schedulers.Schedulers
  * date : 2022/7/18
  */
 class CommentDiaLogViewModel : ViewModel() {
+
+    private val _commentSuccess = MutableLiveData<Boolean>()
+    val commentSuccess :LiveData<Boolean>
+    get() = _commentSuccess
+
     var jokeId = 0
-    fun commentJoke(content: String, jokeId: String,block:()->Unit) {
+    fun commentJoke(content: String, jokeId: String) {
+        _commentSuccess.value = false
         CommentService.INSTANCE.commentJoke(content, jokeId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .mapOrThrowApiException()
             .unSafeSubscribeBy {
                 toast("评论成功")
-                block()
+                _commentSuccess.value = true
             }
     }
 }

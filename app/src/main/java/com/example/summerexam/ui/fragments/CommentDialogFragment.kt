@@ -50,13 +50,14 @@ class CommentDialogFragment : BottomSheetDialogFragment() {
         mImgPostComment.setOnClickListener {
             clickPostComment()
         }
+        viewModel.commentSuccess.observe(viewLifecycleOwner){
+            if (it) dismiss()
+        }
     }
 
     private fun clickPostComment() {
         val content = mEdComment.text.toString()
-        viewModel.commentJoke(content, viewModel.jokeId.toString()) {
-            dismiss()
-        }
+        viewModel.commentJoke(content, viewModel.jokeId.toString())
     }
 
     /**

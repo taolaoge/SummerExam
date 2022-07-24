@@ -1,5 +1,7 @@
 package com.example.summerexam.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.summerexam.extensions.*
 import com.example.summerexam.services.LoginService
@@ -13,8 +15,11 @@ import io.reactivex.rxjava3.schedulers.Schedulers
  * date : 2022/7/14
  */
 class LoginViewModel : ViewModel() {
+    private val _needFinish = MutableLiveData<Boolean>()
+    val needFinish:LiveData<Boolean>
+    get() = _needFinish
 
-    fun login(code: String, phone: String, block: () -> Unit) {
+    fun login(code: String, phone: String) {
         LoginService.INSTANCE.login(code, phone)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -23,7 +28,7 @@ class LoginViewModel : ViewModel() {
                 appContext.getSp("token").edit {
                     putString("token", it.token)
                 }
-                block()
+                _needFinish.value = true
             }
     }
 

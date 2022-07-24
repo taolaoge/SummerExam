@@ -1,5 +1,6 @@
 package com.example.summerexam.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.summerexam.beans.FirstTextResponse
@@ -21,7 +22,17 @@ import io.reactivex.rxjava3.schedulers.Schedulers
  */
 class UserinfoViewModel : ViewModel() {
 
-    val page = MutableLiveData(1)
+    private val _page = MutableLiveData(1)
+    val page: LiveData<Int>
+        get() = _page
+
+    private val _code = MutableLiveData<Int>()
+    val code: LiveData<Int>
+        get() = _code
+
+    private val _followSuccess = MutableLiveData<Int>()
+    val followSuccess: LiveData<Int>
+        get() = _followSuccess
 
     //新的数据集合，差分刷新使用
     val newTextData = ArrayList<FirstTextResponseItem>()
@@ -31,42 +42,34 @@ class UserinfoViewModel : ViewModel() {
 
     val isLoading = MutableLiveData(true)
 
-    var targetUserinfoResponse: TargetUserinfoResponse? = null
-    var userinfoResponse:UserInfoResponse? = null
+
+    private val _targetUserinfoResponse = MutableLiveData<TargetUserinfoResponse>()
+    val targetUserinfoResponse: LiveData<TargetUserinfoResponse>
+        get() = _targetUserinfoResponse
 
 
-
-    fun getTargetUserinfo(userId:String,block:()->Unit){
+    fun getTargetUserinfo(userId: String) {
         UserinfoService.INSTANCE.getTargetUserInfo(userId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .mapOrThrowApiException()
             .unSafeSubscribeBy {
-                targetUserinfoResponse = it
-                block()
+                _targetUserinfoResponse.value = it
             }
     }
 
-    fun getUserinfo(block: () -> Unit){
-        UserinfoService.INSTANCE.getUserinfo()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .mapOrThrowApiException()
-            .unSafeSubscribeBy {
-                userinfoResponse = it
-                block()
-            }
-    }
-
-    fun followUser(status: String, userId: String, block: (Boolean) -> Unit) {
+    fun followUser(status: String, userId: String) {
+        _followSuccess.value = -1
         FirstRepository.followUser(status, userId)
             .unSafeSubscribeBy {
-                if (it.code == 200) block(true)
+                _code.value = it.code
+                if (status == "1") _followSuccess.value = 1
+                else _followSuccess.value = 0
             }
     }
 
     fun getUserJoke() {
-        UserinfoService.INSTANCE.getUserJoke(userId, page.value ?: 1)
+        UserinfoService.INSTANCE.getUserJoke(userId, _page.value ?: 1)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .mapOrThrowApiException()
@@ -76,17 +79,17 @@ class UserinfoViewModel : ViewModel() {
     }
 
 
-    fun likeJoke(id: Int, status: Boolean, block: (Boolean) -> Unit) {
+    fun likeJoke(id: Int, status: Boolean) {
         FirstRepository.likeJoke(id, status)
             .unSafeSubscribeBy {
-                if (it.code == 200) block(true)
+                _code.value = it.code
             }
     }
 
-    fun dislikeJoke(id: Int, status: Boolean, block: (Boolean) -> Unit) {
+    fun dislikeJoke(id: Int, status: Boolean) {
         FirstRepository.dislikeJoke(id, status)
             .unSafeSubscribeBy {
-                if (it.code == 200) block(true)
+                _code.value = it.code
             }
     }
 
@@ -96,6 +99,10 @@ class UserinfoViewModel : ViewModel() {
             newTextData.add(data)
         }
         isLoading.value = false
-        page.value = page.value?.plus(1)
+        _page.value = _page.value?.plus(1)
+    }
+
+    fun changeCode(){
+        _code.value = -1
     }
 }

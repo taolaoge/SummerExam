@@ -74,12 +74,15 @@ class CommentBottomFragment : BottomSheetDialogFragment() {
         mTvBack = view.findViewById(R.id.tv_comment_back)
         val bundle = arguments
         viewModel.id = bundle?.getInt("jokeId") ?: 0
-        if (viewModel.id != 0) viewModel.getCommentList() {
-            mTvCommentCount.text = "评论数量 ${viewModel.count}"
-            mRvComment.run {
-                layoutManager = LinearLayoutManager(context)
-                adapter = CommentRvAdapter(viewModel.newData, ::clickLike)
-                overScrollMode = View.OVER_SCROLL_NEVER
+        if (viewModel.id != 0) viewModel.getCommentList()
+        viewModel.commentSuccess.observe(this) {
+            if (it) {
+                mTvCommentCount.text = "评论数量 ${viewModel.count}"
+                mRvComment.run {
+                    layoutManager = LinearLayoutManager(context)
+                    adapter = CommentRvAdapter(viewModel.newData, ::clickLike)
+                    overScrollMode = View.OVER_SCROLL_NEVER
+                }
             }
         }
         mTvToComment.setOnClickListener {
@@ -111,19 +114,7 @@ class CommentBottomFragment : BottomSheetDialogFragment() {
     }
 
     private fun clickLike(id: String, status: Boolean, position: Int) {
-        viewModel.likeComment(id, status) {
-            if (it) viewModel.newData[position].run {
-                if (status) {
-                    isLike = status
-                    likeNum += 1
-                    freshRecycleViewData()
-                } else {
-                    isLike = status
-                    likeNum -= 1
-                    freshRecycleViewData()
-                }
-            }
-        }
+        viewModel.likeComment(id, status)
     }
 
 }

@@ -1,5 +1,7 @@
 package com.example.summerexam.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.summerexam.beans.Comment
 import com.example.summerexam.services.CommentService
@@ -22,7 +24,16 @@ class CommentViewModel : ViewModel() {
     var id = 0
     var count = 0
 
-    fun getCommentList(block:() -> Unit) {
+    private val _commentSuccess = MutableLiveData<Boolean>()
+    val commentSuccess: LiveData<Boolean>
+        get() = _commentSuccess
+
+    private val _code = MutableLiveData<Int>()
+    val code: LiveData<Int>
+        get() = _code
+
+    fun getCommentList() {
+        _commentSuccess.value = false
         CommentService.INSTANCE.getCommentList(id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -33,17 +44,19 @@ class CommentViewModel : ViewModel() {
                     newData.add(i)
                 }
                 count = it.count
-                block()
+                _commentSuccess.value = true
             }
     }
 
-    fun likeComment(id:String,status:Boolean,block: (Boolean) -> Unit){
-        CommentService.INSTANCE.likeComment(id,status)
+    fun likeComment(id: String, status: Boolean) {
+        CommentService.INSTANCE.likeComment(id, status)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .throwApiExceptionIfFail()
             .unSafeSubscribeBy {
-                if (it.code == 200) block(true)
+                _code.value = it.code
             }
     }
+
+
 }
