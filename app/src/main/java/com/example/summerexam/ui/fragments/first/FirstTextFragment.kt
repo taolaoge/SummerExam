@@ -232,7 +232,7 @@ class FirstTextFragment : BaseFragment(), FirstTextRvAdapter.IClick {
 
     private fun initSwipeLayout() {
         mSwipeLayout.setOnRefreshListener {
-            if (viewModel.page.value != 5 && viewModel.page.value != 0) viewModel.freshList()
+            if (viewModel.page.value != 5 && viewModel.page.value != 0 && viewModel.page.value != 7) viewModel.freshList()
             else if (viewModel.page.value == 0) {
                 viewModel.freshRecommendList()
             } else mSwipeLayout.isRefreshing = false

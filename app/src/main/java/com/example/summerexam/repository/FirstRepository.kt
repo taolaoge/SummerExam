@@ -99,8 +99,8 @@ object FirstRepository {
             .mapOrThrowApiException()
     }
 
-    fun getUserLikeJoke(userId: String,page:Int): Single<FirstTextResponse> {
-        return UserinfoService.INSTANCE.getUserLikeJoke(userId, page)
+    fun getUserLikeJoke(page:Int): Single<List<FirstTextResponseItem>> {
+        return UserinfoService.INSTANCE.getUserLikeJoke(page)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .mapOrThrowApiException()

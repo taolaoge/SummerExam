@@ -98,4 +98,11 @@ interface FirstTextService {
     @POST("home/jokes/search")
     @FormUrlEncoded
     fun searchJoke(@Field("keyword") keyword:String,@Field("page") page:Int): Single<ApiWrapper<List<FirstTextResponseItem>>>
+
+    @POST("jokes/whole_jokes/like/list")
+    @FormUrlEncoded
+    fun getUserLikeJoke(
+        @Field("targetUserId") targetUserId: String,
+        @Field("page") page: Int
+    ): Single<ApiWrapper<List<FirstTextResponseItem>>>
 }

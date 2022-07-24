@@ -45,10 +45,6 @@ class MainActivity : BaseActivity() {
                 R.id.bottom_mine -> {
                     mViewPager.setCurrentItem(3,false)
                 }
-                R.id.bottom_add->{
-                    val intent = Intent(this,PostJokeActivity::class.java)
-                    startActivity(intent)
-                }
             }
             true
         }

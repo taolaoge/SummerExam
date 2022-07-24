@@ -9,11 +9,6 @@
         android:id="@+id/bottom_finding"
         android:title="划一划" />
     <item
-        android:id="@+id/bottom_add"
-        android:icon="@drawable/ic_add"
-        android:title="发段子"
-        />
-    <item
         android:icon="@drawable/ic_message"
         android:id="@+id/bottom_message"
         android:title="消息" />

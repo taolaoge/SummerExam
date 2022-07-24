@@ -21,6 +21,7 @@ import com.example.summerexam.extensions.edit
 import com.example.summerexam.extensions.getSp
 import com.example.summerexam.baseui.BaseFragment
 import com.example.summerexam.network.TAG
+import com.example.summerexam.ui.activities.MyLikeJokeActivity
 import com.example.summerexam.ui.activities.UserinfoActivity
 
 /**
@@ -38,6 +39,8 @@ class MineFragment : BaseFragment() {
     private val mTvUserName by R.id.tv_mine_username.view<TextView>()
     private val mBtnOut by R.id.btn_mine_out.view<Button>()
     private val mImgUser by R.id.img_mine_avatar.view<ImageView>()
+    private val mImgLike by R.id.img_mine_fabulous.view<ImageView>()
+    private val mImgComment by R.id.img_mine_comment.view<ImageView>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,11 +50,6 @@ class MineFragment : BaseFragment() {
         return inflater.inflate(R.layout.fragment_mine, container, false)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     private fun refreshUi() {
         viewModel.refreshUi()
     }
@@ -59,17 +57,13 @@ class MineFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initObserver()
-        mRelativeLayout.setOnClickListener {
-            if (viewModel.token.value == "123") {
-                val intent = Intent(context, LoginActivity::class.java)
-                startActivity(intent)
-            }else{
-                val intent = Intent(context,UserinfoActivity::class.java)
-                intent.putExtra("userId",viewModel.userInfoResponse.value?.user?.userId.toString())
-                Log.d(TAG, "onViewCreate: ${viewModel.userInfoResponse.value?.user?.userId}")
-                startActivity(intent)
-            }
-        }
+        initSetOnClick()
+        Glide.with(this)
+            .load("https://jokes-avatar.oss-cn-beijing.aliyuncs.com/aliyun/jokes/avatar/default_avatar.png")
+            .into(mImgUser)
+    }
+
+    private fun initSetOnClick() {
         mBtnOut.setOnClickListener {
             appContext.getSp("token").edit {
                 clear()
@@ -81,8 +75,26 @@ class MineFragment : BaseFragment() {
             //初始化ui，将ui变为初始的样子
             initUi()
         }
-        Glide.with(this).load("https://jokes-avatar.oss-cn-beijing.aliyuncs.com/aliyun/jokes/avatar/default_avatar.png")
-            .into(mImgUser)
+        mRelativeLayout.setOnClickListener {
+            if (viewModel.token.value == "123") {
+                val intent = Intent(context, LoginActivity::class.java)
+                startActivity(intent)
+            } else {
+                val intent = Intent(context, UserinfoActivity::class.java)
+                intent.putExtra("userId", viewModel.userInfoResponse.value?.user?.userId.toString())
+                startActivity(intent)
+            }
+        }
+        mImgLike.setOnClickListener {
+            val intent = Intent(context, MyLikeJokeActivity::class.java)
+            intent.putExtra("extra", 1)
+            startActivity(intent)
+        }
+        mImgComment.setOnClickListener {
+            val intent = Intent(context,MyLikeJokeActivity::class.java)
+            intent.putExtra("extra", 2)
+            startActivity(intent)
+        }
     }
 
     private fun initObserver() {
@@ -92,7 +104,7 @@ class MineFragment : BaseFragment() {
                 refreshUi()
             }
         }
-        viewModel.userInfoResponse.observe(viewLifecycleOwner){
+        viewModel.userInfoResponse.observe(viewLifecycleOwner) {
             mTvCoin.text = it.info.experienceNum.toString()
             mTvFollow.text = it.info.attentionNum.toString()
             mTvFollowers.text = it.info.fansNum.toString()
@@ -103,9 +115,10 @@ class MineFragment : BaseFragment() {
         }
     }
 
-    private fun initUi(){
+    private fun initUi() {
         mTvUserName.text = "登陆/注册"
-        Glide.with(this).load("https://jokes-avatar.oss-cn-beijing.aliyuncs.com/aliyun/jokes/avatar/default_avatar.png")
+        Glide.with(this)
+            .load("https://jokes-avatar.oss-cn-beijing.aliyuncs.com/aliyun/jokes/avatar/default_avatar.png")
             .into(mImgUser)
         mTvCoin.text = "0"
         mTvFollow.text = "0"

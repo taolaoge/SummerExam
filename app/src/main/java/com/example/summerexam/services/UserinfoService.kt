@@ -1,8 +1,6 @@
 package com.example.summerexam.services
 
-import com.example.summerexam.beans.FirstTextResponse
-import com.example.summerexam.beans.TargetUserinfoResponse
-import com.example.summerexam.beans.UserInfoResponse
+import com.example.summerexam.beans.*
 import com.example.summerexam.network.ApiGenerator
 import com.ndhzs.lib.common.network.ApiWrapper
 import io.reactivex.rxjava3.core.Single
@@ -49,13 +47,17 @@ interface UserinfoService {
         @Field("targetUserId") targetUserId: String,
     ):Single<ApiWrapper<TargetUserinfoResponse>>
 
-    @POST("jokes/whole_jokes/like/list")
+
+    @POST("user/like/list")
     @FormUrlEncoded
     fun getUserLikeJoke(
-        @Field("targetUserId") targetUserId: String,
         @Field("page") page: Int
-    ): Single<ApiWrapper<FirstTextResponse>>
+    ): Single<ApiWrapper<List<FirstTextResponseItem>>>
 
-    @POST("user/info")
-    fun getUserinfo():Single<ApiWrapper<UserInfoResponse>>
+
+    @POST("user/comment/list")
+    @FormUrlEncoded
+    fun getMineComment(
+        @Field("page") page:Int)
+    :Single<ApiWrapper<List<MyCommentResponseItem>>>
 }

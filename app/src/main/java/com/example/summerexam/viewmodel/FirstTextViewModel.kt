@@ -104,7 +104,7 @@ class FirstTextViewModel : BaseViewModel() {
                     .safeSubscribeBy { dealData(it) }
             }
             7 -> {
-                FirstRepository.getUserLikeJoke(userId, attentionPage.value ?: 1)
+                FirstRepository.getUserLikeJoke(attentionPage.value ?: 1)
                     .safeSubscribeBy { dealData(it) }
             }
         }
