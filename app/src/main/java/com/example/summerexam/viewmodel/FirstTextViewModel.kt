@@ -43,8 +43,6 @@ class FirstTextViewModel : BaseViewModel() {
     //新的数据集合，差分刷新使用
     private val _newTextData =
         MutableLiveData<List<FirstTextResponseItem>>()
-
-
     val newTextData: LiveData<List<FirstTextResponseItem>>
         get() = _newTextData
 

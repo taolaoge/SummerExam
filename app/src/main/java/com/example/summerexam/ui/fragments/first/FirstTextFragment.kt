@@ -216,8 +216,8 @@ class FirstTextFragment : BaseFragment(), FirstTextRvAdapter.IClick {
         viewModel.needRefresh.observe(viewLifecycleOwner) {
             if (it) {
                 if (viewModel.page.value == 0) {
-                    mAdapter.notifyItemChanged(viewModel.freshPosition + 1)
-                } else mAdapter.notifyItemChanged(viewModel.freshPosition)
+                    mAdapter.notifyItemChanged(viewModel.freshPosition + 1,"")
+                } else mAdapter.notifyItemChanged(viewModel.freshPosition,"")
 
                 viewModel.changeNeedRefresh()
             }
