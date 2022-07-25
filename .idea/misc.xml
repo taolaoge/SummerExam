@@ -26,6 +26,7 @@
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable/shape_dialog.xml" value="0.148" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable/shape_ed.xml" value="0.2635" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable/shape_img.xml" value="0.2355" />
+        <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/activity_attention_list.xml" value="0.4036458333333333" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/activity_login.xml" value="0.264" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/activity_login2.xml" value="0.3890625" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/activity_main.xml" value="0.25" />
@@ -67,6 +68,7 @@
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/fragment_userinfo.xml" value="0.18206521739130435" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/only_text_recycle_item.xml" value="0.2" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/only_text_recycle_item_bottom.xml" value="0.40217391304347827" />
+        <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/recycle_item_attention.xml" value="0.4036458333333333" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/recycle_item_comment.xml" value="0.335" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/recycle_item_first_text.xml" value="0.25" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/recycle_item_first_text_bottom.xml" value="0.4036458333333333" />

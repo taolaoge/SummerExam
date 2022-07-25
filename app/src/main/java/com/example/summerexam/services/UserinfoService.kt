@@ -60,4 +60,11 @@ interface UserinfoService {
     fun getMineComment(
         @Field("page") page:Int)
     :Single<ApiWrapper<List<MyCommentResponseItem>>>
+
+    @POST("user/attention/list")
+    @FormUrlEncoded
+    fun getAttentionList(
+        @Field("page") page:Int,
+        @Field("targetUserId") targetId:String
+    ):Single<ApiWrapper<List<AttentionListResponseItem>>>
 }

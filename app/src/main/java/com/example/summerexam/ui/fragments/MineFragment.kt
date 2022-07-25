@@ -21,6 +21,7 @@ import com.example.summerexam.extensions.edit
 import com.example.summerexam.extensions.getSp
 import com.example.summerexam.baseui.BaseFragment
 import com.example.summerexam.network.TAG
+import com.example.summerexam.ui.activities.AttentionListActivity
 import com.example.summerexam.ui.activities.MyLikeJokeActivity
 import com.example.summerexam.ui.activities.UserinfoActivity
 
@@ -41,6 +42,7 @@ class MineFragment : BaseFragment() {
     private val mImgUser by R.id.img_mine_avatar.view<ImageView>()
     private val mImgLike by R.id.img_mine_fabulous.view<ImageView>()
     private val mImgComment by R.id.img_mine_comment.view<ImageView>()
+    private val mTvAttention by R.id.tv_mine_follow.view<TextView>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -93,6 +95,12 @@ class MineFragment : BaseFragment() {
         mImgComment.setOnClickListener {
             val intent = Intent(context,MyLikeJokeActivity::class.java)
             intent.putExtra("extra", 2)
+            startActivity(intent)
+        }
+        mTvAttention.setOnClickListener {
+            Log.d(TAG, "initSetOnClick: ${viewModel.userInfoResponse.value?.user?.userId}")
+            val intent = Intent(context,AttentionListActivity::class.java)
+            intent.putExtra("userId",viewModel.userInfoResponse.value?.user?.userId)
             startActivity(intent)
         }
     }
