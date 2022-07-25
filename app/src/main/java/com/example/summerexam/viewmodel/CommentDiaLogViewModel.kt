@@ -3,6 +3,7 @@ package com.example.summerexam.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.summerexam.baseui.BaseViewModel
 import com.example.summerexam.services.CommentService
 import com.example.summerexam.extensions.mapOrThrowApiException
 import com.example.summerexam.extensions.toast
@@ -16,7 +17,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
  * email : 1678921845@qq.com
  * date : 2022/7/18
  */
-class CommentDiaLogViewModel : ViewModel() {
+class CommentDiaLogViewModel : BaseViewModel() {
 
     private val _commentSuccess = MutableLiveData<Boolean>()
     val commentSuccess :LiveData<Boolean>
@@ -29,7 +30,7 @@ class CommentDiaLogViewModel : ViewModel() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .mapOrThrowApiException()
-            .unSafeSubscribeBy {
+            .safeSubscribeBy {
                 toast("评论成功")
                 _commentSuccess.value = true
             }

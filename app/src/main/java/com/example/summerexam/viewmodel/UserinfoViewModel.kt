@@ -3,6 +3,7 @@ package com.example.summerexam.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.summerexam.baseui.BaseViewModel
 import com.example.summerexam.beans.FirstTextResponse
 import com.example.summerexam.beans.FirstTextResponseItem
 import com.example.summerexam.beans.TargetUserinfoResponse
@@ -22,7 +23,7 @@ import java.lang.NullPointerException
  * email : 1678921845@qq.com
  * date : 2022/7/20
  */
-class UserinfoViewModel : ViewModel() {
+class UserinfoViewModel : BaseViewModel() {
 
     private val _page = MutableLiveData(1)
     val page: LiveData<Int>
@@ -62,7 +63,7 @@ class UserinfoViewModel : ViewModel() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .mapOrThrowApiException()
-            .unSafeSubscribeBy {
+            .safeSubscribeBy {
                 _targetUserinfoResponse.value = it
             }
     }
@@ -70,7 +71,7 @@ class UserinfoViewModel : ViewModel() {
     fun followUser(status: String, userId: String) {
         _followSuccess.value = -1
         FirstRepository.followUser(status, userId)
-            .unSafeSubscribeBy {
+            .safeSubscribeBy {
                 _code.value = it.code
                 if (status == "1") _followSuccess.value = 1
                 else _followSuccess.value = 0
@@ -82,7 +83,7 @@ class UserinfoViewModel : ViewModel() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .mapOrThrowApiException()
-            .unSafeSubscribeBy {
+            .safeSubscribeBy {
                 dealData(it)
             }
     }
@@ -90,7 +91,7 @@ class UserinfoViewModel : ViewModel() {
 
     fun likeJoke(id: Int, status: Boolean, position: Int) {
         FirstRepository.likeJoke(id, status)
-            .unSafeSubscribeBy {
+            .safeSubscribeBy {
                 if (it.code == 200) {
                     freshPosition = position
                     newTextData[position].info.isLike = status
@@ -107,7 +108,7 @@ class UserinfoViewModel : ViewModel() {
 
     fun dislikeJoke(id: Int, status: Boolean, position: Int) {
         FirstRepository.dislikeJoke(id, status)
-            .unSafeSubscribeBy {
+            .safeSubscribeBy {
                 if (it.code == 200) {
                     freshPosition = position
                     newTextData[position].info.isUnlike = status

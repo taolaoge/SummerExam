@@ -3,6 +3,7 @@ package com.example.summerexam.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.summerexam.baseui.BaseViewModel
 import com.example.summerexam.beans.SystemMessageResponseItem
 import com.example.summerexam.extensions.mapOrThrowApiException
 import com.example.summerexam.extensions.unSafeSubscribeBy
@@ -16,7 +17,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
  * email : 1678921845@qq.com
  * date : 2022/7/20
  */
-class MessageViewModel : ViewModel() {
+class MessageViewModel : BaseViewModel() {
     private val _needRefresh = MutableLiveData<Boolean>()
     val needRefresh: LiveData<Boolean>
         get() = _needRefresh
@@ -32,7 +33,7 @@ class MessageViewModel : ViewModel() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .mapOrThrowApiException()
-            .unSafeSubscribeBy {
+            .safeSubscribeBy {
                 oldData = newData
                 for (data in it) newData.add(data)
                 _needRefresh.value = true

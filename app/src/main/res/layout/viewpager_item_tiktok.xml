@@ -14,18 +14,27 @@
             android:id="@+id/prepare_view_tiktok"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
     </FrameLayout>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/img_tiktok_avatar"
+        app:shapeAppearanceOverlay="@style/circleImageStyle"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/img_tiktok_like"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
-        android:src="@drawable/ic_love"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/ic_love1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/img_tiktok_avatar" />
 
     <TextView
         android:id="@+id/tv_tiktok_like_num"
@@ -81,8 +90,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="8dp"
-        android:textSize="16dp"
         android:textColor="@color/white"
+        android:textSize="16dp"
         app:layout_constraintBottom_toTopOf="@id/tv_tiktok_content"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="sssssssssssssssssssssssssss" />

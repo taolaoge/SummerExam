@@ -16,10 +16,7 @@ import com.bumptech.glide.Glide
 import com.example.summerexam.R
 import com.example.summerexam.beans.FirstTextResponseItem
 import com.example.summerexam.beans.TiktokResponseItem
-import com.example.summerexam.extensions.appContext
-import com.example.summerexam.extensions.decrypt
-import com.example.summerexam.extensions.gone
-import com.example.summerexam.extensions.visible
+import com.example.summerexam.extensions.*
 import com.example.summerexam.utils.DkVideoPlayerUtils
 import com.example.summerexam.view.PrepareView
 import xyz.doikki.videocontroller.StandardVideoController
@@ -35,13 +32,46 @@ import xyz.doikki.videoplayer.player.VideoViewManager
  * email : 1678921845@qq.com
  * date : 2022/7/24
  */
-class TiktokVpAdapter(private val context:Context)
-    : ListAdapter<TiktokResponseItem, TiktokVpAdapter.InnerHolder>(DiffCallBack) {
+class TiktokVpAdapter(
+    private val context: Context,
+    private val clickComment: (Int) -> Unit, private val clickLike: (Int) -> Unit,
+    private val clickAvatar:(Int) ->Unit
+) : ListAdapter<TiktokResponseItem, TiktokVpAdapter.InnerHolder>(DiffCallBack) {
     private lateinit var mVideoView: VideoView<AndroidMediaPlayer>
     lateinit var mController: GestureVideoController
     private lateinit var mErrorView: ErrorView
     private lateinit var mCompleteView: CompleteView
     private lateinit var mTitleView: TitleView
+
+    inner class InnerHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val mPlayerContainer = itemView.findViewById<FrameLayout?>(R.id.fl_tiktok_container)
+        val mPrepareView = itemView.findViewById<PrepareView>(R.id.prepare_view_tiktok)
+        val mThumb = mPrepareView.findViewById<ImageView>(R.id.thumb)
+        var mPosition = 0
+        val mTvLike: TextView = itemView.findViewById(R.id.tv_tiktok_like_num)
+        val mTvComment: TextView = itemView.findViewById(R.id.tv_tiktok_comment_num)
+        val mTvNickname: TextView = view.findViewById(R.id.tv_tiktok_nickname)
+        val mTvContent: TextView = view.findViewById(R.id.tv_tiktok_content)
+        val mImgLike:ImageView = view.findViewById(R.id.img_tiktok_like)
+        val mImgComment:ImageView = view.findViewById(R.id.img_tiktok_comment)
+        val mImgAvatar:ImageView = view.findViewById(R.id.img_tiktok_avatar)
+
+        init {
+
+            mPlayerContainer.setOnClickListener {
+                startPlay(mPosition, this)
+            }
+            mImgComment.setOnClickListener {
+                clickComment(mPosition)
+            }
+            mImgLike.setOnClickListener {
+                clickLike(mPosition)
+            }
+            mImgAvatar.setOnClickListener {
+                clickAvatar(mPosition)
+            }
+        }
+    }
 
     /**
      * 当前播放的位置
@@ -84,25 +114,6 @@ class TiktokVpAdapter(private val context:Context)
         mVideoView.setVideoController(mController)
     }
 
-    inner class InnerHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val mPlayerContainer = itemView.findViewById<FrameLayout?>(R.id.fl_tiktok_container)
-        val mPrepareView = itemView.findViewById<PrepareView>(R.id.prepare_view_tiktok)
-        val mThumb = mPrepareView.findViewById<ImageView>(R.id.thumb)
-        var mPosition = 0
-        val mTvLike:TextView = itemView.findViewById(R.id.tv_tiktok_like_num)
-        val mTvComment:TextView = itemView.findViewById(R.id.tv_tiktok_comment_num)
-        val mTvNickname:TextView = view.findViewById(R.id.tv_tiktok_nickname)
-        val mTvContent:TextView = view.findViewById(R.id.tv_tiktok_content)
-
-        init {
-            itemView.tag = this
-
-            mPlayerContainer.setOnClickListener {
-                startPlay(mPosition,this)
-            }
-        }
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InnerHolder {
         return InnerHolder(
             LayoutInflater.from(parent.context)
@@ -118,17 +129,18 @@ class TiktokVpAdapter(private val context:Context)
             mTvNickname.text = "@${video.user.nickName}"
             mTvContent.text = video.joke.content
             mPosition = position
+            mImgAvatar.glide(video.user.avatar)
             if (video.joke.videoUrl.decrypt() != "") {
                 holder.mPlayerContainer.visible()
                 Glide.with(holder.mThumb.context)
                     .load(video.joke.thumbUrl.decrypt())
                     .into(holder.mThumb)
             } else holder.mPlayerContainer.gone()
-            startPlay(position,holder)
+            startPlay(position, holder)
         }
     }
 
-    private fun startPlay(newPosition: Int,viewHolder: InnerHolder) {
+    private fun startPlay(newPosition: Int, viewHolder: InnerHolder) {
         releaseVideoView()
         mCurPos = newPosition
         mVideoView.setUrl(getItem(newPosition)?.joke?.videoUrl?.decrypt())

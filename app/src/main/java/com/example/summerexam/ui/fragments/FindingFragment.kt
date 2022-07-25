@@ -1,5 +1,6 @@
 package com.example.summerexam.ui.fragments
 
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +16,7 @@ import com.example.summerexam.adapters.FirstTextRvAdapter
 import com.example.summerexam.adapters.TiktokVpAdapter
 import com.example.summerexam.baseui.BaseFragment
 import com.example.summerexam.extensions.decrypt
+import com.example.summerexam.ui.activities.UserinfoActivity
 import com.example.summerexam.utils.DkVideoPlayerUtils
 import com.example.summerexam.viewmodel.FindingViewModel
 import xyz.doikki.videocontroller.StandardVideoController
@@ -35,7 +37,7 @@ class FindingFragment : BaseFragment() {
     private lateinit var mAdapter: TiktokVpAdapter
     private val mVpTiktok by R.id.vp2_finding.view<ViewPager2>()
         .addInitialize {
-            mAdapter = TiktokVpAdapter(requireContext())
+            mAdapter = TiktokVpAdapter(requireContext(), ::clickComment, ::clickLike,::clickAvatar)
         }
 
     override fun onCreateView(
@@ -53,7 +55,7 @@ class FindingFragment : BaseFragment() {
     }
 
     private fun initViewPager() {
-        mVpTiktok.registerOnPageChangeCallback(object :ViewPager2.OnPageChangeCallback(){
+        mVpTiktok.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 mAdapter.releaseVideoView()
@@ -68,5 +70,38 @@ class FindingFragment : BaseFragment() {
         viewModel.tiktokList.observe(viewLifecycleOwner) {
             mAdapter.submitList(it)
         }
+        viewModel.needRefresh.observe(viewLifecycleOwner) {
+            if (it) {
+                mAdapter.notifyItemChanged(viewModel.freshPosition, "")
+
+                viewModel.changeNeedRefresh()
+            }
+        }
     }
+
+    private fun clickComment(position: Int) {
+        val commentBottomFragment = CommentBottomFragment()
+        commentBottomFragment.arguments = Bundle().apply {
+            putInt(
+                "jokeId",
+                viewModel.tiktokList.value?.get(position)?.joke?.jokesId ?: 1
+            )
+        }
+        commentBottomFragment.show(
+            this@FindingFragment.childFragmentManager,
+            "CommentBottomFragment"
+        )
+    }
+
+    private fun clickLike(position: Int) {
+        viewModel.likeJoke(position)
+    }
+
+    private fun clickAvatar(position:Int){
+        val intent = Intent(requireContext(),UserinfoActivity::class.java)
+        intent.putExtra("userId",
+        viewModel.tiktokList.value?.get(position)?.user?.userId.toString())
+        startActivity(intent)
+    }
+
 }

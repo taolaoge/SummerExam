@@ -278,9 +278,7 @@ class FirstTextFragment : BaseFragment(), FirstTextRvAdapter.IClick {
 
     override fun clickComment(id: Int) {
         val commentBottomFragment = CommentBottomFragment()
-        val bundle = Bundle()
-        bundle.putInt("jokeId", id)
-        commentBottomFragment.arguments = bundle
+        commentBottomFragment.arguments = Bundle().apply { putInt("jokeId", id) }
         commentBottomFragment.show(
             this@FirstTextFragment.childFragmentManager,
             "CommentBottomFragment"

@@ -20,6 +20,7 @@ import com.example.summerexam.extensions.appContext
 import com.example.summerexam.extensions.edit
 import com.example.summerexam.extensions.getSp
 import com.example.summerexam.baseui.BaseFragment
+import com.example.summerexam.extensions.glide
 import com.example.summerexam.network.TAG
 import com.example.summerexam.ui.activities.AttentionListActivity
 import com.example.summerexam.ui.activities.MyLikeJokeActivity
@@ -60,9 +61,7 @@ class MineFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initObserver()
         initSetOnClick()
-        Glide.with(this)
-            .load("https://jokes-avatar.oss-cn-beijing.aliyuncs.com/aliyun/jokes/avatar/default_avatar.png")
-            .into(mImgUser)
+        mImgUser.glide("https://jokes-avatar.oss-cn-beijing.aliyuncs.com/aliyun/jokes/avatar/default_avatar.png")
     }
 
     private fun initSetOnClick() {
@@ -98,7 +97,6 @@ class MineFragment : BaseFragment() {
             startActivity(intent)
         }
         mTvAttention.setOnClickListener {
-            Log.d(TAG, "initSetOnClick: ${viewModel.userInfoResponse.value?.user?.userId}")
             val intent = Intent(context,AttentionListActivity::class.java)
             intent.putExtra("userId",viewModel.userInfoResponse.value?.user?.userId)
             startActivity(intent)

@@ -1,200 +1,208 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:background="@color/white"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:background="@color/white"
+    android:orientation="vertical"
+    app:cardCornerRadius="8dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="55dp">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/img_text_avatar"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginTop="16dp"
-            android:src="@drawable/ic_head_img"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/img_text_avatar"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/ic_head_img"
+                app:layout_constraintHorizontal_bias="0.069"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/circleImageStyle" />
+
+            <TextView
+                android:id="@+id/tv_text_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="nickname"
+                android:textSize="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.055"
+                app:layout_constraintStart_toEndOf="@+id/img_text_avatar"
+                app:layout_constraintTop_toTopOf="@+id/img_text_avatar" />
+
+            <TextView
+                android:id="@+id/tv_text_signature"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="signature"
+                android:textSize="12dp"
+                app:layout_constraintEnd_toEndOf="@+id/tv_text_nickname"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tv_text_nickname"
+                app:layout_constraintTop_toBottomOf="@+id/tv_text_nickname" />
+
+            <TextView
+                android:id="@+id/tv_text_following"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="+ 关注"
+                android:textColor="@color/purple_200"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.744"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_user_joke_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            app:layout_constraintHorizontal_bias="0.069"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearanceOverlay="@style/circleImageStyle" />
-
-        <TextView
-            android:id="@+id/tv_text_nickname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="nickname"
-            android:textSize="15dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.055"
-            app:layout_constraintStart_toEndOf="@+id/img_text_avatar"
-            app:layout_constraintTop_toTopOf="@+id/img_text_avatar" />
-
-        <TextView
-            android:id="@+id/tv_text_signature"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:text="signature"
-            android:textSize="12dp"
-            android:lines="1"
-            android:ellipsize="end"
-            app:layout_constraintEnd_toEndOf="@+id/tv_text_nickname"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/tv_text_nickname"
-            app:layout_constraintTop_toBottomOf="@+id/tv_text_nickname" />
-
-        <TextView
-            android:id="@+id/tv_text_following"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:text="+ 关注"
-            android:textColor="@color/purple_200"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.744"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_marginBottom="8dp"
+            tools:text="ssssssssssssssssssssssssssssssss" />
 
-    <TextView
-        android:id="@+id/tv_user_joke_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        tools:text="ssssssssssssssssssssssssssssssss" />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_picture_container"
-        app:cardCornerRadius="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp">
-        <ImageView
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_picture_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/img_picture"
-            android:adjustViewBounds="true" />
-    </androidx.cardview.widget.CardView>
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            app:cardCornerRadius="8dp">
+
+            <ImageView
+                android:id="@+id/img_picture"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true" />
+        </androidx.cardview.widget.CardView>
 
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/fl_player_container"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:background="@color/black"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:cardCornerRadius="8dp"
-        app:layout_constraintDimensionRatio="16:9"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.example.summerexam.view.PrepareView
-            android:id="@+id/prepare_view"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/fl_player_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </androidx.cardview.widget.CardView>
+            android:layout_height="300dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/black"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintDimensionRatio="16:9"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.example.summerexam.view.PrepareView
+                android:id="@+id/prepare_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </androidx.cardview.widget.CardView>
 
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/rl_info"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/rl_info"
-        android:layout_width="match_parent"
-        android:layout_height="50dp">
+            <ImageView
+                android:id="@+id/img_text_like"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_like"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/img_text_dislike"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/img_text_like"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:src="@drawable/ic_like"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/img_text_dislike"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            <TextView
+                android:id="@+id/tv_user_text_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="0"
+                android:textSize="15dp"
+                app:layout_constraintBottom_toBottomOf="@id/img_text_like"
+                app:layout_constraintStart_toEndOf="@id/img_text_like"
+                app:layout_constraintTop_toTopOf="@id/img_text_like" />
 
-        <TextView
-            android:id="@+id/tv_user_text_detail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:textSize="15dp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintTop_toTopOf="@id/img_text_like"
-            app:layout_constraintBottom_toBottomOf="@id/img_text_like"
-            app:layout_constraintStart_toEndOf="@id/img_text_like"/>
+            <ImageView
+                android:id="@+id/img_text_dislike"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_dislike"
+                app:layout_constraintBottom_toBottomOf="@id/img_text_like"
+                app:layout_constraintEnd_toStartOf="@id/img_text_comment"
+                app:layout_constraintStart_toEndOf="@id/img_text_like"
+                app:layout_constraintTop_toTopOf="@id/img_text_like" />
 
-        <ImageView
-            android:id="@+id/img_text_dislike"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:src="@drawable/ic_dislike"
-            app:layout_constraintStart_toEndOf="@id/img_text_like"
-            app:layout_constraintEnd_toStartOf="@id/img_text_comment"
-            app:layout_constraintTop_toTopOf="@id/img_text_like"
-            app:layout_constraintBottom_toBottomOf="@id/img_text_like"/>
+            <TextView
+                android:id="@+id/tv_text_dislike_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="0"
+                android:textSize="15dp"
+                app:layout_constraintBottom_toBottomOf="@id/img_text_dislike"
+                app:layout_constraintStart_toEndOf="@id/img_text_dislike"
+                app:layout_constraintTop_toTopOf="@id/img_text_dislike" />
 
-        <TextView
-            android:id="@+id/tv_text_dislike_detail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:textSize="15dp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintTop_toTopOf="@id/img_text_dislike"
-            app:layout_constraintBottom_toBottomOf="@id/img_text_dislike"
-            app:layout_constraintStart_toEndOf="@id/img_text_dislike"/>
+            <ImageView
+                android:id="@+id/img_text_comment"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_comment"
+                app:layout_constraintBottom_toBottomOf="@id/img_text_dislike"
+                app:layout_constraintEnd_toStartOf="@id/img_text_share"
+                app:layout_constraintStart_toEndOf="@id/img_text_dislike"
+                app:layout_constraintTop_toTopOf="@id/img_text_dislike" />
 
-        <ImageView
-            android:id="@+id/img_text_comment"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:src="@drawable/ic_comment"
-            app:layout_constraintStart_toEndOf="@id/img_text_dislike"
-            app:layout_constraintEnd_toStartOf="@id/img_text_share"
-            app:layout_constraintTop_toTopOf="@id/img_text_dislike"
-            app:layout_constraintBottom_toBottomOf="@id/img_text_dislike"/>
+            <TextView
+                android:id="@+id/tv_text_comment_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="0"
+                android:textSize="15dp"
+                app:layout_constraintBottom_toBottomOf="@id/img_text_comment"
+                app:layout_constraintStart_toEndOf="@id/img_text_comment"
+                app:layout_constraintTop_toTopOf="@id/img_text_comment" />
 
-        <TextView
-            android:id="@+id/tv_text_comment_detail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:textSize="15dp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintTop_toTopOf="@id/img_text_comment"
-            app:layout_constraintBottom_toBottomOf="@id/img_text_comment"
-            app:layout_constraintStart_toEndOf="@id/img_text_comment"/>
+            <ImageView
+                android:id="@+id/img_text_share"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_share"
+                app:layout_constraintBottom_toBottomOf="@id/img_text_comment"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/img_text_comment"
+                app:layout_constraintTop_toTopOf="@id/img_text_comment" />
 
-        <ImageView
-            android:id="@+id/img_text_share"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:src="@drawable/ic_share"
-            app:layout_constraintStart_toEndOf="@id/img_text_comment"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/img_text_comment"
-            app:layout_constraintBottom_toBottomOf="@id/img_text_comment"/>
+            <TextView
+                android:id="@+id/tv_text_share_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="0"
+                android:textSize="15dp"
+                app:layout_constraintBottom_toBottomOf="@id/img_text_share"
+                app:layout_constraintStart_toEndOf="@id/img_text_share"
+                app:layout_constraintTop_toTopOf="@id/img_text_share" />
 
-        <TextView
-            android:id="@+id/tv_text_share_detail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:textSize="15dp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintTop_toTopOf="@id/img_text_share"
-            app:layout_constraintStart_toEndOf="@id/img_text_share"
-            app:layout_constraintBottom_toBottomOf="@id/img_text_share"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-</LinearLayout>
+</androidx.cardview.widget.CardView>

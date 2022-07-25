@@ -3,6 +3,7 @@ package com.example.summerexam.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.summerexam.baseui.BaseViewModel
 import com.example.summerexam.beans.Comment
 import com.example.summerexam.services.CommentService
 import com.example.summerexam.extensions.mapOrThrowApiException
@@ -18,7 +19,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
  * email : 1678921845@qq.com
  * date : 2022/7/16
  */
-class CommentViewModel : ViewModel() {
+class CommentViewModel : BaseViewModel() {
 
     val newData = ArrayList<Comment>()
     var oldData = ArrayList<Comment>()
@@ -43,7 +44,7 @@ class CommentViewModel : ViewModel() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .mapOrThrowApiException()
-            .unSafeSubscribeBy {
+            .safeSubscribeBy {
                 oldData = newData
                 for (i in it.comments) {
                     newData.add(i)
@@ -58,7 +59,7 @@ class CommentViewModel : ViewModel() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .throwApiExceptionIfFail()
-            .unSafeSubscribeBy {
+            .safeSubscribeBy {
                 if (it.code == 200){
                     toast("操作成功")
                     newData[position].isLike = status

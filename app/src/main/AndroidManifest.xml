@@ -18,6 +18,11 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activities.WelcomeActivity"
+            android:exported="false" >
+
+        </activity>
+        <activity
             android:name=".ui.activities.AttentionListActivity"
             android:exported="false" />
         <activity

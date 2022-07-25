@@ -3,6 +3,7 @@ package com.example.summerexam.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.summerexam.baseui.BaseViewModel
 import com.example.summerexam.beans.UserInfoResponse
 import com.example.summerexam.extensions.*
 import com.example.summerexam.services.MineService
@@ -15,7 +16,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
  * email : 1678921845@qq.com
  * date : 2022/7/15
  */
-class MineViewModel : ViewModel() {
+class MineViewModel : BaseViewModel() {
     private val _token = MutableLiveData("123")
     val token: MutableLiveData<String>
         get() = _token
@@ -39,7 +40,7 @@ class MineViewModel : ViewModel() {
             .doOnError {
                 toast(it.toString())
             }
-            .unSafeSubscribeBy {
+            .safeSubscribeBy {
                 _userInfoResponse.value = it
             }
     }
