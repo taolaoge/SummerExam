@@ -10,11 +10,14 @@
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable/ic_add.xml" value="0.2325" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable/ic_back.xml" value="0.134" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable/ic_comment.xml" value="0.2635" />
+        <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable/ic_comment_white.xml" value="0.1205" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable/ic_dislike.xml" value="0.2325" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable/ic_fabulous.xml" value="0.2325" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable/ic_finding.xml" value="0.2325" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2325" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable/ic_letter.xml" value="0.1115" />
+        <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable/ic_love.xml" value="0.1205" />
+        <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable/ic_message.xml" value="0.1205" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable/ic_mine.xml" value="0.2325" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable/ic_return.xml" value="0.1115" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/drawable/ic_return1.xml" value="0.1235" />
@@ -83,6 +86,7 @@
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/recycyle_item_user_joke.xml" value="0.375" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/recyle_item_recycle_item_recommend_user.xml" value="0.7282608695652174" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/view_pager_item.xml" value="0.264" />
+        <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/layout/viewpager_item_tiktok.xml" value="0.2" />
         <entry key="..\:/Users/bangbangp/AndroidStudioProjects/SummerExam/app/src/main/res/menu/menu_navigation.xml" value="0.40260416666666665" />
       </map>
     </option>

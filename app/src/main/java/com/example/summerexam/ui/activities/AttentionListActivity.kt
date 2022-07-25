@@ -11,6 +11,7 @@ import com.example.summerexam.R
 import com.example.summerexam.adapters.AttentionListRvAdapter
 import com.example.summerexam.baseui.BaseActivity
 import com.example.summerexam.network.TAG
+import com.example.summerexam.view.MyVerticalItemDecoration
 import com.example.summerexam.viewmodel.AttentionListViewModel
 
 class AttentionListActivity : BaseActivity() {
@@ -24,6 +25,9 @@ class AttentionListActivity : BaseActivity() {
         .addInitialize {
             layoutManager = LinearLayoutManager(context)
             adapter = mAdapter
+            addItemDecoration(
+                MyVerticalItemDecoration(20)
+            )
         }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

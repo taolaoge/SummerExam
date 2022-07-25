@@ -20,6 +20,10 @@ class FindingViewModel : BaseViewModel() {
     val tiktokList: LiveData<List<TiktokResponseItem>>
         get() = _tiktokList
 
+    init {
+        getTiktokList()
+    }
+
     fun getTiktokList() {
        TiktokService.INSTANCE.getTiktokList()
            .subscribeOn(Schedulers.io())
