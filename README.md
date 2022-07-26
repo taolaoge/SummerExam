@@ -6,53 +6,41 @@
 
 未登陆的个人主页
 
-![](.\img\未登录的个人信息界面.jpg)
+![](./img/未登录的个人信息界面.jpg)
 
 登陆界面
 
-![](.\img\登陆界面.jpg)
+![](./img/登陆界面.jpg)
 
-![登陆后个人信息页面](C:\Users\bangbangp\AndroidStudioProjects\SummerExam\img\登陆后个人信息页.jpg)
+![登陆后个人信息页面](./img./登陆后个人信息页.jpg)
 
 首页文章列表
 
-![](C:\Users\bangbangp\AndroidStudioProjects\SummerExam\img\首页关注列表.jpg)
+![](./img/首页关注列表.jpg)
 
-![](C:\Users\bangbangp\AndroidStudioProjects\SummerExam\img\首页推荐页.jpg)
+![](./img/首页推荐页.jpg)
 
+![](./img/首页新鲜页.jpg)
 
+![](./img/视频全屏播放.jpg)
 
-![](C:\Users\bangbangp\AndroidStudioProjects\SummerExam\img\首页新鲜页.jpg)
+![](./img/划一划仿抖音.jpg)
 
-视频全屏播放
+![](./img/搜索.jpg)
 
-![](C:\Users\bangbangp\AndroidStudioProjects\SummerExam\img\视频全屏播放.jpg)
+![](./img/我的关注列表.jpg)
 
-
-
-划一划
-
-![](C:\Users\bangbangp\AndroidStudioProjects\SummerExam\img\划一划仿抖音.jpg)
-
-搜索页面
-
-![](C:\Users\bangbangp\AndroidStudioProjects\SummerExam\img\搜索.jpg)
-
-我的关注列表
-
-![](C:\Users\bangbangp\AndroidStudioProjects\SummerExam\img\我的关注列表.jpg)
-
-我的消息列表
-
-![](C:\Users\bangbangp\AndroidStudioProjects\SummerExam\img\消息列表.jpg)
+![](./img/消息列表.jpg)
 
 我喜欢的段子
 
-![](C:\Users\bangbangp\AndroidStudioProjects\SummerExam\img\我喜欢的视频.jpg)
+![](./img/我喜欢的视频.jpg)
 
 个人主页
 
-![](C:\Users\bangbangp\AndroidStudioProjects\SummerExam\img\个人主页.jpg)
+![](./img/个人主页.jpg)
+
+
 
 
 
