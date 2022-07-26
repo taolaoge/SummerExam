@@ -57,7 +57,6 @@ class TiktokVpAdapter(
         val mImgAvatar:ImageView = view.findViewById(R.id.img_tiktok_avatar)
 
         init {
-
             mPlayerContainer.setOnClickListener {
                 startPlay(mPosition, this)
             }

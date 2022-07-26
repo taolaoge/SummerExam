@@ -65,6 +65,11 @@ class FindingFragment : BaseFragment() {
         })
     }
 
+    override fun onPause() {
+        super.onPause()
+        mAdapter.releaseVideoView()
+    }
+
     private fun initObserver() {
         mVpTiktok.adapter = mAdapter
         viewModel.tiktokList.observe(viewLifecycleOwner) {
@@ -73,7 +78,6 @@ class FindingFragment : BaseFragment() {
         viewModel.needRefresh.observe(viewLifecycleOwner) {
             if (it) {
                 mAdapter.notifyItemChanged(viewModel.freshPosition, "")
-
                 viewModel.changeNeedRefresh()
             }
         }

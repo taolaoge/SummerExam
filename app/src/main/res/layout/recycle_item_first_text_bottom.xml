@@ -8,7 +8,7 @@
         android:id="@+id/tv_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="正在刷新中或没有更多数据"
+        android:text="正在刷新中"
         android:textColor="@color/teal_200"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"

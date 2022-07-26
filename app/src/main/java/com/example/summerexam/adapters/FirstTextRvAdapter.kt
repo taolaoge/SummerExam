@@ -104,7 +104,9 @@ class FirstTextRvAdapter(
         }
     }
 
-    inner class BottomHolder(view: View) : RecyclerView.ViewHolder(view) {}
+    inner class BottomHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val mTvBottom = view.findViewById<TextView>(R.id.tv_comment)
+    }
 
     inner class RecommendUserHolder(view: View) : RecyclerView.ViewHolder(view) {
         val mRvRecommendUser: RecyclerView = view.findViewById(R.id.rv_recommend_user)
@@ -164,9 +166,13 @@ class FirstTextRvAdapter(
      * 获取item的类型
      */
     override fun getItemViewType(position: Int): Int {
-        return if (newRecommendUserData == null) 0
+        return if (newRecommendUserData == null){
+            if (position == itemCount -1) 1
+            else 0
+        }
         else {
             if (position == 0) 3
+            else if (position == itemCount-1) 1
             else 0
         }
     }
@@ -220,7 +226,7 @@ class FirstTextRvAdapter(
         mAdapter?.notifyItemChanged(position)
     }
 
-    fun freshRecycleViewData() {
+    private fun freshRecycleViewData() {
         mAdapter?.submitList(newRecommendUserData)
     }
 
@@ -242,4 +248,5 @@ class FirstTextRvAdapter(
             return oldItem == newItem
         }
     }
+
 }

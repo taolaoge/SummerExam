@@ -1,5 +1,6 @@
 package com.example.summerexam.services
 
+import com.example.summerexam.beans.SearchUserResponseItem
 import com.example.summerexam.beans.SystemMessageResponse
 import com.example.summerexam.beans.UserMessageResponse
 import com.example.summerexam.network.ApiGenerator
